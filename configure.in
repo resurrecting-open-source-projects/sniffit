@@ -90,7 +90,7 @@ irix*)
 	OS_OPT=
 	AC_SUBST(OS_OPT)
         ;;
-freebsd*)
+freebsd*|kfreebsd*)
 	AC_DEFINE(FREEBSD)
 	OS_OPT=
 	AC_SUBST(OS_OPT)

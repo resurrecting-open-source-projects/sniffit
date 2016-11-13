@@ -1366,7 +1366,7 @@ EOF
 	OS_OPT=
 	
         ;;
-freebsd*)
+freebsd*|kfreebsd*)
 	cat >> confdefs.h <<\EOF
 #define FREEBSD 1
 EOF
