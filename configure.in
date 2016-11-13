@@ -1,0 +1,83 @@
+dnl Sniffit configure.in File
+dnl   - by: Brecht Claerhout 
+dnl
+dnl GNU Autoconf file
+
+AC_INIT(sniffit.h)
+
+dnl Config of libpcap
+AC_CONFIG_SUBDIRS(libpcap-0.3)
+
+dnl Check the C compiler
+AC_PROG_CC
+
+dnl Check NCURSES availability
+NCURSES_PATH=/usr/include:/usr/include/ncurses:/usr/include/curses:/usr/local/include:/usr/local/include/ncurses:/usr/local/include/curses
+AC_CHECK_LIB(ncurses,main)
+
+AC_PATH_PROGS(NCURSES_LOCATION,ncurses.h,no,$NCURSES_PATH)
+if test "$NCURSES_LOCATION" != no; then
+	echo "#include \"$NCURSES_LOCATION\"" >sn_curses.h
+	AC_DEFINE(HAVE_NCURSES_H,1)
+fi
+
+dnl Check Shared Memory support
+AC_CHECK_FUNCS(shmget)
+
+dnl exit function check
+AC_CHECK_FUNCS(atexit)
+
+dnl Check the datalength
+AC_CHECK_SIZEOF(unsigned short int)
+if test $ac_cv_sizeof_unsigned_short_int -ne 2; then
+	echo "unisigned short is NOT 2 bytes... quiting"
+	exit
+fi
+AC_CHECK_SIZEOF(unsigned long int)
+if test $ac_cv_sizeof_unsigned_long_int -ne 4; then
+	echo "unisigned short is NOT 4 bytes... quiting"
+	exit
+fi
+
+
+dnl Check the OS
+AC_CANONICAL_SYSTEM
+case "$target_os" in
+linux*)
+	AC_DEFINE(LINUX)
+	OS_OPT=	
+	AC_SUBST(OS_OPT)
+        ;;
+sunos*)
+	AC_DEFINE(SUNOS)
+	AC_CHECK_LIB(socket,main)
+	AC_CHECK_LIB(nsl,main)
+	OS_OPT=
+	AC_SUBST(OS_OPT)
+	;;
+solaris*)
+	AC_DEFINE(SUNOS)
+	AC_CHECK_LIB(socket,main)
+	AC_CHECK_LIB(nsl,main)
+	OS_OPT=
+	AC_SUBST(OS_OPT)
+        ;;
+irix*)
+	AC_DEFINE(IRIX)
+	OS_OPT=
+	AC_SUBST(OS_OPT)
+        ;;
+freebsd*)
+	AC_DEFINE(FREEBSD)
+	OS_OPT=
+	AC_SUBST(OS_OPT)
+        ;;
+*)
+	echo "NOT A SUPPORTED SYSTEM / OR SYSTEM NOT RECOGNISED"
+	echo "Contact <Coder@reptile.rug.ac.be> if you feel it might be a bug."
+	exit	
+	;;
+esac                    
+
+dnl FINISHED!
+AC_OUTPUT(Makefile)

@@ -1,0 +1,158 @@
+/* Sniffit Plugin example                                                 */
+/*   - by: Brecht Claerhout                                               */
+/*                                                                        */
+/* This Plugin scans for DNS packets and decodes them.                    */
+/* It is used to demonstrate how you can easily add your own features     */
+/* without having to worry about the packet intercepting and filtering.   */
+/* Plus the fact that all other features of Sniffit remain functional,    */
+/* and that multiple plugins are combinable.                              */
+
+struct PL_DNS_header
+{
+	unsigned short id, flags;
+	unsigned short nr_quest, nr_answ_RR, nr_auth_RR, nr_add_RR;
+};
+int PL_pos_max;
+
+#define	PL_DNS_QR	0x8000
+#define PL_DNS_OPCODE	0x7800
+#define	PL_DNS_AA	0x0400
+#define PL_DNS_TC	0x0200
+#define	PL_DNS_RD	0x0100
+#define	PL_DNS_RA	0x0080
+#define PL_DNS_RCODE	0x000F
+
+void PL_DNS_error(void)
+{
+printf("\n\nSorry... could not decode the DNS packet!\n\n");
+}
+
+int PL_DNS_decode(char *buf, int start_pos,char *string, int start_string)
+{
+int count, pos, i, j;
+unsigned short offset;
+
+j=start_string;
+pos=start_pos;	
+
+if(pos > PL_pos_max)	return -1;
+if( (count=(buf[pos]&63))!=buf[pos] )
+	{
+	offset= ((short)(buf[pos]&63)*256) + ((short)(buf[pos+1])&0xFF);
+	if(offset > PL_pos_max+12)	return -1;
+	if(PL_DNS_decode(buf,offset-12,string,j)<0)	return -1;
+	pos++;
+	goto end_field;
+	}
+while(count!=0)
+	{
+	for(i=0;i<count;i++)
+		{pos++;
+		if(pos > PL_pos_max)	return -1;
+		if(string==NULL)
+		   {printf("%c",buf[pos]);}
+		else 
+		   {string[j]=buf[pos];string[j+1]=0;j++;}
+		}
+	printf(".");
+	pos++;
+	if( (count=(buf[pos]&63))!=buf[pos] )
+		{
+		offset= ((short)(buf[pos]&63)*256) + ((short)(buf[pos+1])&0xFF);
+		if(PL_DNS_decode(buf,offset-12,string,j)<0)	return -1;
+		pos++;
+		goto end_field;
+		}
+	}
+end_field: pos++;
+return pos;
+}
+
+void PL_DNS_plugin (struct Plugin_data *PLD)
+{
+struct IP_header *dns_iphead;
+struct UDP_header *dns_udphead;
+struct PL_DNS_header *dns_dnshead;
+int i, j, dec_pos, answers, count, udp_start, len;
+long pos;
+unsigned char *so,*dest, *dns_p, *dns_buffer;
+unsigned short fl, *r_dlen;
+unsigned short *type, *class;
+
+dns_buffer=PLD->PL_packet;
+udp_start = PLD->PL_info.IP_len;
+len=PLD->PL_info.IP_len + PLD->PL_info.UDP_len + PLD->PL_info.DATA_len;
+dns_iphead= (struct IP_header *) dns_buffer;
+dns_udphead= (struct UDP_header *) (dns_buffer+udp_start);
+dns_dnshead= (struct DNS_header *) (dns_buffer+udp_start+sizeof(struct UDP_header));
+
+PL_pos_max = PLD->PL_info.DATA_len - 12;
+
+so=(unsigned char *)&(dns_iphead->source);
+dest=(unsigned char *)&(dns_iphead->destination);
+if((ntohs(dns_udphead->source)!=53)&&(ntohs(dns_udphead->destination)!=53))
+	return;
+printf("DNS Sniffit Plugin Report:\n");
+printf("Packet: %u.%u.%u.%u %u -> %u.%u.%u.%u %u\n",
+		so[0],so[1],so[2],so[3],ntohs(dns_udphead->source),
+                dest[0],dest[1],dest[2],dest[3],ntohs(dns_udphead->destination));
+
+printf("ID: %d \n",ntohs(dns_dnshead->id));
+fl=ntohs(dns_dnshead->flags);
+
+printf("  STATUS: %s ",(fl & PL_DNS_QR)? "Answer": "Query");
+printf("(opcode: %X) , ",(fl & PL_DNS_OPCODE)>>11);
+printf("%s , ",(fl & PL_DNS_AA)? "Auth. A.": "");
+printf("%s , ",(fl & PL_DNS_TC)? "TRUNC": "");
+printf("%s , ",(fl & PL_DNS_RD)? "Rec. Desired": "");
+printf("%s , ",(fl & PL_DNS_RA)? "rec. Avail.": "rec. NOT Av.");
+printf("ret: %d\n",(fl & PL_DNS_RCODE));
+
+printf("  Q: %d  Answ: %d  Auth: %d  Add: %d",
+			ntohs(dns_dnshead->nr_quest),
+			ntohs(dns_dnshead->nr_answ_RR),
+			ntohs(dns_dnshead->nr_auth_RR),
+	        	ntohs(dns_dnshead->nr_add_RR));
+
+dns_p=(dns_buffer+udp_start+sizeof(struct UDP_header)+12);
+dec_pos=0;
+for(i=0;i<ntohs(dns_dnshead->nr_quest);i++)
+  {
+  printf("\n  Query: ");
+  dec_pos=PL_DNS_decode(dns_p,dec_pos,NULL,0);
+  if(dec_pos<0) {PL_DNS_error(); return;}
+  type=(unsigned short *) &(dns_p[dec_pos]);
+  class=(unsigned short *) &(dns_p[dec_pos+2]);
+  printf("\n    Type: %d   Class: %s",ntohs(*type),(ntohs(*class))?"IP":"Unknown");
+  dec_pos+=4;
+ }
+
+if(fl & PL_DNS_TC)
+  {
+  printf("Truncated packet, not displayed...\n");
+  return;
+  }
+
+/* dec_pos at beginning first answer field */
+answers=ntohs(dns_dnshead->nr_answ_RR)+ntohs(dns_dnshead->nr_auth_RR)+
+		ntohs(dns_dnshead->nr_add_RR);
+for(i=0;i<answers;i++)
+  {
+  printf("\n  Answer %d/%d: ",i+1,answers);
+  dec_pos=PL_DNS_decode(dns_p,dec_pos,NULL,0);
+  if(dec_pos<0) {PL_DNS_error(); return;}
+  type=(unsigned short *) &(dns_p[dec_pos]);
+  class=(unsigned short *) &(dns_p[dec_pos+2]);
+  printf("\n    Type: %d   Class: %s",ntohs(*type),(ntohs(*class))?"IP":"Unknown");
+  dec_pos+=8;
+  r_dlen=(unsigned short *)&(dns_p[dec_pos]);
+  dec_pos+=2;
+  if(ntohs(*type)==1)
+	{printf("\n    Data: ");
+	for(j=0;j<4;j++)
+		printf("%u.",(unsigned char)dns_p[dec_pos+j]);
+	}
+  dec_pos+=ntohs(*r_dlen);
+  }	
+printf("\n\n");
+}

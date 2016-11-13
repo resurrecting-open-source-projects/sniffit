@@ -8,7 +8,7 @@
 sniffit \- packet sniffer and monitoring tool
 
 .SH SYNOPSIS
-.B sniffit  [-xdabvn] [-P 
+.B sniffit  [-xdabvnN] [-P 
 .I proto
 .B ] [-A 
 .I char
@@ -22,6 +22,8 @@ sniffit \- packet sniffer and monitoring tool
 .I snifdevice
 .B ] [-D 
 .I tty
+.B ] [-M
+.I plugin
 .B ] [(-t 
 .I Target-IP
 .B | -s 
@@ -108,6 +110,11 @@ Turn of IP checksum checking. This can show you bogus packets.
 (mind you ARP, RARP, other non-IP packets will show up bogus too)
 .I "(compatible with ALL options)"
 
+.IP -N
+Don't perform any of the build in Sniffit functions. Usefull for only 
+running a Plugin.
+.I "(compatible with ALL options)"
+
 .IP -x
 Prints extended info on TCP packets to stdout (SEQ, ACK, Flags, etc...)
 Interesting when tracing spoofs, packet loss and other real net 
@@ -132,7 +139,7 @@ options currently are: IP, TCP, ICMP, UDP. They can be combined.
 IP, ICMP, UDP info is dumped to stdout. IP gives ADDITIONAL info on the 
 IPwrapping around other packets, it is not needed to specify IP for TCP 
 packet logging.
-IP, UDP, ICMP packets are not filtered.
+IP, ICMP packets are not filtered (UDP packets are as of 0.3.4).
 .I "(NOT compatible with: '-i' '-v' '-L')"
 
 .IP "-A char"
@@ -171,6 +178,14 @@ for info on forcing the use of other devices.
 .IP "-D tty"
 All logging output will be send to that device. 
 .I "(ONLY works with '-i')"     
+
+.IP "-M plugin"
+Activate Plugin nr. 
+.B Plugin
+, for a list on all plugins compiled in your version, just type '
+.B sniffit
+'. Read all about Plugins in the PLUGIN-HOWTO (READ IT!)
+.I "(NOT compatible with: '-i' '-v')"
 
 .IP "-L loglevel"
 Use 
@@ -235,6 +250,14 @@ When in logging mode, stop logging. Otherwise, quit.
 .IP "'n'"
 Toggle netstatistics. These are sampled at 3 secs, look in the config.h 
 file to change this.
+.IP "'g'"
+.B Sniffit 
+is now able to generate some trafic load. Currently this is a 'underdevelloped'
+feature with very few options, but it will be expanded a lot.
+Currently only UDP packets are generated. When pressing 'g' you will be 
+asked the source/dest IP/port and how much packets are needed to be 
+transmitted.  
+Packets contain the line: "This Packet was fired with Sniffit!
 
 .SH "LOGGING MODE ('-L')"
 Output is saved to
@@ -279,8 +302,7 @@ file)
 
 .SH "IP ICMP UDP LOGGING"
 Information on these packets is dumped to stdout. Packet 
-origin/destination can't be filtered (otherwise put: filtering options 
-only refer to TCP packets).
+Filtering options only refer to TCP and UDP packets.
 The contence of UDP packets is only shown when enabling '-a' or '-d'.  
 
 .SH AUTHOR

@@ -1,4 +1,4 @@
-/* Sniffit Global File -- Brecht Claerhout                              */
+/* Sniffit Global File                                                        */
 
 /* some things that are better defined before all the rest */
 /* currently some option data */

@@ -1,0 +1,26 @@
+/* Sniffit Plugin example                                                 */
+/*   - by: Brecht Claerhout                                               */
+/*                                                                        */
+/* This Plugin is a extremely simple example, with no real functionallity */
+/* It is used to demonstrate how you can easily add your own features     */
+/* without having to worry about the packet intercepting and filtering.   */
+/* Plus the fact that all other features of Sniffit remain functional,    */
+/* and that multiple plugins are combinable.                              */
+
+void PL_dummy_plugin (struct Plugin_data *PLD)
+{
+printf("Dummy Plugin Report:\n");
+
+printf(" IP header: %d bytes\n", PLD->PL_info.IP_len);
+
+if(PLD->PL_info.TCP_len!=0)
+  {
+  printf("  TCP header: %d bytes / %d Databytes\n",PLD->PL_info.TCP_len,
+							PLD->PL_info.DATA_len);
+  }
+if(PLD->PL_info.UDP_len!=0)
+  {
+  printf("  UDP header: %d bytes / %d Databytes\n",PLD->PL_info.UDP_len,
+							PLD->PL_info.DATA_len);
+  }
+}

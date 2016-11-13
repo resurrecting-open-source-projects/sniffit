@@ -1,0 +1,177 @@
+                       --=[Sniffit - PLUGIN-HOWTO]=--   
+                    --=['Shipped' with Sniffit 0.3.5]=--
+                           by Brecht Claerhout
+
+1. What are Sniffit plugins (READ)
+2. How to install a plugin  (READ)
+3. How to make a plugin     (Only for programmers)
+4. Contense of structs      (Only for programmers)
+5. Standard Plugins         (READ)
+
+
+1. What are Sniffit plugins
+---------------------------
+
+Sniffit Plugins are a very fancy name for a very primitive system. The 
+plugins allow you to add your own code to Sniffit without many problems.
+This has the advantage you can create your own sniffer within Sniffit, 
+without having to worry about the packet filtering.
+
+2. How to install a plugin
+--------------------------
+
+Well, as I plan to release some plugins myself, and maybe ppl are going 
+to share their own plugins, a little word on the installation.
+
+It's pretty simple, you get the plugin, put it in the sniffit directory 
+and you edit the sn_plugin.h file like this:
+
+#define PLUGIN1_NAME    "My plugin"
+#define PLUGIN1(x)      main_plugin_function(x)
+#include "my_plugin.plug"
+
+Some notes:
+a) You can have plugins from 0 to 9 so PLUGIN0_NAME to PLUGIN1_NAME. 
+   Numbers don't have to be consecutive.
+   (so also a PLUGIN0(x) to PLUGIN9(x) corresponding with the PLUGIN?_NAMES)
+
+b) The PLUGIN?_NAME contains the name that will be displayed when just 
+   typing sniffit.
+
+c) main_plugin_function should be a name provided by the author of the 
+   plugin. It is the name of the function that should be called by Sniffit. 
+   Details on this for making your own plugins are explained below.
+
+d) #include "my_plugin.plug"
+   Where my_plugin.plug is the name of the plugin source code file.
+
+3. How to make a plugin
+-----------------------
+
+I know it's primitive, but it pretty much works and is very easy.
+A plugins should consists of a function (here PL_dummy) 
+
+void PL_dummy (struct Plugin_data *PLD)
+{
+....
+}
+
+It's no problem to use several functions.
+It's no problem to use global data, as long as it doesn't interfer with 
+sniffits global data (or other plugins global data). 
+So it is wise to make all global variables and functions like: 
+	PL_nameofplugin_nameofvariable/function
+
+
+4. Contense of structs
+----------------------
+
+NOTE: I don't use the standard structures for packets. This has it's 
+      'historical' reasons, and has rather become a drag than a positive 
+      point. But it would be even a greater drag (time loss) to overturn 
+      everything completely and recode the appropriate parts of Sniffit, maybe
+      I will do it someday, maybe I won't.
+      I hope you can live with it...
+
+Notice you get a pointer to a structure ('struct Plugin_data *PLD') when 
+your plugin is called. 
+This structure is totally yours and you may modify it without any problems.
+It is defined as:
+
+struct Plugin_data {
+        struct unwrap PL_info;
+        struct IP_header PL_iphead;
+        struct TCP_header PL_tcphead;
+        struct UDP_header PL_udphead;
+        unsigned char PL_data[MTU];
+        unsigned char PL_packet[MTU];
+};
+
+
+PL_info   : contains some general usefull info 
+PL_iphead : contains the IP_header (no options)
+PL_tcphead: contains the TCP_header if it is a TCP packet (no options) 
+PL_udphead: contains the TCP_header if it is a UDP packet (no options) 
+PL_data   : contains the packet data (no headers)
+PL_packet : contains the entire packet
+
+Details on the Packet structures below (You know, the unconventional ones)
+(It is best that you grab your book on packets and have a look at the 
+fields. The structures are composed the same way, and are an exact copy 
+of those headers. So watch it! You might need to use ntohs() and ntohl() 
+now and then!)
+(Have a look at the Dummy Plugin and the DNS Plugin for examples)
+
+struct IP_header                        /* The IPheader (without options) */
+{
+        unsigned char verlen, type;
+        unsigned short length, ID, flag_offset;
+        unsigned char TTL, protocol;
+        unsigned short checksum;
+        unsigned long int source, destination;
+};
+
+
+struct TCP_header                       /* The TCP header (without options) */
+{
+        unsigned short source, destination;
+        unsigned long int seq_nr, ACK_nr;
+        unsigned short offset_flag, window, checksum, urgent; 
+};
+
+
+struct UDP_header                                /* The UDP header */ 
+{
+        unsigned short source, destination;
+        unsigned short length, checksum;
+};
+
+
+5. Standard Plugins
+-------------------
+
+There are 2 Plugins that are currently included in the distribution of 
+Sniffit: A dummy Plugin, and a DNS Plugin.
+
+The Dummy Plugin:
+  As it says, it does nothing ;)
+  example: sniffit -M 0 -bN -t foo.bar
+           Will output some useless information on the intercepted packet 
+           (that has passed the filtering you defined).
+           Example of output: 
+          
+           Dummy Plugin Report:
+            IP header: 20 bytes
+             TCP header: 20 bytes / 1 Databytes
+
+The DNS Plugin:
+  The DNS plugin will examine any UDP packet that is passes the filter 
+  you have setup for sniffit from/to port 53.
+  These packets are DNS packets, and that plugin will decode them and 
+  output some information to the standard output.
+  NOTE: '-P UDP' is needed because Sniffit needs to pass UDP packets to 
+        the Plugin.
+
+  e.g.: sniffit -M1 -N -P UDP -t @
+        Will examine all DNS traffic.
+   
+        An example of output is:     
+
+        DNS Sniffit Plugin Report:
+        Packet: 111.33.111.11 53 -> 111.111.66.33 53
+        ID: 5782 
+          STATUS: Answer (opcode: 0) ,  ,  ,  , rec. NOT Av. , ret: 0
+          Q: 1  Answ: 0  Auth: 2  Add: 2
+          Query: 21.158.245.200.in-addr.arpa.
+            Type: 12   Class: IP
+          Answer 1/4: 245.200.IN-ADDR.ARPA.
+            Type: 2   Class: IP
+          Answer 2/4: 245.200.IN-ADDR.ARPA.
+            Type: 2   Class: IP
+          Answer 3/4: DIXIT.ANSP.BR.
+            Type: 1   Class: IP
+            Data: 143.108.1.17.
+          Answer 4/4: FPSP.FAPESP.BR.
+            Type: 1   Class: IP
+            Data: 143.108.1.1.
+

@@ -1,0 +1,54 @@
+# Sniffit Makefile 
+#   - Maintained by: Brecht Claerhout
+#
+
+.PHONY : clean
+
+#Some Vars
+SNIFFIT    = sniffit.0.3.5.c
+CC         = @CC@
+LIBS       = @LIBS@
+DEFS	   = @DEFS@
+OS_OPT     = @OS_OPT@
+OBJ_FLAG   = -w -O2 -c
+OBJ_OPT    = -I./libpcap-0.3 -L./libpcap-0.3
+EXE_FLAG   = -w -O2 -o sniffit
+EXE_OPT    = -I./libpcap-0.3 -L./libpcap-0.3 -lpcap
+EXE_OBJ    = sn_packets.o sn_generation.o sn_interface.o sn_cfgfile.o \
+             sn_logfile.o
+DEP_FILES  = sn_config.h pcap.h sn_data.h sn_defines.h sn_plugins.h \
+             sn_packets.o \
+             sn_generation.o sn_interface.o sn_cfgfile.o sn_logfile.o
+
+sniffit: $(SNIFFIT) $(DEP_FILES)
+	cd libpcap-0.3; make; cd ..
+	$(CC) $(EXE_FLAG) $(SNIFFIT) $(EXE_OBJ) $(EXE_OPT) $(LIBS) $(DEFS) $(OS_OPT) 
+	strip sniffit
+
+sn_cfgfile.o: sn_cfgfile.h sn_cfgfile.c sn_defines.h sn_structs.h sn_config.h
+	$(CC) $(OBJ_FLAG) sn_cfgfile.c $(OBJ_OPT) $(DEFS)
+
+sn_logfile.o: sn_logfile.h sn_logfile.c sn_defines.h sn_structs.h sn_config.h
+	$(CC) $(OBJ_FLAG) $(GEN_OPT) sn_logfile.c $(OBJ_OPT) $(DEFS)
+
+sn_packets.o: sn_packets.h sn_packets.c sn_defines.h sn_structs.h sn_config.h
+	$(CC) $(OBJ_FLAG) $(GEN_OPT) sn_packets.c $(OBJ_OPT) $(DEFS)
+
+sn_interface.o: sn_interface.h sn_interface.c sn_defines.h sn_structs.h \
+                sn_generation.h sn_generation.c sn_config.h
+	$(CC) $(OBJ_FLAG) $(GEN_OPT) sn_interface.c $(OBJ_OPT) $(DEFS)
+
+sn_generation.o: sn_generation.h sn_generation.c sn_defines.h sn_structs.h \
+                 sn_config.h
+	$(CC) $(OBJ_FLAG) $(GEN_OPT) sn_generation.c $(OBJ_OPT) $(DEFS)
+
+#Clean up everthing...
+clean:
+	cd libpcap-0.3; make clean; rm -f config.cache; cd ..
+	rm -f config.cache
+	rm -f config.status
+	rm -f config.log
+	rm -f ./libpcap-0.3/config.cache
+	rm -f ./libpcap-0.3/config.status
+	rm -f ./libpcap-0.3/config.log
+	rm -f *.o sniffit
