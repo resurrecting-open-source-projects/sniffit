@@ -48,15 +48,15 @@ void quit (char *prog_name)		/* Learn to use the program */
 {
   printf (
 	   "usage: %s [-xdabvnN] [-P proto] [-A char] [-p port] [(-r|-R) recordfile]\n"
-	   "       [-l sniflen] [-L logparam] [-F snifdevice] [-M plugin]\n"
-#ifdef INCLUDE_INTERFACE
-	   "       [-D tty]"
-	   " (-t<Target IP> | -s<Source IP>)"
-	   " | (-i|-I) | -c<config file>]\n",
-#else
-	   "       (-t<Target IP> | -s<Source IP>) | -c<config file>]\n",
-#endif
+	   "       [-l sniflen] [-L logparam] [-F snifdevice] [-M plugin]\n",
 	   prog_name);
+#ifdef INCLUDE_INTERFACE
+  printf ( "       [-D tty]"
+	   " (-t<Target IP> | -s<Source IP>)"
+	   " | (-i|-I) | -c<config file>]\n");
+#else
+  printf ( "       (-t<Target IP> | -s<Source IP>) | -c<config file>]\n");
+#endif
   printf ("Plugins Available:\n");
 #ifdef PLUGIN0_NAME
   printf ("    0 -- %s\n", PLUGIN0_NAME);
