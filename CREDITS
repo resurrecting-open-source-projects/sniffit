@@ -1,0 +1,4 @@
+0.4.0 version:
+
+- Joshua Kwan <joshk@triplehelix.org>
+  Sent a patch to solve Debian bug #195548. It solved a fail with gcc-3.3.
