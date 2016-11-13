@@ -134,7 +134,7 @@ typedef unsigned short _16_bit;
 #define ICMP_TYPE_15    "Information request"
 #define ICMP_TYPE_16    "Information reply"
 #define ICMP_TYPE_17    "Address mask request"
-#define ICMP_TYPE_18    "Adress mask reply"
+#define ICMP_TYPE_18    "Address mask reply"
                                                
 /*** Services (standardised) *******************************************/
 #define FTP_DATA_1	20
