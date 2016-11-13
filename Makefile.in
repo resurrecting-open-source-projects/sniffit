@@ -26,9 +26,8 @@ all: sniffit
 	@echo "Succesfull compilation..."
 
 sniffit: $(SNIFFIT) $(DEP_FILES)
-	cd libpcap; make; cd ..
+#	cd libpcap; make; cd ..
 	$(CC) @CPPFLAGS@ $(EXE_FLAG) $(SNIFFIT) $(EXE_OBJ) $(EXE_OPT) $(LIBS) $(DEFS) $(OS_OPT)
-	strip sniffit
 
 sn_cfgfile.o: sn_cfgfile.h sn_cfgfile.c sn_defines.h sn_structs.h sn_config.h
 	$(CC) $(OBJ_FLAG) sn_cfgfile.c $(OBJ_OPT) $(DEFS)
@@ -52,12 +51,12 @@ sn_resolv.o: sn_resolv.h sn_resolv.c sn_defines.h
 
 #Clean up everthing...
 clean:
-	cd libpcap; make clean; rm -f config.cache; cd ..
+#	cd libpcap; make clean; rm -f config.cache; cd ..
 	rm -f Makefile
 	rm -f config.cache
 	rm -f config.status
 	rm -f config.log
-	rm -f ./libpcap/config.cache
-	rm -f ./libpcap/config.status
-	rm -f ./libpcap/config.log
+#	rm -f ./libpcap/config.cache
+#	rm -f ./libpcap/config.status
+#	rm -f ./libpcap/config.log
 	rm -f *.o sniffit 
