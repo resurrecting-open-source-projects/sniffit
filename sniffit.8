@@ -39,7 +39,7 @@ sniffit \- packet sniffer and monitoring tool
 is a packet sniffer for TCP/UDP/ICMP packets. 
 .B sniffit 
 is able to give you very detailed technical info on these 
-packets (SEQ, ACK, TTL, Window, ...) but also packet contence in 
+packets (SEQ, ACK, TTL, Window, ...) but also packet contents in 
 different formats (hex or plain text, ...).
 .LP
 .B sniffit
@@ -76,7 +76,7 @@ you are running and exits
 
 .IP "-t Target-IP"
 Only process packets TO Target-IP. If Target-IP is in dot-nr notation, 
-'x' is allowed as wildcard. (e.g. '-t 157.193.x', '-t x', ...)
+\'x' is allowed as wildcard. (e.g. '-t 157.193.x', '-t x', ...)
 .I "(NOT compatible with: '-s' '-i' '-I' '-c' '-v' '-L')"
 
 .IP "-s Source-IP"
@@ -84,7 +84,7 @@ Similar to '-t', only process packets FROM Source-IP.
 .I "(NOT compatible with: '-t' '-i' '-I' '-c' '-v' '-L')"
 
 .IP -b
-'both' mode, together with '-s' or '-t', only process FROM/TO the IP 
+\'both' mode, together with '-s' or '-t', only process FROM/TO the IP 
 specified by '-s' or '-t' 
 .I "(NOT compatible with: '-t' '-i' '-I' '-c' '-v' '-L')"
 
@@ -115,7 +115,7 @@ Same as '-i', but gives you more information.
 .IP "-R <file>"
 Record all traffic in 
 .I <file>
-.This file can then be fed to Sniffit with the '-r' option.
+This file can then be fed to Sniffit with the '-r' option.
 .I "(Needs a selection parameter like '-c' '-t' '-s')"
 .I "(NOT compatible with '-i' '-I' '-v' '-L' '-r')"
 
@@ -149,12 +149,12 @@ debugging/checking tasks.
 .I "(NOT compatible with: '-i' 'I' '-v')"
 
 .IP -d
-'dump mode', shows the packets on the screen (stdout) instead of logging 
+\'dump mode', shows the packets on the screen (stdout) instead of logging 
 into files (default). Data is printed in bytes (hex).  
 .I "(NOT compatible with: '-i' 'I' '-v' '-L')"
 
 .IP -a
-'dump mode', same of '-d' but outputs ASCII. Non printable chars are 
+\'dump mode', same of '-d' but outputs ASCII. Non printable chars are 
 replaced by '.'.
 ('-d' and '-a' mix without any problem)
 .I "(NOT compatible with: '-i' '-I' '-v' '-L')"
@@ -193,8 +193,7 @@ Force sniffit to use a certain network device.
 can be found with 
 .I ifconfig
 (see
-.BR ifconfig (8)
-). 
+.BR ifconfig (8)). 
 .B sniffit
 supports ethernet and PPP by default. Read
 .B README.FIRST
@@ -210,7 +209,7 @@ Activate Plugin nr.
 .B Plugin
 , for a list on all plugins compiled in your version, just type '
 .B sniffit
-'. Read all about Plugins in the PLUGIN-HOWTO (READ IT!)
+\'. Read all about Plugins in the PLUGIN-HOWTO (READ IT!)
 .I "(NOT compatible with: '-i' '-I' '-v')"
 
 .IP "-L logparam"
@@ -235,7 +234,7 @@ where 'x.x.x.x' is the sending host (port 'p') and 'y.y.y.y' the
 receiving host (port 'o').
 
 .SH "DUMP MODE ('-d' and/or '-a')"
-Output is dumped to stdout, the packet contence is shown in it's 
+Output is dumped to stdout, the packet contents is shown in it's 
 unwrapped form (the complete IP packet). 
 
 .SH "INTERACTIVE MODE ('-i' or '-I')"
@@ -320,7 +319,7 @@ Sniffit will try to identify all mail that was logged.
 .SH "IP ICMP UDP LOGGING"
 Information on these packets is dumped to stdout. Packet 
 Filtering options only refer to TCP and UDP packets.
-The contence of UDP packets is only shown when enabling '-a' or '-d'.  
+The contents of UDP packets is only shown when enabling '-a' or '-d'.  
 
 .SH AUTHOR
 Brecht Claerhout <coder@reptile.rug.ac.be>
