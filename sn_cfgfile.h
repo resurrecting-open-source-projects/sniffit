@@ -1,23 +1,3 @@
-struct cfg_file_contense
-{
-unsigned char host[16];
-unsigned int priority;
-unsigned char wildcard;
-unsigned short port;
-};
-
-struct cfg_file_contense *select_from_list;     /* pointers for cfg lists */
-struct cfg_file_contense *select_to_list;
-struct cfg_file_contense *deselect_from_list;
-struct cfg_file_contense *deselect_to_list;
- 
-int select_from_length=0;                         /* length of cfg lists  */ 
-int select_to_length=0; 
-int deselect_from_length=0;
-int deselect_to_length=0;
-int Priority=0;             /* The higher the priority, the more important */
-char dot_notation[20];                            /* for easy working, Q&D */
-
 void clear_list_buffer (struct cfg_file_contense *help)
 {
 help->host[0]=0;

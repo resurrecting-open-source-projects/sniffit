@@ -9,27 +9,40 @@
 /* System V IPC (it probably does)                                        */
 
 #ifdef LINUX
-/*#undef INCLUDE_INTERFACE */
+/* if you undef INCLUDE INTERFACE, don't forget to adjust the Makefile! */
+/* information is in that file!                                         */
 #define INCLUDE_INTERFACE  
+/*#undef INCLUDE_INTERFACE */
 #endif
 
 #ifdef SUNOS
-/*#undef INCLUDE_INTERFACE */
+/* if you undef INCLUDE INTERFACE, don't forget to adjust the Makefile! */
 #define INCLUDE_INTERFACE  
+/*#undef INCLUDE_INTERFACE */
+#endif
+
+#ifdef FREEBSD
+/* if you undef INCLUDE INTERFACE, don't forget to adjust the Makefile! */
+/* information is in that file!                                         */
+#define INCLUDE_INTERFACE  
+/*#undef INCLUDE_INTERFACE */
 #endif
 
 #ifdef IRIX
 #undef INCLUDE_INTERFACE 
 #endif
 
-#ifdef FREEBSD
-/*#undef INCLUDE_INTERFACE */
-#define INCLUDE_INTERFACE  
-#endif
-
+/* Not supported yet */
 #ifdef BSDI
 #undef INCLUDE_INTERFACE 
 #endif
+
+/* If you don't have the atexit() function, you will probably have on_exit */
+/* so remove the atexit line and uncomment the on_exit line.               */
+
+#define exit_func(x)    atexit(x)
+/* #define exit_func(x)    on_exit (x,0) */
+
 
 /* Following parameters describe the connections that can be handled at */ 
 /* once, MAXCOUNT stands for connections handled in normal mode. As     */
@@ -62,8 +75,8 @@
 /*************** Don't change anything below this line *********************/
 
 #undef DEBUG                   /* Debugging (to tty) - sigh */
-/*#define DEBUG */ 
-#define DEBUG_DEVICE	"/dev/ttyp3"
+/* #define DEBUG */
+#define DEBUG_DEVICE	"/dev/tty9"
 
 #undef DEBUG_ONSCREEN                  /* Debugging (to screen) - sigh */
 /*#define DEBUG_ONSCREEN */

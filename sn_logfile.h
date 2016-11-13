@@ -1,10 +1,6 @@
 /* Sniffit Logfile include file - Brecht Claerhout */
 
-void logfile_exit (void);
-char *gettime (void);
-void open_logfile (void);
-
-void logfile_exit (void)         /* atexit closing of logfile */
+void logfile_exit (void)         /* at/on_exit closing of logfile */
 {
 printf("Sniffit Logging session ended.\n");
 print_logline("Sniffit session ended.");
@@ -70,7 +66,7 @@ if(Logfile[0]==0)       strcpy(Logfile,"sniffit.log");
 LogFILE=fopen(Logfile,"a");
 if(LogFILE==NULL)
   printf("Sniffit hardattack.. couldn't create/open logfile...\n"), exit(1); 
-atexit(logfile_exit);
+exit_func(logfile_exit);
 fchmod(LogFILE,  S_IWUSR|S_IRUSR);
 print_logline("Sniffit session started.");
 printf("Sniffit Logging started. (loglevel: %d)\n",LOGLEVEL);

@@ -213,6 +213,20 @@ sends the packets)
 .IP "F4 or '4'"
 Enter a port (enter '0' for no mask) for packet filtering. (host that 
 receives the packets)
+.IP "F5 or '5'"
+Start a program 'sniffit_key5' with arguments
+.I "<from IP> <from port> <to IP> <to port>"
+If the program doesn't exist, nothing is done. Sniffit should be in the 
+same path as sniffit was STARTED FROM (not necessarely the path sniffit is 
+stored in) This function is usefull for interactive connection killing or 
+extra monitoring. A little shell script can always transform the arguments 
+given and pass them on to other programs.
+.IP "F6 or '6'"
+Same as F5 or '5', but with program 'sniffit_key6'
+.IP "F7 or '7'"
+Same as F5 or '5', but with program 'sniffit_key7'
+.IP "F8 or '8'"
+Same as F5 or '5', but with program 'sniffit_key8'
 .IP "ENTER"
 a window will pop up and log the connection, or the connection output 
 will be send at a chosen device if you used the '-D' option.

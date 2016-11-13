@@ -240,179 +240,215 @@ depend:	$(GENSRC) force
 # DO NOT PUT ANYTHING AFTER THIS LINE, IT WILL GO AWAY.
 
 pcap-linux.o: pcap-linux.c /usr/include/sys/param.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/limits.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/syslimits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/limits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/syslimits.h \
  /usr/include/limits.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/posix1_lim.h \
  /usr/include/linux/limits.h /usr/include/posix2_lim.h \
  /usr/include/linux/param.h /usr/include/asm/param.h \
  /usr/include/sys/types.h /usr/include/linux/types.h \
- /usr/include/asm/types.h /usr/include/stdio.h /usr/include/libio.h \
- /usr/include/_G_config.h /usr/include/netdb.h /usr/include/paths.h \
- /usr/include/ctype.h /usr/include/endian.h /usr/include/bytesex.h \
- /usr/include/linux/version.h /usr/include/asm/byteorder.h \
- /usr/include/signal.h /usr/include/linux/signal.h \
+ /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/types.h /usr/include/sys/bitypes.h \
+ /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
+ /usr/include/netdb.h /usr/include/paths.h /usr/include/ctype.h \
+ /usr/include/endian.h /usr/include/bytesex.h /usr/include/signal.h \
+ /usr/include/linux/signal.h /usr/include/asm/signal.h \
  /usr/include/errno.h /usr/include/linux/errno.h \
- /usr/include/sys/time.h /usr/include/linux/time.h /usr/include/time.h \
+ /usr/include/asm/errno.h /usr/include/sys/time.h \
+ /usr/include/linux/time.h /usr/include/time.h \
  /usr/include/sys/socket.h /usr/include/linux/socket.h \
- /usr/include/linux/sockios.h /usr/include/sys/file.h \
- /usr/include/fcntl.h /usr/include/gnu/types.h \
- /usr/include/linux/fcntl.h /usr/include/sys/ioctl.h \
- /usr/include/linux/ioctl.h /usr/include/termios.h \
- /usr/include/linux/termios.h /usr/include/sys/socketio.h \
- /usr/include/malloc.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h \
+ /usr/include/asm/socket.h /usr/include/asm/sockios.h \
+ /usr/include/linux/sockios.h /usr/include/linux/uio.h \
+ /usr/include/sys/file.h /usr/include/fcntl.h /usr/include/gnu/types.h \
+ /usr/include/linux/fcntl.h /usr/include/asm/fcntl.h \
+ /usr/include/sys/ioctl.h /usr/include/linux/ioctl.h \
+ /usr/include/asm/ioctl.h /usr/include/termios.h \
+ /usr/include/linux/termios.h /usr/include/asm/termios.h \
+ /usr/include/asm/termbits.h /usr/include/asm/ioctls.h \
+ /usr/include/sys/socketio.h /usr/include/malloc.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h \
  /usr/include/memory.h /usr/include/string.h /usr/include/unistd.h \
  /usr/include/posix_opt.h /usr/include/confname.h \
  /usr/include/net/if.h /usr/include/linux/if.h \
- linux-include/linux/if_arp.h /usr/include/linux/route.h \
- /usr/include/net/if_arp.h /usr/include/netinet/in.h \
- /usr/include/linux/in.h linux-include/netinet/in_systm.h \
+ /usr/include/net/if_arp.h /usr/include/linux/netdevice.h \
+ /usr/include/linux/config.h /usr/include/linux/autoconf.h \
+ /usr/include/linux/if_ether.h linux-include/linux/if_arp.h \
+ /usr/include/netinet/in.h /usr/include/linux/in.h \
+ /usr/include/asm/byteorder.h linux-include/netinet/in_systm.h \
  linux-include/netinet/ip.h linux-include/netinet/ip_var.h \
  linux-include/netinet/udp.h linux-include/netinet/tcp.h net/bpf.h \
  pcap-int.h pcap.h
 pcap.o: pcap.c /usr/include/sys/types.h /usr/include/linux/types.h \
- /usr/include/asm/types.h /usr/include/unistd.h \
- /usr/include/features.h /usr/include/sys/cdefs.h \
- /usr/include/posix_opt.h /usr/include/gnu/types.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h \
+ /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/types.h /usr/include/sys/bitypes.h \
+ /usr/include/unistd.h /usr/include/features.h \
+ /usr/include/sys/cdefs.h /usr/include/posix_opt.h \
+ /usr/include/gnu/types.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h \
  /usr/include/confname.h pcap-int.h pcap.h /usr/include/sys/time.h \
  /usr/include/linux/time.h /usr/include/time.h net/bpf.h \
  /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
 inet.o: inet.c /usr/include/sys/param.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/limits.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/syslimits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/limits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/syslimits.h \
  /usr/include/limits.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/posix1_lim.h \
  /usr/include/linux/limits.h /usr/include/posix2_lim.h \
  /usr/include/linux/param.h /usr/include/asm/param.h \
  /usr/include/sys/types.h /usr/include/linux/types.h \
- /usr/include/asm/types.h /usr/include/sys/file.h /usr/include/fcntl.h \
- /usr/include/gnu/types.h /usr/include/linux/fcntl.h \
+ /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/types.h /usr/include/sys/bitypes.h \
+ /usr/include/sys/file.h /usr/include/fcntl.h /usr/include/gnu/types.h \
+ /usr/include/linux/fcntl.h /usr/include/asm/fcntl.h \
  /usr/include/sys/ioctl.h /usr/include/linux/ioctl.h \
- /usr/include/termios.h /usr/include/linux/termios.h \
+ /usr/include/asm/ioctl.h /usr/include/termios.h \
+ /usr/include/linux/termios.h /usr/include/asm/termios.h \
+ /usr/include/asm/termbits.h /usr/include/asm/ioctls.h \
  /usr/include/sys/socketio.h /usr/include/linux/sockios.h \
- /usr/include/sys/socket.h /usr/include/linux/socket.h \
- /usr/include/net/if.h /usr/include/linux/if.h \
- linux-include/linux/if_arp.h /usr/include/linux/route.h \
- /usr/include/netinet/in.h /usr/include/linux/in.h \
- /usr/include/asm/byteorder.h /usr/include/ctype.h \
- /usr/include/endian.h /usr/include/bytesex.h \
- /usr/include/linux/version.h /usr/include/errno.h \
- /usr/include/linux/errno.h /usr/include/stdio.h /usr/include/libio.h \
+ /usr/include/asm/sockios.h /usr/include/sys/socket.h \
+ /usr/include/linux/socket.h /usr/include/asm/socket.h \
+ /usr/include/linux/uio.h /usr/include/net/if.h \
+ /usr/include/linux/if.h /usr/include/netinet/in.h \
+ /usr/include/linux/in.h /usr/include/asm/byteorder.h \
+ /usr/include/ctype.h /usr/include/endian.h /usr/include/bytesex.h \
+ /usr/include/errno.h /usr/include/linux/errno.h \
+ /usr/include/asm/errno.h /usr/include/stdio.h /usr/include/libio.h \
  /usr/include/_G_config.h /usr/include/stdlib.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h \
  /usr/include/alloca.h /usr/include/string.h /usr/include/unistd.h \
  /usr/include/posix_opt.h /usr/include/confname.h pcap.h \
  /usr/include/sys/time.h /usr/include/linux/time.h /usr/include/time.h \
  net/bpf.h
 gencode.o: gencode.c /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/sys/socket.h /usr/include/features.h \
- /usr/include/sys/cdefs.h /usr/include/linux/socket.h \
- /usr/include/linux/sockios.h /usr/include/sys/time.h \
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/sys/socket.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/linux/socket.h /usr/include/asm/socket.h \
+ /usr/include/asm/sockios.h /usr/include/linux/sockios.h \
+ /usr/include/linux/uio.h /usr/include/sys/time.h \
  /usr/include/linux/time.h /usr/include/time.h /usr/include/net/if.h \
- /usr/include/linux/if.h linux-include/linux/if_arp.h \
- /usr/include/linux/route.h net/bpf.h /usr/include/netinet/in.h \
+ /usr/include/linux/if.h net/bpf.h /usr/include/netinet/in.h \
  /usr/include/linux/in.h /usr/include/asm/byteorder.h \
  linux-include/netinet/if_ether.h /usr/include/net/if_arp.h \
- /usr/include/memory.h /usr/include/string.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h pcap.h \
+ /usr/include/linux/netdevice.h /usr/include/linux/config.h \
+ /usr/include/linux/autoconf.h /usr/include/linux/if_ether.h \
+ linux-include/linux/if_arp.h /usr/include/memory.h \
+ /usr/include/string.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h pcap.h \
  /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
  pcap-namedb.h /usr/include/setjmp.h /usr/include/jmp_buf.h \
  /usr/include/i386/jmp_buf.h /usr/include/signal.h \
- /usr/include/linux/signal.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stdarg.h \
+ /usr/include/linux/signal.h /usr/include/asm/signal.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stdarg.h \
  /usr/include/stdlib.h /usr/include/errno.h /usr/include/linux/errno.h \
- /usr/include/alloca.h gencode.h
+ /usr/include/asm/errno.h /usr/include/alloca.h gencode.h
 optimize.o: optimize.c /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/sys/time.h /usr/include/features.h \
- /usr/include/sys/cdefs.h /usr/include/linux/time.h \
- /usr/include/time.h net/bpf.h /usr/include/stdio.h \
- /usr/include/libio.h /usr/include/_G_config.h /usr/include/memory.h \
- /usr/include/string.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h gencode.h
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/sys/time.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/linux/time.h /usr/include/time.h net/bpf.h \
+ /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
+ /usr/include/memory.h /usr/include/string.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h gencode.h
 nametoaddr.o: nametoaddr.c /usr/include/sys/param.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/limits.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/syslimits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/limits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/syslimits.h \
  /usr/include/limits.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/posix1_lim.h \
  /usr/include/linux/limits.h /usr/include/posix2_lim.h \
  /usr/include/linux/param.h /usr/include/asm/param.h \
  /usr/include/sys/types.h /usr/include/linux/types.h \
- /usr/include/asm/types.h /usr/include/sys/socket.h \
- /usr/include/linux/socket.h /usr/include/linux/sockios.h \
+ /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/types.h /usr/include/sys/bitypes.h \
+ /usr/include/sys/socket.h /usr/include/linux/socket.h \
+ /usr/include/asm/socket.h /usr/include/asm/sockios.h \
+ /usr/include/linux/sockios.h /usr/include/linux/uio.h \
  /usr/include/net/if.h /usr/include/linux/if.h \
- linux-include/linux/if_arp.h /usr/include/linux/route.h \
  /usr/include/netinet/in.h /usr/include/linux/in.h \
  /usr/include/asm/byteorder.h linux-include/netinet/if_ether.h \
- /usr/include/net/if_arp.h /usr/include/arpa/inet.h \
- /usr/include/sys/bitypes.h /usr/include/ctype.h /usr/include/endian.h \
- /usr/include/bytesex.h /usr/include/linux/version.h \
- /usr/include/errno.h /usr/include/linux/errno.h /usr/include/netdb.h \
- /usr/include/paths.h pcap.h /usr/include/sys/time.h \
- /usr/include/linux/time.h /usr/include/time.h net/bpf.h \
- /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
- pcap-namedb.h gencode.h ethertype.h
+ /usr/include/net/if_arp.h /usr/include/linux/netdevice.h \
+ /usr/include/linux/config.h /usr/include/linux/autoconf.h \
+ /usr/include/linux/if_ether.h linux-include/linux/if_arp.h \
+ /usr/include/arpa/inet.h /usr/include/ctype.h /usr/include/endian.h \
+ /usr/include/bytesex.h /usr/include/errno.h \
+ /usr/include/linux/errno.h /usr/include/asm/errno.h \
+ /usr/include/netdb.h /usr/include/paths.h pcap.h \
+ /usr/include/sys/time.h /usr/include/linux/time.h /usr/include/time.h \
+ net/bpf.h /usr/include/stdio.h /usr/include/libio.h \
+ /usr/include/_G_config.h pcap-namedb.h gencode.h ethertype.h
 etherent.o: etherent.c /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/ctype.h /usr/include/features.h /usr/include/sys/cdefs.h \
- /usr/include/endian.h /usr/include/bytesex.h \
- /usr/include/linux/version.h /usr/include/asm/byteorder.h pcap.h \
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/ctype.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/endian.h /usr/include/bytesex.h pcap.h \
  /usr/include/sys/time.h /usr/include/linux/time.h /usr/include/time.h \
  net/bpf.h /usr/include/stdio.h /usr/include/libio.h \
  /usr/include/_G_config.h pcap-namedb.h
 savefile.o: savefile.c /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/sys/time.h /usr/include/features.h \
- /usr/include/sys/cdefs.h /usr/include/linux/time.h \
- /usr/include/time.h net/bpf.h /usr/include/errno.h \
- /usr/include/linux/errno.h /usr/include/memory.h \
- /usr/include/string.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h \
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/sys/time.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/linux/time.h /usr/include/time.h net/bpf.h \
+ /usr/include/errno.h /usr/include/linux/errno.h \
+ /usr/include/asm/errno.h /usr/include/memory.h /usr/include/string.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h \
  /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
  /usr/include/stdlib.h /usr/include/alloca.h /usr/include/unistd.h \
  /usr/include/posix_opt.h /usr/include/gnu/types.h \
  /usr/include/confname.h pcap-int.h pcap.h
 bpf_filter.o: bpf_filter.c /usr/include/sys/param.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/limits.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/syslimits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/limits.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/syslimits.h \
  /usr/include/limits.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/posix1_lim.h \
  /usr/include/linux/limits.h /usr/include/posix2_lim.h \
  /usr/include/linux/param.h /usr/include/asm/param.h \
  /usr/include/sys/types.h /usr/include/linux/types.h \
- /usr/include/asm/types.h /usr/include/sys/time.h \
- /usr/include/linux/time.h /usr/include/time.h net/bpf.h
+ /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/types.h /usr/include/sys/bitypes.h \
+ /usr/include/sys/time.h /usr/include/linux/time.h /usr/include/time.h \
+ net/bpf.h
 bpf_image.o: bpf_image.c /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/sys/time.h /usr/include/features.h \
- /usr/include/sys/cdefs.h /usr/include/linux/time.h \
- /usr/include/time.h net/bpf.h pcap.h /usr/include/stdio.h \
- /usr/include/libio.h /usr/include/_G_config.h /usr/include/string.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/sys/time.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/linux/time.h /usr/include/time.h net/bpf.h pcap.h \
+ /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
+ /usr/include/string.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h
 scanner.o: scanner.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/libio.h \
  /usr/include/_G_config.h /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/sys/time.h /usr/include/linux/time.h /usr/include/time.h \
- /usr/include/ctype.h /usr/include/endian.h /usr/include/bytesex.h \
- /usr/include/linux/version.h /usr/include/asm/byteorder.h pcap.h \
- net/bpf.h pcap-namedb.h gencode.h tokdefs.h /usr/include/stdlib.h \
- /usr/lib/gcc-lib/i486-linux/2.7.0/include/stddef.h \
- /usr/include/errno.h /usr/include/linux/errno.h /usr/include/alloca.h
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/sys/time.h \
+ /usr/include/linux/time.h /usr/include/time.h /usr/include/ctype.h \
+ /usr/include/endian.h /usr/include/bytesex.h pcap.h net/bpf.h \
+ pcap-namedb.h gencode.h tokdefs.h /usr/include/stdlib.h \
+ /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h \
+ /usr/include/errno.h /usr/include/linux/errno.h \
+ /usr/include/asm/errno.h /usr/include/alloca.h
 grammar.o: grammar.c /usr/include/sys/types.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/sys/time.h /usr/include/features.h \
- /usr/include/sys/cdefs.h /usr/include/linux/time.h \
- /usr/include/time.h /usr/include/sys/socket.h \
- /usr/include/linux/socket.h /usr/include/linux/sockios.h \
- /usr/include/net/if.h /usr/include/linux/if.h \
- linux-include/linux/if_arp.h /usr/include/linux/route.h net/bpf.h \
+ /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+ /usr/include/asm/posix_types.h /usr/include/asm/types.h \
+ /usr/include/sys/bitypes.h /usr/include/sys/time.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/linux/time.h /usr/include/time.h \
+ /usr/include/sys/socket.h /usr/include/linux/socket.h \
+ /usr/include/asm/socket.h /usr/include/asm/sockios.h \
+ /usr/include/linux/sockios.h /usr/include/linux/uio.h \
+ /usr/include/net/if.h /usr/include/linux/if.h net/bpf.h \
  /usr/include/netinet/in.h /usr/include/linux/in.h \
  /usr/include/asm/byteorder.h linux-include/netinet/if_ether.h \
- /usr/include/net/if_arp.h /usr/include/stdio.h /usr/include/libio.h \
- /usr/include/_G_config.h pcap.h pcap-namedb.h gencode.h
+ /usr/include/net/if_arp.h /usr/include/linux/netdevice.h \
+ /usr/include/linux/config.h /usr/include/linux/autoconf.h \
+ /usr/include/linux/if_ether.h linux-include/linux/if_arp.h \
+ /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
+ pcap.h pcap-namedb.h gencode.h
 
 # IF YOU PUT ANYTHING HERE IT WILL GO AWAY

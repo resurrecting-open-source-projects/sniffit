@@ -101,7 +101,7 @@ struct unwrap                                           /* some extra info */
 };
 
 /* This routine stolen from ping.c */
-u_short in_cksum(u_short *addr,int len)
+unsigned short in_cksum(unsigned short *addr,int len)
 {
 register int nleft = len;   /* leave this alone.. my opinion is that the   */
 register u_short *w = addr; /* register is needed to make it work for both */ 
@@ -124,7 +124,7 @@ answer = ~sum;
 return(answer);
 }
 
-int unwrap_packet (const u_char *sp, struct unwrap *unwrapped) 
+int unwrap_packet (const unsigned char *sp, struct unwrap *unwrapped) 
 { 
 	struct IP_header  IPhead;
 	struct TCP_header TCPhead;

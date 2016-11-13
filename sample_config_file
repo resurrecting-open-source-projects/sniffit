@@ -1,4 +1,4 @@
-# Sniffit V.0.3.1 Sample Config file -- Brecht Claerhout
+# Sniffit V.0.3.3 Sample Config file -- Brecht Claerhout
 
 # First select all packets! 
 select both mhosts 1

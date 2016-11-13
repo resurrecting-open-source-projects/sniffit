@@ -31,20 +31,19 @@
 #define	ETH_DEV	"ef"
 #endif
 
-/*** Extra system dependent stuff  ***/
-#ifdef SUNOS
-#define atexit(x) on_exit (x,0) 
-#endif
-
 #ifdef INCLUDE_INTERFACE
+/* If this file is reported missing, fill in the absolute path of the file */
+/* ncurses.h location can vary from time to time.                          */ 
+/* NOTE: this file is generaly equal to curses.h                           */
 #include <ncurses.h>
+
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #endif
 
 /*** Normal Sniffit operations */
 
-#define VERSION   "0.3.2"                               /* Program Version */
+#define VERSION   "0.3.3"                               /* Program Version */
 #define SNAPLEN   MTU                            /* Ethernet Packet Length */
 #define MSDELAY   0                               /* Delay between Packets */
 #define PACKETS   1                       /* Number of packets to dispatch */
