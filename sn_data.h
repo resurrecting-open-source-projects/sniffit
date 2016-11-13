@@ -2,43 +2,105 @@
 
 /**** Network Devices *******************************************************/
 
-#define PPP_DEV_NR      1
-char *PPP_DEV[]={"ppp"};
+
+/* Older configuration system of Sniffit */
+/* ether: 14                             */
+/* ppp  : 4                              */
+/* slip : 16                             */
+/* lo   : 4                              */
 
 #ifdef LINUX
-#define ETH_DEV_NR      1
-char *ETH_DEV[]={"eth"};
+/*
+#define NETDEV_NR      3
+char *NETDEV[]={"lo","ppp","eth"};     
+int HEADSIZE []={4  ,0   ,14};
+*/
+#define NETDEV_NR      3
+char *NETDEV[]={"ppp","slip","eth"}; 		/* echo on loopback   */    
+int HEADSIZE []={0   ,0     ,14};		/* slip needs testing */
 #endif
 
 #ifdef SUNOS
-#define ETH_DEV_NR      2
-char *ETH_DEV[]={"le","hme"};
+#define NETDEV_NR      3
+char *NETDEV[]={"le","hme"};
+int HEADSIZE[]={14  ,14};		/* ppp: 4 or 0 or nothing? */
 #endif
 
 #ifdef IRIX
-#define ETH_DEV_NR      1
-char *ETH_DEV[]={"et"};
+#define NETDEV_NR      2
+char *NETDEV[]={"ppp","et"};
+int HEADSIZE[]={0    ,14};		/* ppp: 4 or 0 or nothing */
 #endif
 
-#ifdef FREEBSD
-#define ETH_DEV_NR      1
-char *ETH_DEV[]={"ed"};
+#ifdef FREEBSD				/* ppp: 4 or 0 ? */
+/*
+#define NETDEV_NR      2
+char *NETDEV[]={"ppp","ed"};		
+int HEADSIZE[]={4    ,14}; 
+*/
+#define NETDEV_NR      1
+char *NETDEV[]={"ed"};		
+int HEADSIZE[]={14}; 
 #endif
 
-#ifdef BSDI
-#define ETH_DEV_NR      1
-char *ETH_DEV[]={"ef"};
+#ifdef BSDI				/* ppp: 4 or 0 ? */
+/*
+#define NETDEV_NR      2
+char *NETDEV[]={"ppp","ef"};	
+int HEADSIZE[]={4    ,14}; 
+*/
+#define NETDEV_NR      1
+char *NETDEV[]={"ef"};	
+int HEADSIZE[]={14}; 
+#endif
+
+#ifdef DEC_OSF
+#define NETDEV_NR      1
+char *NETDEV[]={"ln"};
+int HEADSIZE[]={14}; 
+#endif
+
+#ifdef NETBSD
+#ifdef i386
+#define NETDEV_NR      21
+char *NETDEV[]={"ppp","ai","de","ec","ef","eg","el","en","ep","fe","fea","fpa","fxp","ix","iy","lc","le","ne","sm","tl","we"};
+int HEADSIZE[]={4    ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14   ,14   ,14   ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14  };
+#elif defined(sparc)
+#define NETDEV_NR      3
+char *NETDEV[]={"ppp","le","ie"};
+int HEADSIZE[]={4    ,14  ,14};
+#elif defined(amiga)
+#define ETH_DEV_NR      6
+char *NETDEV[]={"ppp","bah","ed","es","le","qn"};
+int HEADSIZE[]={4    ,14  ,14   ,14  ,14  ,14};
+#else
+#error Unknown network devices for this NetBSD architecture.
+#endif
+#endif
+
+#ifdef AIX                          /* only for the AIX powerpack ;) */
+#define NETDEV_NR      4            /* not usefull without it        */
+char *NETDEV[]={"en","et","tr","fi"};
+int HEADSIZE[]={14  ,22  ,22  ,24}; 
+#endif
+
+#ifdef HPUX                        /* only for the HPUX powerpack ;) */
+#define NETDEV_NR      2           /* not usefull without it        */
+char *NETDEV[]={"le","sam"};              
+int HEADSIZE[]={14  ,14   }; 
 #endif
 
 /**** Global data **********************************************************/ 
 pcap_t *dev_desc;
+pcap_dumper_t *dev_dump;
 void *start_dynam;
 int dynam_len;
 char Logfile[250];                                      /* name of logfile */
 FILE *LogFILE;                                           /* logfile stream */
-char *IP;
+/* char *IP; *//* was with older '-p' */
+char IP[256];
 unsigned long SNIFLEN;                            /* bytes we need to snif */
-short DEST_PORT;                                       /* destination port */
+short DEST_PORT, SRC_PORT;                             /* destination port */
 char non_printable, *logging_device;
 
 /**** Global data (packets) *************************************************/
@@ -95,6 +157,7 @@ int *LISTlength, *DATAlength, memory_id;
 unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets;
 unsigned int  *IP_nr_of_packets;
 unsigned long *TCP_bytes_in_packets, *UDP_bytes_in_packets;
+int *DESC_LEN;
 
 /**** data structures *******************************************************/ 
 struct snif_mask *mask;

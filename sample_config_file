@@ -1,4 +1,4 @@
-# Sniffit V.0.3.3 Sample Config file -- Brecht Claerhout
+# Sniffit V.0.3.3-0.3.7 Sample Config file -- Brecht Claerhout
 
 # First select all packets! 
 select both mhosts 1
@@ -8,3 +8,4 @@ select both mhosts 2
 deselect both port 80
 deselect both port 8001
 
+# Be sure to end this file with a blank line!

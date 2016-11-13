@@ -13,6 +13,7 @@
 #include "sn_structs.h"
 #include "sn_interface.h"
 #include "sn_generation.h"
+#include "sn_resolv.h"
 
 /*** extern stuff ********/
 extern char *SHARED, *connection_data, *timing, *running_connections,
@@ -20,6 +21,9 @@ extern char *SHARED, *connection_data, *timing, *running_connections,
 extern int *LISTlength, *DATAlength, memory_id;
 extern unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets; unsigned int  *IP_nr_of_packets;
 extern unsigned long *TCP_bytes_in_packets, *UDP_bytes_in_packets;  
+extern int *DESC_LEN;   /* For the connection desciption */                   
+
+extern char INTERACTIVE_EXTEND;
 
 extern struct snif_mask *mask;
 extern struct shared_logged_conn *log_conn;
@@ -35,6 +39,7 @@ extern WINDOW *menu_window;
 extern struct box_window data_box, main_box, mask_box, packets_box;
 extern int Pid;                   
 extern char *logging_device;
+
 
 /*** Screen Parameters ***/
 extern int MASK_WINDOW_ROWS, MASK_WINDOW_COLS, MAIN_WINDOW_ROWS, MAIN_WINDOW_COLS; 
@@ -233,11 +238,21 @@ while((line<boxlen)&& ((i+j)<CONNECTION_CAPACITY) )
 		wmove(Work_win->work_window,line,0);
 		whline(Work_win->work_window,' ',rowlen);
 		if(strcmp(log_conn->log_enter,conn[i+j].connection) != 0) 
-    			wprintw(Work_win->work_window," %s",conn[i+j].connection);
+			{
+			if(INTERACTIVE_EXTEND==1)
+    				wprintw(Work_win->work_window," %s  :  %s",conn[i+j].connection,conn[i+j].desc);
+			else
+    				wprintw(Work_win->work_window," %s",conn[i+j].connection);
+			}
 		else
-    			wprintw(Work_win->work_window," %s           *LOGGED*",
-						        conn[i+j].connection);
-
+			{
+			if(INTERACTIVE_EXTEND==1)
+    				wprintw(Work_win->work_window," %s  :  [LOGGED]",
+							        conn[i+j].connection);
+			else
+    				wprintw(Work_win->work_window," %s     [LOGGED]",
+							        conn[i+j].connection);
+			}
     		line++;
     		}
   	j++;
@@ -285,12 +300,22 @@ wmove(Work_win->work_window,item-begin_item,0);
 whline(Work_win->work_window,' ',rowlen);
 
 if(strcmp(log_conn->log_enter,conn[i].connection)!=0)
-	mvwprintw(Work_win->work_window,item-begin_item,0,
-						" %s", conn[i].connection );
+	{
+	if(INTERACTIVE_EXTEND==1)
+	  mvwprintw(Work_win->work_window,item-begin_item,0,
+				" %s  :  %s", conn[i].connection, conn[i].desc);
+	else
+	  mvwprintw(Work_win->work_window,item-begin_item,0," %s", conn[i].connection);
+	}
 else
-	mvwprintw(Work_win->work_window,item-begin_item,0,
-					        " %s           *LOGGED*",
-                                             	conn[i].connection );
+	{
+	if(INTERACTIVE_EXTEND==1)
+	  mvwprintw(Work_win->work_window,item-begin_item,0,
+					        " %s  :  [LOGGED]",conn[i].connection);
+	else
+	  mvwprintw(Work_win->work_window,item-begin_item,0,
+					        " %s     [LOGGED]",conn[i].connection);
+	}	  
   
 wnoutrefresh(Work_win->work_window);
 if(COLOR_AVAIL!=0)
@@ -517,7 +542,7 @@ delwin(packets_box.work_window), delwin(packets_box.main_window);
 forced_refresh();
 }
 
-int add_itemlist(char *buffer, char *string)
+int add_itemlist(char *buffer, char *string, char *desc)
 {
 int i, to_help, to_item;
 struct shared_conn_data *conn;
@@ -528,6 +553,7 @@ conn = (struct shared_conn_data *) buffer;
 for(i=0;i<CONNECTION_CAPACITY;i++)
 	if(strcmp( conn[i].connection, string)==0)
 		{
+                strcpy(conn[i].desc, desc);  /* For description of connect */
 		conn[i].timeout=0;
 		return -1;
 		}
@@ -535,6 +561,7 @@ for(i=0;i<CONNECTION_CAPACITY;i++)
 	if(conn[i].connection[0]==0)
     		{
 		strcpy(conn[i].connection, string);
+                strcpy(conn[i].desc, desc);  /* For description of connect */
 		conn[i].timeout=0;
     		(*LISTlength)++;
 		return i;
@@ -550,6 +577,7 @@ for(i=0;i<CONNECTION_CAPACITY;i++)
 			to_item=i;
 			}
 strcpy(conn[to_item].connection, string);
+strcpy(conn[to_item].desc, desc);  /* For description of connect */
 conn[to_item].timeout=0;
 return to_item;
 }
@@ -564,6 +592,7 @@ for(i=0;i<CONNECTION_CAPACITY;i++)
 	if(strcmp( conn[i].connection, string)==0)
     		{
 		conn[i].connection[0]=0;
+		conn[i].desc[0]=0;
 		conn[i].timeout=0;
     		(*LISTlength)--;
 	        if(strcmp( log_conn->log_enter, string)==0) 
@@ -598,6 +627,7 @@ conn = (struct shared_conn_data *) running_connections;
 for(i=0;i<CONNECTION_CAPACITY;i++)
 	{
 	conn[i].connection[0]=0;
+	conn[i].desc[0]=0;
 	conn[i].timeout=0;
 	} 
 *timing=0;
@@ -668,6 +698,11 @@ set_signal (SIGCHLD, SIG_IGN);
 set_signal(SIGUSR1,interaction);
 
 init_screen();	        	/* The whole screen setup */
+if( MAIN_WINDOW_COLS-2-CONN_NAMELEN-1 < DESC_BYTES)
+  *DESC_LEN=MAIN_WINDOW_COLS-2-CONN_NAMELEN-1;
+else
+  *DESC_LEN=DESC_BYTES;
+
 f_box_window(&mask_box,MASK_WINDOW_ROWS,MASK_WINDOW_COLS,MASK_WINDOW_Y,MASK_WINDOW_X,0);
 mask_status(&mask_box);
 f_box_window(&main_box,MAIN_WINDOW_ROWS,MAIN_WINDOW_COLS,0,0,0);

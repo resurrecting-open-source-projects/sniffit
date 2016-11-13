@@ -14,10 +14,12 @@ sniffit \- packet sniffer and monitoring tool
 .I char
 .B ] [-p 
 .I port
+.B ] [(-r|-R) 
+.I recordfile
 .B ] [-l 
 .I sniflen
 .B ] [-L 
-.I loglevel
+.I logparam
 .B ] [-F 
 .I snifdevice
 .B ] [-D 
@@ -28,7 +30,7 @@ sniffit \- packet sniffer and monitoring tool
 .I Target-IP
 .B | -s 
 .I Source-IP
-.B ) | -i | -c 
+.B ) | (-i|-I) | -c 
 .I config-file
 .B ]
 
@@ -43,9 +45,9 @@ different formats (hex or plain text, ...).
 .B sniffit
 can by default handle ethernet and PPP devices, but can easily be 
 forced into using other devices (read the 
-.B README.*
+.B README.FIRST
 and 
-.B config.h
+.B sn_config.h
 files on this subject!)
 .LP
 The sniffer can easily be configured in order to 'filter' the incomming 
@@ -59,7 +61,7 @@ for continuous monitoring on different levels.
 
 .SH NOTE
 This man page is supposed to be a reference manual. So please read 
-.B README.* 
+.B README.FIRST 
 first, and use this only for better understanding or for a quick check on 
 the use of
 .B sniffit
@@ -75,16 +77,16 @@ you are running and exits
 .IP "-t Target-IP"
 Only process packets TO Target-IP. If Target-IP is in dot-nr notation, 
 'x' is allowed as wildcard. (e.g. '-t 157.193.x', '-t x', ...)
-.I "(NOT compatible with: '-s' '-i' '-c' '-v' '-L')"
+.I "(NOT compatible with: '-s' '-i' '-I' '-c' '-v' '-L')"
 
 .IP "-s Source-IP"
 Similar to '-t', only process packets FROM Source-IP.
-.I "(NOT compatible with: '-t' '-i' '-c' '-v' '-L')"
+.I "(NOT compatible with: '-t' '-i' '-I' '-c' '-v' '-L')"
 
 .IP -b
 'both' mode, together with '-s' or '-t', only process FROM/TO the IP 
 specified by '-s' or '-t' 
-.I "(NOT compatible with: '-t' '-i' '-c' '-v' '-L')"
+.I "(NOT compatible with: '-t' '-i' '-I' '-c' '-v' '-L')"
 
 .IP "-c config-file"
 Use 
@@ -93,17 +95,41 @@ for the packet filtering. This allows you to be very specific on the
 packets to be processed (see 
 .BR sniffit (5)
 for details on the format).
-.I "(NOT compatible with: '-t' '-s' '-i' '-v' '-L')"
+.I "(NOT compatible with: '-t' '-s' '-i' '-I' '-v' '-L')"
 
 .IP -i
 Launch the ncurses interface for active monitoring ('interactive mode'). 
 (NOT available if you compiled without INTERACTIVE support see
-.B config.h
+.B sn_config.h
 and
-.B README.*
+.B README.FIRST
 )
-(one of the options '-t' '-s' '-i' '-c' is required)
+(one of the options '-t' '-s' '-i' '-I' '-c' is required)
 .I "(NOT compatible with: '-t' '-s' '-c' '-v' '-L')"
+
+.IP -I
+Same as '-i', but gives you more information.
+(one of the options '-t' '-s' '-i' '-I' '-c' is required)
+.I "(NOT compatible with: '-t' '-s' '-c' '-v' '-L')"
+
+.IP "-R <file>"
+Record all traffic in 
+.I <file>
+.This file can then be fed to Sniffit with the '-r' option.
+.I "(Needs a selection parameter like '-c' '-t' '-s')"
+.I "(NOT compatible with '-i' '-I' '-v' '-L' '-r')"
+
+.IP "-r <file>"
+This option feeds the recorded 
+.I <file> to 
+.B sniffit.
+It requires the '-F' option with the correct device. Suppose you log a file 
+on a machine with 'eth0'. When feeding the logged file to 
+.B sniffit
+, you will need to add '-F eth0' or '-F eth' to the command line. It doesn't 
+need much explanation that using '-i' or '-I' in combination with '-r' makes 
+no sense (at this moment).
+.I "(requires '-F', NOT compatible with '-R' '-i' '-I')"
 
 .IP -n
 Turn of IP checksum checking. This can show you bogus packets.
@@ -120,18 +146,18 @@ Prints extended info on TCP packets to stdout (SEQ, ACK, Flags, etc...)
 Interesting when tracing spoofs, packet loss and other real net 
 debugging/checking tasks. 
 (if you want to log this, pipe stdout to a file)  
-.I "(NOT compatible with: '-i' '-v')"
+.I "(NOT compatible with: '-i' 'I' '-v')"
 
 .IP -d
 'dump mode', shows the packets on the screen (stdout) instead of logging 
 into files (default). Data is printed in bytes (hex).  
-.I "(NOT compatible with: '-i' '-v' '-L')"
+.I "(NOT compatible with: '-i' 'I' '-v' '-L')"
 
 .IP -a
 'dump mode', same of '-d' but outputs ASCII. Non printable chars are 
 replaced by '.'.
 ('-d' and '-a' mix without any problem)
-.I "(NOT compatible with: '-i' '-v' '-L')"
+.I "(NOT compatible with: '-i' '-I' '-v' '-L')"
 
 .IP "-P proto"
 Specify the protocols that should be processed (default TCP). Possible 
@@ -140,26 +166,26 @@ IP, ICMP, UDP info is dumped to stdout. IP gives ADDITIONAL info on the
 IPwrapping around other packets, it is not needed to specify IP for TCP 
 packet logging.
 IP, ICMP packets are not filtered (UDP packets are as of 0.3.4).
-.I "(NOT compatible with: '-i' '-v' '-L')"
+.I "(NOT compatible with: '-i' '-I' '-v' '-L')"
 
 .IP "-A char"
-When in 'normal mode' (not '-d','-a','-i','-L'), all non-printable chars 
+When in 'normal mode' (not '-d','-a','-i','-I','-L'), all non-printable chars 
 will be replaced by 
 .I char
-.I "(NOT compatible with: '-a' '-d' '-i' '-v' '-L')"
+.I "(NOT compatible with: '-a' '-d' '-i' '-I' '-v' '-L')"
 
 .IP "-p port"
 Only checks packets going TO (!!)  port 
 .I port
 , 0 means all ports, default is 0 (all).
-.I "(NOT compatible with: '-c' '-i' '-v' '-L')"
+.I "(NOT compatible with: '-c' '-i' '-I' '-v' '-L')"
 
 .IP "-l sniflen"
 Ammount of data to log (default 300 bytes) in 'normal mode'. The first
 .B sniflen  
 bytes of every connection are logged. Length 0 logs means everything. (look 
 out with diskspace!)
-.I "(NOT compatible with: '-i' '-v' '-L')"
+.I "(NOT compatible with: '-i' '-I' '-v' '-L')"
 
 .IP "-F snifdevice"
 Force sniffit to use a certain network device.
@@ -171,13 +197,13 @@ can be found with
 ). 
 .B sniffit
 supports ethernet and PPP by default. Read
-.B README.*
+.B README.FIRST
 for info on forcing the use of other devices.
 .I "(compatible with ALL options)"
 
 .IP "-D tty"
 All logging output will be send to that device. 
-.I "(ONLY works with '-i')"     
+.I "(ONLY works with '-i' and '-I')"     
 
 .IP "-M plugin"
 Activate Plugin nr. 
@@ -185,17 +211,19 @@ Activate Plugin nr.
 , for a list on all plugins compiled in your version, just type '
 .B sniffit
 '. Read all about Plugins in the PLUGIN-HOWTO (READ IT!)
-.I "(NOT compatible with: '-i' '-v')"
+.I "(NOT compatible with: '-i' '-I' '-v')"
 
-.IP "-L loglevel"
+.IP "-L logparam"
 Use 
-.B sniffit as a monitoring tool and enable loglevel
-.I loglevel
-The File for logging can be specified in the config file (see
+.B sniffit
+as a monitoring tool and enable different logging modes (
+.I logparam
+) The File for logging can be specified in the config file (see
 .BR sniffit (5)
 ) but is 
 .B sniffit.log
-by default. 
+by default. Different 
+.I logparam can be combined.
 .I "(ONLY works with '-c')"     
 
 .SH "NORMAL MODE"
@@ -210,7 +238,7 @@ receiving host (port 'o').
 Output is dumped to stdout, the packet contence is shown in it's 
 unwrapped form (the complete IP packet). 
 
-.SH "INTERACTIVE MODE ('-i')"
+.SH "INTERACTIVE MODE ('-i' or '-I')"
 Keys available in interactive mode:
 .IP "'UP or 'k'"
 self explanatory
@@ -248,7 +276,7 @@ will be send at a chosen device if you used the '-D' option.
 .IP "'q'"
 When in logging mode, stop logging. Otherwise, quit.
 .IP "'n'"
-Toggle netstatistics. These are sampled at 3 secs, look in the config.h 
+Toggle netstatistics. These are sampled at 3 secs, look in the sn_config.h 
 file to change this.
 .IP "'g'"
 .B Sniffit 
@@ -258,47 +286,36 @@ Currently only UDP packets are generated. When pressing 'g' you will be
 asked the source/dest IP/port and how much packets are needed to be 
 transmitted.  
 Packets contain the line: "This Packet was fired with Sniffit!
+.IP "'r'"
+Reset.. clears all current connections from memory and restarts.
 
 .SH "LOGGING MODE ('-L')"
 Output is saved to
 .B sniffit.log 
-,unless you have specified some other name in the config file (see
+, unless you have specified some other name in the config file (see
 .BR sniffit (5)
 ).
 .LP
-.IP "Loglevel 1 (Raw level)"
+.IP "raw"
 Log all SYN, FIN, RST packets. This will give you an overview of all 
 network (TCP) trafic in a 'RAW' way (a connection starting could gives 
 you at least 2 SYN packets, etc...).
-.IP "Loglevel 10 (Normal level)"
-Same as Raw level 1, but a bit more intelligent. Unless packets are 
+.IP "norm"
+Same as raw, but a bit more intelligent. Unless packets are 
 transmitted multiple times because of packet loss, you will only get 1 
 notice of a connection starting or ending. (the packet id
 will give you the host that initiated the connection first)
-.IP "Loglevel 12 (Normal level)"
-This option will spy on trafic concerning ports 21 and 23 on the subnet. 
-Yes indeed, 
-.B ftp
+.IP "telnet"
+Sniffit will try to catch login and passwords for this application. (see
+.BR telnet (1)
+)
+.IP "ftp"
+Sniffit will try to catch login and passwords for this application. 
 (see
 .BR ftp (1)
-) and 
-.B telnet
-(see
-.BR telnet (1)
-). Sniffit will try to catch login and passwords 
-for these applications. 
-.IP
-.B ftp
-- Easy catching. Even multiple tries are registered.
-.IP
-.B telnet
-- A bit harder. We only try to catch the first attempt, so if someone 
-fails the first login, you will miss his password.
-A '~' in the login and passwords fields can be a nonprintable character 
-(if in the beginning of a field, probably due to an early
-start of registration) or a '~'. Interested in some tricks that made this 
-work? Have a look at in function 'packethandler' in the sniffit.*.c 
-file)                        
+) 
+.IP "mail"
+Sniffit will try to identify all mail that was logged.
 
 .SH "IP ICMP UDP LOGGING"
 Information on these packets is dumped to stdout. Packet 

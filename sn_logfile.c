@@ -12,7 +12,8 @@
 
 extern char Logfile[250];                                /* name of logfile */
 extern FILE *LogFILE;                                     /* logfile stream */ 
-extern char LOGLEVEL;
+extern char LOGPARAM;
+extern char DUMPMODE;				   	 /* recorded or not */
       
 void logfile_exit (void)         /* at/on_exit closing of logfile */
 {
@@ -26,11 +27,12 @@ char *gettime (void)
 {
 time_t t;
 char *tm;
+static char recorded[] = "Recorded";
 
 time(&t);
 tm=ctime(&t);
 tm[24]=0;
-return tm;
+return (DUMPMODE&16)?recorded:tm;
 }
 
 void print_logline (char *logline)
@@ -60,6 +62,13 @@ sprintf(line,"%s: login [%s]",conn,login);
 print_logline (line);
 }
 
+void print_mail (char *conn, char *msg)
+{
+char line[250];
+sprintf(line,"%s: mail [%s]",conn,msg);
+print_logline (line);
+}
+
 void print_pwd (char *conn, char *pwd)
 {
 char line[250];
@@ -83,6 +92,6 @@ if(LogFILE==NULL)
 exit_func(logfile_exit);
 fchmod(LogFILE,  S_IWUSR|S_IRUSR);
 print_logline("Sniffit session started.");
-printf("Sniffit Logging started. (loglevel: %d)\n",LOGLEVEL);
+printf("Sniffit Logging started.\n");
 }
 

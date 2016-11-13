@@ -46,9 +46,9 @@
 /* more dangerous to change, if you machine goes to slow (when sniffing    */
 /* in interactive mode), lower this number.                                */
 
-#define MAXCOUNT  		100
+#define MAXCOUNT  		500
 #ifdef INCLUDE_INTERFACE
-#define CONNECTION_CAPACITY  	50
+#define CONNECTION_CAPACITY  	100
 #endif
 
 /* This is the interval time for the netstatistics */
@@ -67,13 +67,13 @@
 /***************************************************************************/
 /* Read about forcing the sniff device in the README.FIRST file            */
 
-#define FORCED_HEAD_LENGTH	ETHERHEAD
+#define FORCED_HEAD_LENGTH	14 /* default */
 
 /* MTU: this could need a change on interfaces different from ethernet or on non-standard */
 /*      configured systems. Get the info out of 'ifconfig'.                               */
 /*      But 1500 is a standard.                                                           */
 
-#define MTU	1500
+#define MTU	5000
 
 /*************** Don't change anything below this line *********************/
 

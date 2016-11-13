@@ -6,19 +6,28 @@ dnl GNU Autoconf file
 AC_INIT(sniffit.h)
 
 dnl Config of libpcap
-AC_CONFIG_SUBDIRS(libpcap-0.3)
+AC_CONFIG_SUBDIRS(libpcap)
 
 dnl Check the C compiler
 AC_PROG_CC
 
 dnl Check NCURSES availability
-NCURSES_PATH=/usr/include:/usr/include/ncurses:/usr/include/curses:/usr/local/include:/usr/local/include/ncurses:/usr/local/include/curses
-AC_CHECK_LIB(ncurses,main)
+NCURSES_PATH=/usr/include:/usr/include/ncurses:/usr/include/curses:/usr/local/include:/usr/local/include/ncurses:/usr/local/include/curses:./:./ncurses.h
+ncurses_warn=0
+AC_CHECK_LIB(ncurses,main,,ncurses_warn=1)
 
 AC_PATH_PROGS(NCURSES_LOCATION,ncurses.h,no,$NCURSES_PATH)
 if test "$NCURSES_LOCATION" != no; then
 	echo "#include \"$NCURSES_LOCATION\"" >sn_curses.h
 	AC_DEFINE(HAVE_NCURSES_H,1)
+else
+	ncurses_warn=1
+fi
+
+dnl Print warning for interactive mode
+if test $ncurses_warn -ne 0; then
+        AC_MSG_WARN(Interactive mode (-i/-I) will NOT be supported.!)
+	AC_MSG_WARN(Install ncurses!)       
 fi
 
 dnl Check Shared Memory support
@@ -30,13 +39,22 @@ AC_CHECK_FUNCS(atexit)
 dnl Check the datalength
 AC_CHECK_SIZEOF(unsigned short int)
 if test $ac_cv_sizeof_unsigned_short_int -ne 2; then
-	echo "unisigned short is NOT 2 bytes... quiting"
+	echo "unsigned short is NOT 2 bytes... quiting"
 	exit
 fi
+
 AC_CHECK_SIZEOF(unsigned long int)
-if test $ac_cv_sizeof_unsigned_long_int -ne 4; then
-	echo "unisigned short is NOT 4 bytes... quiting"
-	exit
+if test $ac_cv_sizeof_unsigned_long_int -eq 4; then
+AC_DEFINE(USE_32_LONG_INT)
+else
+	echo "unsigned long is NOT 4 bytes... hmmm..."
+	AC_CHECK_SIZEOF(unsigned int)
+	if test $ac_cv_sizeof_unsigned_int -ne 4; then
+		echo "unsigned int is NOT 4 bytes either... quiting"
+        	exit
+	else
+		AC_DEFINE(USE_32_INT)
+	fi
 fi
 
 
@@ -62,6 +80,11 @@ solaris*)
 	OS_OPT=
 	AC_SUBST(OS_OPT)
         ;;
+hpux*)
+	AC_DEFINE(HPUX)
+	OS_OPT=
+	AC_SUBST(OS_OPT)
+        ;;
 irix*)
 	AC_DEFINE(IRIX)
 	OS_OPT=
@@ -69,6 +92,11 @@ irix*)
         ;;
 freebsd*)
 	AC_DEFINE(FREEBSD)
+	OS_OPT=
+	AC_SUBST(OS_OPT)
+        ;;
+netbsd*)
+	AC_DEFINE(NETBSD)
 	OS_OPT=
 	AC_SUBST(OS_OPT)
         ;;

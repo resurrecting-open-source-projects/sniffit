@@ -1,11 +1,15 @@
 /* Sniffit Cfgfile source file                                            */
-/*   - by: Brecht Claerhout                                               */
+/*   - by          : Brecht Claerhout                                     */
+/*   - improvements: Shudoh Kazuyuki                                      */
+
+#include <stdio.h>
+#include <netdb.h>	                           /* for getservbyname() */
 
 #include "sn_config.h"
-#include <stdio.h>
 #include "sn_defines.h"
 #include "sn_structs.h"
 #include "sn_cfgfile.h"           
+#include "sn_resolv.h"
 /* #include "sn_generation.h" */
 
 extern struct cfg_file_contense *select_from_list; /* pointers for cfg lists */ 
@@ -147,7 +151,7 @@ return string;
 
 void make_nr_dot (char *host)
 {
-unsigned long hostnr;
+_32_bit hostnr;
 unsigned char *digit;
 char help[255];
 
@@ -156,6 +160,37 @@ clean_string(help);
 hostnr=getaddrbyname(help);
 digit=(char *)&hostnr;
 sprintf(dot_notation,"%u.%u.%u.%u",digit[0],digit[1],digit[2],digit[3]);
+}
+
+static int make_portno(char *servname)             /* by Shudoh Kazuyuki */ 
+{
+struct servent *ent = NULL;
+int ret = 0;
+char *buf;
+int namelen;
+
+buf = strdup(servname);
+namelen = strlen(buf) - 1;
+if (buf[namelen] == '\n') 
+  {buf[namelen] = '\0';}
+
+setservent(0 /*false*/);
+ent = getservbyname(buf, "tcp");
+
+if (ent) 
+  {ret = (int)ntohs((unsigned short)ent->s_port);}
+else 
+  {ret = atoi(buf);}
+
+free(buf);
+
+if (ret <= 0) 
+  {
+  printf("Invalid port no or service name in config file: %s\n", servname);
+  exit(1);
+  }
+
+return ret;
 }
 
 void interprete_line (char *line)
@@ -167,13 +202,17 @@ size_t i;
 field=strtok(line," ");
 if(field!=NULL)
 	{
+	/* comment line */
+	if(*field == '#')  return;
+	if(*field == ';')  return;
+
 	strlower(field);
 	if(strcmp(strlower(field),"logfile")==0)
 	  {
 	  field=clean_filename(strtok(NULL," "));
      	  if(field != NULL) strcpy(Logfile,field);
 	  }
-	if(strcmp(strlower(field),"select")==0)
+	else if(strcmp(strlower(field),"select")==0)
 	  {
 	  field=strtok(NULL," ");
           if(strcmp(strlower(field),"from")==0)
@@ -185,14 +224,14 @@ if(field!=NULL)
               make_nr_dot(strtok(NULL," "));
               strcpy(help->host,dot_notation);
               if( (field=strtok(NULL," "))!=NULL) 
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
               return;
  	      }
             if(strcmp(strlower(field),"port")==0)  /* select from port */
 	      {                           
 	      help=adjust_select_from_list();
-	      help->port=atoi( strtok(NULL," ") ); 
+	      help->port=make_portno( strtok(NULL," ") ); 
 	      help->priority=Priority;
 	      return;
 	      }
@@ -201,7 +240,7 @@ if(field!=NULL)
 	      help=adjust_select_from_list();
 	      strcpy(help->host, clean_string(strtok(NULL," ")));
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
 	      help->wildcard=1;
  	      return;
@@ -216,14 +255,14 @@ if(field!=NULL)
               make_nr_dot(strtok(NULL," "));
 	      strcpy(help->host,dot_notation);
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
               return;
  	      }
             if(strcmp(strlower(field),"port")==0)  /* select to port */
 	      {                           
 	      help=adjust_select_to_list();
-	      help->port=atoi( strtok(NULL," ") ); 
+	      help->port=make_portno( strtok(NULL," ") ); 
 	      help->priority=Priority;
               return;
  	      }
@@ -232,7 +271,7 @@ if(field!=NULL)
 	      help=adjust_select_to_list();
 	      strcpy(help->host, clean_string(strtok(NULL," ")));
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
 	      help->wildcard=1;
               return;
@@ -249,7 +288,7 @@ if(field!=NULL)
 	      strcpy(help->host,dot_notation);
 	      strcpy(helpp->host,dot_notation);
 	      if( (field=strtok(NULL," "))!=NULL)
-			{help->port=atoi(field); helpp->port=atoi(field);}
+			{help->port=make_portno(field); helpp->port=make_portno(field);}
 	      help->priority=Priority;
  	      helpp->priority=Priority;
               return;
@@ -259,8 +298,8 @@ if(field!=NULL)
 	      help=adjust_select_from_list();
 	      helpp=adjust_select_to_list();
 	      field=strtok(NULL," "); 
-	      help->port=atoi(field); 
-	      helpp->port=atoi(field); 
+	      help->port=make_portno(field); 
+	      helpp->port=make_portno(field); 
 	      help->priority=Priority;
 	      helpp->priority=Priority;
               return;
@@ -273,7 +312,7 @@ if(field!=NULL)
 	      strcpy(help->host, field);
 	      strcpy(helpp->host, field);
 	      if( (field=strtok(NULL," "))!=NULL)
-			{help->port=atoi(field); helpp->port=atoi(field);}
+			{help->port=make_portno(field); helpp->port=make_portno(field);}
 	      help->priority=Priority;
 	      helpp->priority=Priority;
  	      help->wildcard=1;
@@ -294,14 +333,14 @@ if(field!=NULL)
               make_nr_dot(strtok(NULL," "));
 	      strcpy(help->host,dot_notation);
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
               return;
  	      }
             if(strcmp(strlower(field),"port")==0)  /* select from port */
-	      {                           
+	      {
 	      help=adjust_deselect_from_list();
-	      help->port=atoi(strtok(NULL," ")); 
+	      help->port=make_portno(strtok(NULL," ")); 
 	      help->priority=Priority;
               return;
  	      }
@@ -310,7 +349,7 @@ if(field!=NULL)
 	      help=adjust_deselect_from_list();
 	      strcpy(help->host, clean_string(strtok(NULL," ")));
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
  	      help->wildcard=1;
               return;
@@ -325,14 +364,14 @@ if(field!=NULL)
               make_nr_dot(strtok(NULL," "));
 	      strcpy(help->host,dot_notation);
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
               return;
  	      }
             if(strcmp(strlower(field),"port")==0)  /* deselect to port */
 	      {                           
 	      help=adjust_deselect_to_list();
-	      help->port=atoi(strtok(NULL," ")); 
+	      help->port=make_portno(strtok(NULL," ")); 
 	      help->priority=Priority;
               return;
  	      }
@@ -341,7 +380,7 @@ if(field!=NULL)
 	      help=adjust_deselect_to_list();
 	      strcpy(help->host, clean_string(strtok(NULL," ")));
 	      if( (field=strtok(NULL," "))!=NULL)
-			help->port=atoi(field);
+			help->port=make_portno(field);
 	      help->priority=Priority;
  	      help->wildcard=1;
               return;
@@ -358,7 +397,7 @@ if(field!=NULL)
 	      strcpy(help->host,dot_notation);
 	      strcpy(helpp->host,dot_notation);
 	      if( (field=strtok(NULL," "))!=NULL)
-			{help->port=atoi(field); helpp->port=atoi(field);}
+			{helpp->port = help->port = make_portno(field);}
 	      help->priority=Priority;
 	      helpp->priority=Priority;
               return;
@@ -368,8 +407,7 @@ if(field!=NULL)
 	      help=adjust_deselect_from_list();
 	      helpp=adjust_deselect_to_list();
 	      field=strtok(NULL," "); 
-	      help->port=atoi(field); 
-	      helpp->port=atoi(field); 
+	      helpp->port = help->port = make_portno(field); 
 	      help->priority=Priority;
 	      helpp->priority=Priority;
               return;
@@ -382,7 +420,7 @@ if(field!=NULL)
 	      strcpy(help->host, field);
 	      strcpy(helpp->host, field);
 	      if( (field=strtok(NULL," "))!=NULL)
-			{help->port=atoi(field); helpp->port=atoi(field);}
+			{help->port=make_portno(field); helpp->port=make_portno(field);}
 	      help->priority=Priority;
 	      helpp->priority=Priority;
  	      help->wildcard=1;
@@ -405,7 +443,7 @@ deselect_from_list=NULL; deselect_to_list=NULL;
 Priority=0;
 
 if((cfgfile = fopen(file,"r"))==NULL)
-	{printf("Couldn't find config file... giving up.\n"); exit(1);}
+	{fprintf(stderr,"Couldn't find config file... giving up.\n"); exit(1);}
 while(feof(cfgfile)==0)
 	{
 	fgets(lineptr,259,cfgfile);
@@ -415,4 +453,3 @@ while(feof(cfgfile)==0)
 	}
 fclose(cfgfile);
 };
-

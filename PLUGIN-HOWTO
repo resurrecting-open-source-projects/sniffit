@@ -1,7 +1,3 @@
-                       --=[Sniffit - PLUGIN-HOWTO]=--   
-                    --=['Shipped' with Sniffit 0.3.5]=--
-                           by Brecht Claerhout
-
 1. What are Sniffit plugins (READ)
 2. How to install a plugin  (READ)
 3. How to make a plugin     (Only for programmers)
@@ -26,9 +22,10 @@ to share their own plugins, a little word on the installation.
 It's pretty simple, you get the plugin, put it in the sniffit directory 
 and you edit the sn_plugin.h file like this:
 
-#define PLUGIN1_NAME    "My plugin"
-#define PLUGIN1(x)      main_plugin_function(x)
-#include "my_plugin.plug"
+  #define PLUGIN0_NAME "Dummy Plugin"                                  
+  #define PLUGIN0(x)     main_plugin_function(x)                      
+  #define PLUGIN0_INIT() init_plugin()            /* (optional) */
+  #include "my_plugin.plug"
 
 Some notes:
 a) You can have plugins from 0 to 9 so PLUGIN0_NAME to PLUGIN1_NAME. 
@@ -42,8 +39,12 @@ c) main_plugin_function should be a name provided by the author of the
    plugin. It is the name of the function that should be called by Sniffit. 
    Details on this for making your own plugins are explained below.
 
-d) #include "my_plugin.plug"
+d) init_plugin() is also a function that can be provided by the author.
+   Some plugins will not have an init function.
+
+e) #include "my_plugin.plug"
    Where my_plugin.plug is the name of the plugin source code file.
+
 
 3. How to make a plugin
 -----------------------
@@ -61,6 +62,12 @@ It's no problem to use global data, as long as it doesn't interfer with
 sniffits global data (or other plugins global data). 
 So it is wise to make all global variables and functions like: 
 	PL_nameofplugin_nameofvariable/function
+
+* NEW: If you define a PL_init_function 
+*      e.g: #define PLUGIN0_INIT() init_plugin() 
+*
+*      This function will be runned when Sniffit starts, and the plugin 
+*      is selected by the user, it is usefull for initialising some data.
 
 
 4. Contense of structs
@@ -149,8 +156,6 @@ The DNS Plugin:
   you have setup for sniffit from/to port 53.
   These packets are DNS packets, and that plugin will decode them and 
   output some information to the standard output.
-  NOTE: '-P UDP' is needed because Sniffit needs to pass UDP packets to 
-        the Plugin.
 
   e.g.: sniffit -M1 -N -P UDP -t @
         Will examine all DNS traffic.

@@ -4,7 +4,7 @@
 
 typedef void (*sig_hand)(int );  /* sighandler_t gave errors, weird */
 
-int add_itemlist(char *, char *);
+int add_itemlist(char *, char *, char *);
 void child_exit (void);
 void clear_shared_mem(char);
 void data_device (char *, int);
@@ -28,7 +28,7 @@ void set_signal (int, sig_hand);
 void sig_blocking(char, int);
 void stop_logging (void);
 int check_mask (const struct packetheader *,const unsigned char *, char *, 
-					char *, struct unwrap *);
+                                            char *, char *, struct unwrap *);
 pcap_handler interactive_packethandler( char *, const struct packetheader *,
                  		        const unsigned char *);
 void stop_packet_info (void);

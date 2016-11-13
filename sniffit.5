@@ -17,7 +17,7 @@ continuous logging ('-L' option).
 .LP
 A 
 .B sniffit 
-config file might look like:
+config file might look like (Be sure to end it with a BLANK line):
 .IP
 .nf
 # Sniffit Sample Config file -- Brecht Claerhout
@@ -88,8 +88,10 @@ will ignore packets that match the description
 wildcars in 0.3.0, but without the 'x'
 
 .IP "<field4>"
-Either a hostname, a portnumber or a numbet-dot partial notatiion 
-indicating multiple hosts depending on <field3>
+Either a hostname, a portnumber, a service name or a numbet-dot partial 
+notation indicating multiple hosts depending on <field3> 
+(service names like 'ftp' are resolved as the services available present on 
+the host that runs Sniffit, and translated into a port nr)
 
 .IP "<field5>"
 A portnumber, if <field3> was 'host' or 'mhosts' (optional, if not filled 

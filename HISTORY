@@ -1,0 +1,118 @@
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+*                            Sniffit History                                  *
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+
+ BUGFIXES
+----------
+
+(PRIOR TO 0.2.0 - some are LINUX only)
+   - Kernel 1.2.(some) incompatibility should be fixed. (like 1.2.5)
+     (all credit for that to Godmar Back)
+   - logging connections with lots of data is okay too now.
+     'the integer that needed to be a long'-bug. 
+     It was an overflow prob.
+   - off course there are always minor ameliorations not worth mentioning
+
+(SINCE 0.2.0)
+   - MAXCOUNT bug 
+   - interactive part lock-up bugs
+   - output format 
+
+(SINCE 0.3.0)
+   - a wildcard bug
+   - a Makefile bug (nothing important)
+
+(SINCE 0.3.1)
+   - a typo caused the screwing up of the wildcard option (0.3.1)
+   - 'select from host' didn't work...
+
+(SINCE 0.3.2)
+   - a functions that had a parameter missing.
+   - all interactive mode problems.
+
+(SINCE 0.3.3)
+   - Interactive mode, with non-color-modes.
+   - External program firing...
+
+(SINCE 0.3.4)
+   - Interactive mode NON-IP packet detection.
+   - errorhandeling starting of external programs from interface
+   - various improvements for the porting (thx, beta-testers)
+
+(SINCE 0.3.5)
+   - Seg fault on small Fragmented IP packets handled.
+   - core dump bug fixed with unknown network devices 
+
+ NEW STUFF
+-----------
+
+V.0.1.0
+   - First test of the ncurses interface (never use this version, it's 
+     megaslow)
+
+V.0.1.1
+   - Added '-x' for extra information on TCP packets
+   - Added '-A <char>' for you 'password-horny-dudes' ;)  
+   - beginning of ICMP support ('-P <protocol>')
+   - First 'real' test for the interface
+
+V.0.1.2
+   - IP debugging info
+   - UDP support
+   - extended ICMP info (almost complete....)
+   - logging on another terminal
+
+V.0.2.0
+   - SUN port (I now hate SPARC's ;)
+
+V.0.2.1
+   - SGI port
+
+V.0.2.2
+   - Netload statistics (interactive part)
+   - Massive debugging of interactive part 
+
+V.0.3.0
+   - Wildcards in non-interactive mode
+   - time-out in non interactive mode, so you won't stuff memory by 
+     connections that weren't closed like they're supposed to be. 
+   - Forcing the use of a snif device
+   - MTU changeble in config.h
+   - ppp use 
+
+V.0.3.1
+   - Flexible network trafic selection with config file.
+
+V.0.3.2
+   - IP checksum check
+   - First introduction of a logfile for monitoring
+   - Adding of loglevel: 1, 10, 12
+
+V.0.3.3
+   - rewrite of some parts (big clean-up of interactive part)
+   - Auto adjusting to screen of interface
+   - Starting of external programs from interface
+
+V.0.3.4 (Beta)
+   - Use of Autoconf
+   - Upgrade of Libpcap to 0.3
+   - Added Packet generation
+   - Added UDP selectivity
+   - Added "plugins"
+
+V.0.3.5
+   - cleaned out 0.3.4 beta
+
+V.0.3.6 (alpha, special HIP preview)
+   - '-I' mode (locally refered to as 'Iliet' mode (pronounce in Dutch), 
+     officialy 'Extended Interactive')
+   - alpha version session recording
+   - alpha version 'sniffit_pb' added (concept canceled in 0.3.7)
+   - an init function for plugins
+
+V.0.3.7
+   - Thrown away the old style recording, and changed the concept
+   - Gracefull shutdown with restoring original interface mode
+
+------------------------ Thx for using Sniffit(tm) ---------------------------
+

@@ -1,0 +1,85 @@
+------[ The Sniffit-FAQ V.0.2]------------------------------------------------
+
+As the same questions keep popping up in my mailbox, I decided to write a 
+Sniffit-FAQ.
+
+------[ The Questions ]-------------------------------------------------------
+ 
+1. 'sniffit -i' doesn't work. It says unknown option.
+
+1.b. I'm sure I have NCURSES, but I still have that problem!
+
+2. I can only see packets to/from my own computer, what is wrong? (BTW: 
+   I'm on PPP).
+
+3. I have e.g. to ethernetcards, but 'sniffit -F /dev/eth1' doesn't work, 
+   why?
+
+4. How can I find the device names?
+
+5. Why can't my LINUX capture packets?
+
+6. Why can't my BSD style system capture packets?
+
+------[ The Answers ]---------------------------------------------------------
+
+1. 'sniffit -i' doesn't work. It says unknown option.
+
+   Prior to 0.3.5 you had to configure Sniffit manual, that was a drag, 
+   so I made it configure itself. Problem now is that it is too automatic.
+   When running the 'configure' script, it looks for 'ncurses' (which is 
+   needed for the interactive mode), when it does not find 'ncurses', it 
+   just excludes interactive mode, so '-i' becomes an unknown option.
+   Solution: if you haven't got 'ncurses', install it (to be found at any 
+   sunsite mirror). If you are sure you have it, well it probably isn't 
+   in the right directories, maybe use some symbolic links.
+   These are the dirs 'configue' looks in:
+         /usr/include:/usr/include/ncurses:/usr/include/curses
+         /usr/local/include:/usr/local/include/ncurses:
+         /usr/local/include/curses
+   and as of 0.3.6 Sniffit also looks in: 
+         ./:./ncurses
+   (BTW: it looks for a file 'ncurses.h')
+
+1.b. I'm sure I have NCURSES, but I still have that problem!
+
+   Sometimes you have NCURSES, but no 'ncurses.h' file. Simple, just link 
+   (soft) 'ncurses.h' to 'curses.h'. 
+
+2. I can only see packets to/from my own computer, what is wrong? (BTW: 
+   I'm on PPP)
+
+   PPP: Point to Point connection.
+   Per defenition, this protocol will only carry packets that contain 
+   information for the connected computer.
+   As a consequence on your side, you see only things that got to/come 
+   from your computer, so Sniffit works fine.
+   To see traffic of whole subnets, you need protocols like ethernet (the 
+   coax cable).
+
+3. I have e.g. to ethernetcards, but 'sniffit -F /dev/eth1' doesn't work, 
+   why?
+
+   Don't put any path in front of the devices. These names aren't even 
+   listed in /dev/.
+   The correct line would be: 'sniffit -F eth1'
+ 
+4. How can I find the device names?
+
+   Well in case Sniffit doesn't find the correct name itself, you will 
+   have to find it, and use the '-F' parameter.
+   The devices can be found by using the 'ifconfig' or 'route' commands.
+
+5. Why can't my LINUX capture packets?
+
+   You should upgrade the kernel.
+   Normally Sniffit should work on all kernels older then 2.0.0.
+   But I advise using a kernel older then 2.0.25.
+   (You could also downgrade the libpcap version to that used wityh 
+    Sniffit 0.3.3 if all else fails)
+
+6. Why can't my BSD style system capture packets?
+
+   You should recompile your kernel with BPF support.
+
+------[ The End ]-------------------------------------------------------------

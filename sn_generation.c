@@ -77,7 +77,7 @@ forced_refresh();
 /*	              int sp_ipoptlen, int sp_tcpoptlen, int sp_datalen,  */
 /*                    char *sp_source, unsigned short sp_source_port,     */ 
 /*                    char *sp_dest,unsigned short sp_dest_port,          */ 
-/*                    unsigned long sp_seq, unsigned long sp_ack,         */ 
+/*                    _32_bit sp_seq, _32_bit sp_ack,                     */ 
 /*                    unsigned short sp_flags)                            */ 
 /*   fire data away in a TCP packet                                       */
 /*    sp_fd         : raw socket filedesc.                                */ 
@@ -243,9 +243,9 @@ sp_help_tcp->checksum=in_cksum((unsigned short *) sp_pseudo_ip_construct,
 
 void transmit_TCP (int sp_fd, char *sp_data, 
 			   int sp_ipoptlen, int sp_tcpoptlen, int sp_datalen, 
-		           unsigned long sp_source, unsigned short sp_source_port,
-			   unsigned long sp_dest, unsigned short sp_dest_port,
-                           unsigned long sp_seq, unsigned long sp_ack, 
+		           _32_bit sp_source, unsigned short sp_source_port,
+			   _32_bit sp_dest, unsigned short sp_dest_port,
+                           _32_bit sp_seq, _32_bit sp_ack, 
                            unsigned short sp_flags)
 {
 char sp_buffer[1500];
@@ -314,8 +314,8 @@ sp_help_udp->checksum=in_cksum((unsigned short *) sp_pseudo_ip_construct,
 
 void transmit_UDP (int sp_fd, char *sp_data, 
 			   int sp_ipoptlen, int sp_datalen, 
-		           unsigned long sp_source, unsigned short sp_source_port,
-			   unsigned long sp_dest, unsigned short sp_dest_port)
+		           _32_bit sp_source, unsigned short sp_source_port,
+			   _32_bit sp_dest, unsigned short sp_dest_port)
 {
 char sp_buffer[1500];
 struct sp_data_exchange sp_struct;

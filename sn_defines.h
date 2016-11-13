@@ -1,13 +1,24 @@
-/* Sniffit Defines File                                                         */
+/* Sniffit Defines File                                                    */
 
 #include "sn_config.h"
 
+/*** typedefs ******************/
+
+#ifdef USE_32_LONG_INT
+typedef unsigned long int _32_bit;
+#endif
+#ifdef USE_32_INT
+typedef unsigned int _32_bit;
+#endif
+typedef unsigned short _16_bit;
+
 /*** Normal Sniffit operations */
 
-#define VERSION   "0.3.5"                               /* Program Version */
+#define VERSION   "0.3.7 Beta"                          /* Program Version */
 #define SNAPLEN   MTU                            /* Ethernet Packet Length */
-#define MSDELAY   0                               /* Delay between Packets */
-#define PACKETS   1                       /* Number of packets to dispatch */
+#define MSDELAY   1000                                     /* pcap timeout */
+#define PACKETS   1					  /* pcap dispatch */
+#define CNT	  -1                                    /* pcap loop count */
 #define LENGTH_OF_INTERPROC_DATA	5*SNAPLEN       /* buffer capacity */
 #define SCBUF     30			           /* scroll buffer length */
 #define LOG_PASS_BUF  20+1	                /* login/pwd buffer length */
@@ -23,16 +34,28 @@
 /* 	0-9  : TCP	*/
 /* 	10-19: ICMP	*/
 /* 	20-29: UDP      */
-#define DONT_EXAMINE	-1			/* Skip Packet */
-#define TCP_EXAMINE	0			/* TCP - 'for us' */
-#define TCP_FINISH	1			/* TCP - end connection */
-#define ICMP_EXAMINE	10			/* ICMP - examine */
-#define UDP_EXAMINE	20			/* UDP - examine */
+#define DROP_PACKET		-2		/* Skip Packet completely */
+#define DONT_EXAMINE		-1		/* Skip Packet */
+#define TCP_EXAMINE		0		/* TCP - 'for us' */
+#define TCP_FINISH		1		/* TCP - end connection */
+#define TCP_EX_FRAG_HEAD	2               /* defined lower */
+#define TCP_EX_FRAG_NF		3
+#define ICMP_EXAMINE		10		/* ICMP - examine */
+#define UDP_EXAMINE		20		/* UDP - examine */
 
 #define F_TCP		1			/* Flags for PROTOCOLS */
 #define F_ICMP		2
 #define F_UDP		4
 #define F_IP            8
+
+/*** Logparam defines */
+
+#define	LOGPARAM_LOG_ON		1
+#define	LOGPARAM_RAW		2
+#define LOGPARAM_NORM		4
+#define LOGPARAM_TELNET		8
+#define LOGPARAM_FTP		16
+#define LOGPARAM_MAIL		32
 
 /*** Interface defines */
 
@@ -47,7 +70,8 @@
 #define WIN_COLOR_PACKET_INFO	6
 #define WIN_COLOR_PKTCNT	7
 
-#define CONN_NAMELEN         56    /* length of string */
+#define CONN_NAMELEN         56     /* length of string      */
+#define DESC_BYTES           60     /* length of description */
 
 #define MENU " Masks: F1-Source IP  F2-Dest. IP  F3-Source Port  F4-Dest. Port"
 #endif
@@ -66,11 +90,6 @@
 #undef PLUGIN9_NAME
 
 
-/***************************** Packet Defines  ****************************/
-#define ETHERHEAD 14    /* Length Ethernet Packet header */
-#define PPPHEAD 4       /* Length PPP Packet header */
-#define SLIPHEAD 16     /* Length SLIP Packet header */
-
 #define	IP_VERSION	4
 
 #define URG 32       /*TCP-flags */
@@ -80,11 +99,17 @@
 #define SYN 2
 #define FIN 1
 
-#define NO_IP   0
-#define NO_IP_4 1000
-#define ICMP    1                       /* Protocol Numbers */
-#define TCP     6
-#define UDP     17
+/* unwrap packet */
+#define NOT_SUPPORTED	-1
+#define NO_IP   	0
+#define NO_IP_4 	1000
+#define CORRUPT_IP	1001
+#define TCP_FRAG_HEAD	1002
+#define UDP_FRAG_HEAD	1003
+#define ICMP_FRAG_HEAD	1004
+#define ICMP    	1                       /* Protocol Numbers */
+#define TCP     	6
+#define UDP     	17
 
 #define ICMP_HEADLENGTH 4               /* fixed ICMP header length */
 #define UDP_HEADLENGTH  8               /* fixed UDP header length */
@@ -111,3 +136,17 @@
 #define ICMP_TYPE_17    "Address mask request"
 #define ICMP_TYPE_18    "Adress mask reply"
                                                
+/*** Services (standardised) *******************************************/
+#define FTP_DATA_1	20
+#define FTP_1		21
+#define SSH_1	 	22
+#define TELNET_1	23
+#define MAIL_1		25
+#define IDENT_1		113	
+#define HTTP_1		80	
+#define HTTP_2		80	
+#define HTTP_3		80	
+#define HTTP_4		80	
+#define IRC_1		6667	
+#define X11_1		6000	
+

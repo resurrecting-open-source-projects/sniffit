@@ -1,5 +1,8 @@
 /* Sniffit Structs File                                                       */
 
+#ifndef _SN_STRUCTS_H_
+#define _SN_STRUCTS_H_
+
 #include <stdio.h>
 #include "sn_packetstructs.h"
 
@@ -9,7 +12,7 @@ struct file_info
         char proto, filename[50];
         FILE *f;
         unsigned long bytes;
-        unsigned long exp_seq;     /* expected seq to avoid double logging */
+        _32_bit exp_seq;     /* expected seq to avoid double logging */
 	int time_out;   
 	char log;                      /* log=0  : do nothing        */
 	                               /* log=1  : log 'login'       */
@@ -54,6 +57,7 @@ struct box_window
 struct shared_conn_data           /* shared memory connection datastructure */
   {
   char connection [CONN_NAMELEN];                 /* full ID string of conn */
+  char desc [DESC_BYTES];                         /* connection description */
   int timeout;                   
   };
 struct shared_logged_conn            /* shared memory logging datastructure */
@@ -62,25 +66,25 @@ struct shared_logged_conn            /* shared memory logging datastructure */
   };
 struct snif_mask                                         /* struct for mask */
   {
-  unsigned long source_ip, destination_ip;
-  unsigned short source_port, destination_port;
+  _32_bit source_ip, destination_ip;
+  _32_bit short source_port, destination_port;
   };
 
 /* (packet generation) */
 struct generate_mask
 {
-	unsigned long  dest_ip, source_ip;
-	unsigned short	dest_port, source_port;
-	unsigned long 	pkt_no;
+	_32_bit dest_ip, source_ip;
+	_16_bit	dest_port, source_port;
+	_32_bit 	pkt_no;
 };
 
 struct sp_data_exchange {
         int fd;                                /* Sh!t from transmit_TCP  */
         char *data;
         int datalen;
-        unsigned long source; unsigned short source_port;
-        unsigned long dest;   unsigned short dest_port;
-        unsigned long seq, ack;
+        _32_bit source; unsigned short source_port;
+        _32_bit dest;   unsigned short dest_port;
+        _32_bit seq, ack;
         unsigned short flags;
         char *buffer;               /* work buffer */
         int IP_optlen;             /* IP options length in bytes  */
@@ -88,3 +92,4 @@ struct sp_data_exchange {
         };                            
 #endif
 
+#endif

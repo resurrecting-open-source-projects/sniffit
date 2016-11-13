@@ -5,8 +5,9 @@
 /* and include the source code of it.                                   */
 /* Example:                                                             */
 /* #define PLUGIN0_NAME "Dummy Plugin"                                  */
-/* #define PLUGIN0(x)   PL_real_function_name(x)                        */
-/* #include "plugin_include_filename.h"                                 */
+/* #define PLUGIN0(x)     PL_real_function_name(x)                      */
+/* #define PLUGIN0_INIT() PL_init_real_function_name()       (optional) */
+/* #include "plugin_include_filename.plug"                              */
 /* PLUGIN0_NAME and PLUGIN0 are fixed names, numbers can go from 0 to 9 */ 
 
 /* These to plugins come standard with the Sniffit package as examples. */
