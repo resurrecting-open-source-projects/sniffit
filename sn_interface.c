@@ -6,7 +6,9 @@
 #ifdef INCLUDE_INTERFACE
 #include <signal.h>
 #include <termios.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>       
 #include "sn_curses.h" 

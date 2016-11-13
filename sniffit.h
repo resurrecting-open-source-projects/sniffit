@@ -3,6 +3,8 @@
 #ifndef _SNIFFIT_H_ 
 #define _SNIFFIT_H_
 
+#include "pcap.h"
+
 /**** Sniffit functions *****************************************************/ 
 int check_packet(_32_bit,
                 const struct packetheader *,

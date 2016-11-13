@@ -5,7 +5,9 @@
 #include "sn_config.h"
 #ifdef INCLUDE_INTERFACE
 #ifdef GENERATION
+#include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>     
 #include "sn_curses.h"

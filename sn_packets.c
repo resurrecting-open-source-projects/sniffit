@@ -4,6 +4,7 @@
 #include "sn_config.h"
 #include "sn_defines.h"
 #include "sn_structs.h"
+#include <string.h>
 #include <netinet/in.h>
 
 extern int PROTO_HEAD;

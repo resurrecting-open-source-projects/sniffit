@@ -2,7 +2,9 @@
 /*   - by          : Brecht Claerhout                                     */
 /*   - improvements: Shudoh Kazuyuki                                      */
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <netdb.h>	                           /* for getservbyname() */
 
 #include "sn_config.h"
@@ -10,6 +12,7 @@
 #include "sn_structs.h"
 #include "sn_cfgfile.h"           
 #include "sn_resolv.h"
+#include "sniffit.h"
 /* #include "sn_generation.h" */
 
 extern struct cfg_file_contense *select_from_list; /* pointers for cfg lists */ 

@@ -3,7 +3,9 @@
                      
 #include "sn_config.h"
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include "sn_defines.h"
