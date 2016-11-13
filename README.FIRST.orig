@@ -1,0 +1,435 @@
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+*                            Sniffit V.0.3.0                                  *
+*                          By Brecht Claerhout                                *
+#  This program is intended to demonstrate the unsafeness of TCP (currently)  #
+*                No illegal activities are encouraged!                        *
+#      Anyway, I'm not responsible for anything you do with it.               #
+*                                                                             *
+#  Sniffit grew a little upon it's original intentions and is now             #
+*  extended for network debugging (UDP, ICMP, netload, etc.)                  *
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+*                          Libpcap library                                    *
+#      This product includes software developed by the Computer Systems       #
+*           Engineering Group at Lawrence Berkeley Laboratory.                *
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+
+0. Introduction, and some stuff you should know.
+	crap, credits and compilation notes
+1. Programmers notes
+	excuses for my incompetence
+2. Use of the program
+	flags and examples
+3. Extra info on use 
+        3.1 Running interactive mode
+	3.2 Forcing network devices   (*READ*)
+4. The output
+	read this! you could be supprised otherwise.
+5. IMPORTANT NOTES, READ!
+	this also!
+6. BUGFIXES
+7. NEW STUFF
+	to keep track of what's in it
+	and what is going to come 
+------------------------------------------------------------------------------
+
+0. Introduction, and some stuff you should know.
+------------------------------------------------
+
+Why Jump to 0.3.0? Because I think it's time to start with patches and not
+with complete releases for every minor detail that changes. I believe Sniffit
+is now in a stage where it will benefit of a lot of minor changes instead of 
+some huge modifications.
+The last number in the version will be the patch-level from now on. 
+BTW: you should read IMPORTANT!
+
+What did I add? Well, support for people with more then one network interface,
+because I got a lot of mails lately of people complaining that sniffit didn't
+want to use their second ethernetcard and thus gave up.
+PPP support was added... no big deal...
+Also I added the use of wildcards in IP numbers....(READ ON HOW TO USE 
+THEM, it's not with *'s) 
+Sniffit should also work on FreeBSD now..
+When in logging mode (you know, all the small files) there is a TIMEOUT 
+mechanism, so you won't miss a byte!
+You can now define another MTU than 1500 bytes in the 'config.h' file. 
+The ncurses interface should work on FreeBSD and SunOS/Solaris too know, 
+a big thanks to Woju (woju@freebsd.ee.ntu.edu.tw) for doing the work I 
+resented (I wasn't able to test this, but I trust'em ;).
+He also added 'k'/'j' as UP/DOWN in interactive mode.
+
+The sniffer is still under development (it always will be, I don't get payed
+for this ;), so you'll find some parts that should be extended some more (like
+the interactive part)!
+
+I use the libpcap library developped at Berkeley Laboratory, for easy 
+porting (Read the licence).
+
+Credits go to: 
+    Wim Vandeputte, for testing and providing me with a WWW and FTP site.
+    Godmar Back, for fixing that kernel 1.2.X bug (LINUX).
+    Peter Kooiman, of Paradigm Systems Technology for providing the 
+                   facilities to port Sniffit, and for the endless testing 
+                   (although he laughs this away with "no big deal, I 
+                   don't need no credits").
+                   Without him, there would have been no ports at all.
+    Brooke Paul, for providing me with an SGI account.
+    Qing Long, for the bash/zsh libpcap/configure script
+    Guy Gustavson, For giving me a FreeBSD account. 
+    Woju, for the ncurses SunOS/FreeBSD fixing, and for his other effords.
+    everybody, who ever mailed me with sugestions help, etc...
+
+This is free software, spread it if you want, but keep the package 
+complete and unmodified. Do not use any code from this package without 
+mentioning the source in your docs and advertisement. Do not use any of 
+this code in Commercial Software/Commercial Packages.
+
+Sugestions and comments can be sent to:
+  coder@reptile.rug.ac.be
+The program can be optained via: 
+  http://reptile.rug.ac.be/~coder/sniffit/sniffit.html
+
+Compiling:
+
+Look at the "config.h" file for options. PLEASE CHECK THAT CONFIG FILE! 
+First, try "make all", if that doesn't work, you should look into the 
+process of compilation more carefull.
+
+make clean  : cleans all directories for a compiling from scratch
+make config : needed for the compilation of libpcap
+make sniffit: compile the sniffer program
+make freebsd: compile sniffit on FreeBSD
+make sniffit_manual: look at the end of the makefile, this part is easily 
+                     modified manually. If the program doesn't compile and 
+                     you want to add some comliling options
+
+
+1. Programmers notes
+--------------------
+
+No more excuses ..... I think I used the easiest solution, probably 
+somewhere some guru is now laughing with my lack of programming skill, 
+but the hell with it, it works (most of the time ;)
+
+Still I note the use of shared memory, with Linux you should take extra 
+care when recompiling your kernel! Answer YES to 'System V IPC 
+(CONFIG_SYSVIPC) [y]'.
+
+2. Use of the program
+---------------------
+
+(* in front of the line that describes something new)
+
+Options:
+ONE of these three is required!
+  -t <IP nr/name>   tells the sniffer to check out packets GOING TO <IP>
+  -s <IP nr/name>   tells the sniffer to check out packets COMMING FROM <IP>
+*                   You can now use the 'x' wildcard (only IP NUMBERS of 
+*                   course).
+*                   e.g. -t 199.145.x
+*                        -t 199.14x
+*                   mind you -t x is not a valid option.
+  -i                Interactive mode, overrides all other options
+
+NOTE: -t or -s only apply to TCP packages, ICMP, IP, UDP packages are ALL 
+      interpreted.
+      Also, any selection on ports, -p only applies to TCP packages.
+
+Parameters both modes (non-interactive and interactive):
+* -F <device>  force sniffit to use a network device (READ 3.2 ON THIS 
+*                                                         SUBJECT, IMPORTANT)
+
+Parameters for not running in -i:
+  -b           does both -t and -s, doesn't mather what function you used 
+               (-t or -s)
+  -d           Dump mode, shows the packets on the screen in bytes (not 
+               like tcpdump). For test purposes. (numbers are hex)
+  -a           same of '-d' but outputs ASCII. 
+  -x           Prints extended info on TCP packets (SEQ numbers, ACK, Flags)
+	       Like SEQ, ACK, the flags, etc... (works wit '-a', '-d', '-s', 
+	       '-t', '-b' or on its own.)
+               (Mind you it is always shown on stdout, so not logged when 
+               using '-t', '-s', '-b' without another parameter)
+  -A <char>    When in logging mode, all non-printable chars will be 
+               replaced by <char>. (see note below 4.The output)
+  -P protocol  specify the protocols examined (default TCP)
+	       possible options currently are: IP, TCP, ICMP, UDP
+	       They can be combined.
+  -p <port>    Logs connections on port <port>, 0 means all ports, default 
+               is 0 (all), look out with that on loaded nets!
+  -l <length>  Ammount of information to log (default 300 bytes). 
+               Length 0 logs everything. (look out with diskspace when 
+               logging everything!)
+
+Parameters with -i:
+  
+  -D <device>  All logging output will be send to that device.
+               It's cool to get the same IRC screen as the guy y'r 
+               sniffing upon ;-)
+
+Some examples:
+  Imagine the following setup: 2 hosts on a subnet, one is running the 
+  sniffer (sniffit.com), the otherone is 666.666.666.7 (target.com).
+    1. You want to test if the sniffer is working:
+       sniffit:~/# sniffit -d -p 7 -t 666.666.666.7
+       and in another window:
+       sniffit:~/$ telnet target.com 7
+       you should see the sniffer giving you packets as you telnet to 
+       the 'echo' service. 
+    2. I want to log some passwords from people on 666.666.666.7:
+       sniffit:~/# sniffit -p 23 -t 666.666.666.7
+    3. Root of target.com tells me he gets strange ftp connections and 
+       wants to find out the commands typed:
+       sniffit:~/# sniffit -p 21 -l 0 -t 666.666.666.7
+    4. You want to read all incomming and outgoing mail on target.com:
+       sniffit:~/# sniffit -p 25 -l 0 -b -t 666.666.666.7 &
+       or
+       sniffit:~/# sniffit -p 25 -l 0 -b -s 666.666.666.7 &
+    5. You want to use the menu based interface.
+       sniffit:~/# sniffit -i
+    6. Something is really wrong and you want to see the Control Messages
+       with error codes.
+       sniffit:~/# sniffit -P icmp -b -s 666.666.666.7
+    7. Go wild on scrolling the screen.
+       sniffit:~/# sniffit -P ip -P icmp -P tcp -p 0 -b -a -d -x -s 
+                   666.666.666.7
+       witch is the same as
+       sniffit:~/# sniffit -P ipicmptcp -p 0 -b -a -d -x -s 666.666.666.7
+    8. Log passwords in that way you can read them with 'more 666*'
+       sniffit:~/# sniffit -p 23 -A . -t 666.666.666.7
+       or
+       sniffit:~/# sniffit -p 23 -A ^ -t dummy.net
+    9. This could go on for ever..............
+
+
+3. Extra info on use 
+-------------------- 
+
+3.1 Running interactive mode
+----------------------------
+
+Remember: This part is in full development, so if anything goes wrong, 
+          MAIL ME !
+
+There are still some small problems with timing that could cause lock-ups in 
+some cases.. it doesn't happen often, I'll look at it later.
+
+When running in interactive mode:
+
+UP or 'k' : self explanatory
+DOWN or j': self explanatory
+F1 or '1' : Enter a host (enter 'all' for no mask) for packet filtering 
+            (host that sends the packets)
+F2 or '2' : Enter a host (enter 'all' for no mask) for packet filtering.
+            (host that receives the packets)
+F3 or '3' : Enter a port (enter '0' for no mask) for packet filtering.
+            (host that sends the packets)
+F4 or '4' : Enter a port (enter '0' for no mask) for packet filtering.
+            (host that receives the packets)
+ENTER     : a window will pop up and log the connection, or the connection 
+            output will be send at a chosen device if you used the '-D' 
+            option.
+'q'       : When in logging mode, stop logging. Otherwise, quit.
+'n'       : Toggle netstatistics. These are sampled at 3 secs, look in 
+            the config.h file to change this (could be needed if y'r 
+            computer is slow).
+
+3.2 Forcing network devices   (*READ*)
+--------------------------------------
+
+NOTE: the correct name (for sniffit) of a device can be found by running 
+      'ifconfig'
+
+When forcing network devices, sniffit tries to find out what device it is. 
+If sniffit recognises the name, everything is okay. 
+If it does not recognise the name it will set the variable 
+FORCED_HEAD_LENGHTH to the ethernet headlength. The ethernet headlength 
+is the length in bytes of an ethernet packet hearder. 
+So if you have to force a non-ethernet device, that is not recognised by 
+sniffit, make sure you change that headlength correctly in the 'config.h' file.
+
+The -F option was added, because I noticed devicenames can differ from 
+system to system, and because some ppl have multiple devices present.
+When having problems with this option, please think twice before you mail me.
+
+4. The output
+-------------
+
+ - IP header info (not logged, displayed):
+
+   Examples:
+     
+     from 100.100.60.80 to 100.100.69.63
+     IP Packet precedence: Routine   (-T-)
+     FLAGS: -- --     Time to live (secs): 59
+     Protocol (6): TCP
+
+     from 100.100.69.31 to 100.100.69.63
+     IP Packet precedence: Routine   (---)
+     FLAGS: -- --     Time to live (secs): 60
+     Protocol (17): UDP
+
+     from 100.100.69.51 to 100.100.69.63
+     IP Packet precedence: Routine   (---)
+     FLAGS: -- --     Time to live (secs): 255
+     Protocol (1): ICMP
+
+   explanation:
+
+   Precedence can be: 
+     Routine, Priority, Immediate, Flash, Flash override, Critical, 
+     Internetwork Control, Network control
+   The Flags between brackets: (DTR) Delay-Throughput-reliability
+   FLAGS: DF MF    DF=Don't Fragment    MF=More Fragments      
+
+ - TCP Packets (logged or displayed):
+
+   The sniffer logs the data in ascii format. So when logging telnet 
+   connections, you will need to use 'joe' or something else that can 
+   support control chars (look for '-A <char>' below).
+   Telnet 'negotiates' (binary) in the beginning of every connection, and 
+   'catting' a output file, will most of the time show nothing (due to 
+   control chars).
+   Of course when logging mail, there are no problems.
+   The new '-A <char>' takes care of the control characters, that way you 
+   will be able to read the logfiles with 'more', 'vi', etc...
+
+   -a and -d give you raw packets i.e. not unwrapped, on the screen 
+   (nothing is logged), -x gives you more info on the TCP package 
+   (everything is still logged unless using -a or -d mode), 
+   The flags are:
+      U: Urgent pointer significant 
+      A: Acknowledgement is signif (will be shown)
+      P: Push function
+      R: Reset the connection
+      S: Synchronizes sequence numbers
+      F: No more data from sender (end connection) 
+
+  Filenames Created:
+  Imagine a subnet with the hosts 666.666.666.666 and 666.666.666.7, and we 
+  run a sniffer on the first.
+  The sniffer creates the following files:
+    When logging packets TO host 666.666.666.7 (-t 666.666.666.7) files like 
+    777.777.7.7.15000-666.666.666.7.23 are created, when the data CAME FROM 
+    host 777.777.7.7-15000 (with 15000 port used on 777.777.7.7 for that 
+    connection, and received on port 23 of 666.666.666.7)
+
+    When logging packets FROM host 666.666.666.7 (-s 666.666.666.7) files 
+    like 666.666.666.7.15000-777.777.7.7-23 are created, when the data 
+    GOES TO host 777.777.7.7 (with 15000 port used on 666.666.666.7 for 
+    that connection)
+
+
+- ICMP Packets (not logged, displayed):
+
+  On host 100.100.69.63 someone tried 'telnet 100.100.23.23'
+  Suppose this host is unreachable, this could be a possible output:
+
+    ICMP message id: 100.100.69.254 > 100.100.69.63
+      ICMP type: Destination unreachable
+      Error: Host unreachable
+    ICMP message concerned following IP packet:
+    from 100.100.69.63 to 100.100.23.23
+    IP Packet precedence: Routine   (---)
+    FLAGS: -- --     Time to live (secs): 63
+    Protocol (6): TCP
+
+
+- UDP Packets (not logged, displayed)
+
+  You get the package id. When using -d, -a you get the contence of the 
+  package. (pretty basic)
+
+
+5. IMPORTANT NOTES, READ!
+-------------------------
+
+First of all, some stuff people who use this program should already know, 
+if you don't, well here ya got it:
+  
+  - Sniffers can only be run by ROOT
+  - Sniffers can only log packets that 'travel' on THEIR ethernetcable.
+    So there has to be some host on your subnet involved (either as 
+    sender or receiver).
+
+Some other notes:
+ 
+  - You can not sniff packets sent by the host that's running the sniffer.
+  - Working with '-d' or '-a' give you raw packets, they are still 
+    packed in IP, when logging to files, only send data is logged, 
+    the packets are 'unwrapped'.
+  - Sniffers can not be detected from the outside (look below for note on 
+    harddisk).
+    Some people pretend that tcp wrappers and stuff can detect sniffers, 
+    well that's bullshit. Sniffers are just 'sitting' on the line and 
+    reading what is passing anyway, they don't DO anything, they just watch.
+    They can be detected:
+      - In the processlist (ps -augwx)
+      - When the harddisklight flashes a lot, people can suspect something
+        Also harddisks can make a lot of noice, but these sympthomes are 
+        only payed attention to in hostile environments.
+   - (LINUX) Your KERNEL should support System V IPC. If you will use '-i'
+
+
+6. BUGFIXES
+-----------
+
+(PRIOR TO 0.2.0 - some are LINUX only)
+   - Kernel 1.2.(some) incompatibility should be fixed. (like 1.2.5)
+     (all credit for that to Godmar Back)
+   - logging connections with lots of data is okay too now.
+     'the integer that needed to be a long'-bug. 
+     It was an overflow prob.
+   - off course there are always minor ameliorations not worth mentioning
+
+(SINCE 0.2.0)
+   - MAXCOUNT bug 
+   - interactive part lock-up bugs
+   - output format 
+
+7. NEW STUFF
+------------
+
+V.0.1.0
+   - First test of the ncurses interface (never use this version, it's 
+     megaslow)
+
+V.0.1.1
+   - Added '-x' for extra information on TCP packets
+   - Added '-A <char>' for you 'password-horny-dudes' ;)  
+   - beginning of ICMP support ('-P <protocol>')
+   - First 'real' test for the interface
+
+V.0.1.2
+   - IP debugging info
+   - UDP support
+   - extended ICMP info (almost complete....)
+   - logging on another terminal
+
+V.0.2.0
+   - SUN port (I now hate SPARC's ;)
+
+V.0.2.1
+   - SGI port
+
+V.0.2.2
+   - Netload statistics (interactive part)
+   - Massive debugging of interactive part 
+
+V.0.3.0
+   - Wildcards in non-interactive mode
+   - time-out in non interactive mode, so you won't stuff memory by 
+     connections that weren't closed like they're supposed to be. 
+   - Forcing the use of a snif device
+   - MTU changeble in config.h
+   - ppp use 
+
+I'm working on (if you still believe me):
+   - An expanded ncurses interface 
+        - two way connection logging
+        - ....
+     (for further ncurses development, I need y'r reports, thx!)  
+   - including all ICMP info (like timestamp, etc.)
+   - debugging and optimizing (sigh...)
+   - Further Porting (shouldn't give much problems anymore)
+
+------------------------ Thx for using Sniffit(tm) ---------------------------

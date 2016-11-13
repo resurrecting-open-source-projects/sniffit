@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+#Sniffit argument generating file -- Brecht Claerhout
+
+if uname -a|grep -i linux >/dev/null ; then
+ echo '-DLINUX -USUNOS -UIRIX -UFREEBSD -I/usr/include/ncurses -L/usr/include/ncurses -lncurses' 
+else
+ if uname -a|grep -i sunos >/dev/null; then
+  echo '-ULINUX -DSUNOS -UIRIX -UFREEBSD -lsocket -lnsl -lncurses'
+# Could be needed to change
+# echo '-ULINUX -DSUNOS -UIRIX -UFREEBSD -lnsl -lncurses'
+ else 
+  if uname -a|grep -i irix >/dev/null; then
+   echo '-ULINUX -USUNOS -DIRIX -UFREEBSD'
+  else
+   echo 'NOT_AUTODETECTED'
+  fi
+ fi
+fi
+

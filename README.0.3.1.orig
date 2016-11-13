@@ -1,0 +1,289 @@
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+*                            Sniffit V.0.3.1                                  *
+*                          By Brecht Claerhout                                *
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+*                        Patch 1: 0.3.0 -> 0.3.1                              *
+#                                                                             #
+*    Warning: All patches are follow up, so check the version number/patch    *
+#             level before applying a new one.                                #
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
+
+0. Introduction, and some stuff you should know.
+	crap, credits and compilation notes
+        READ THE PATCH INSTALL!
+1. Use of the program
+	NEW flags and examples
+2. The output
+	CHANGES / NEW output formats
+3. IMPORTANT NOTES, READ!
+	new stuff.
+4. BUGFIXES
+5. NEW STUFF
+	to keep track of what's in it
+	and what is going to come 
+------------------------------------------------------------------------------
+
+0. Introduction, and some stuff you should know.
+------------------------------------------------
+
+Like I said when releasing 0.3.0, I'm using patches now....
+Cuts down on y'r downloading.... cuts down on my backups ;)
+
+BTW: you should read README.FIRST and IMPORTANT from 0.3.0 if you are a 
+     new user! This file contains only ADDITIONAL info!
+
+Whats new? Well I made Sniffit a little more flexible for continuous 
+logging. You can now use a config file and easily exclude/include all hosts 
+you want... read section 1.
+(When you get to that part, you'll see that Sniffit now can easily develop 
+into an extra permanent monitoring tool, given some time and some 
+patchlevels... I have some stuff in mind, idea's are still welcome, as is 
+money ;)
+
+Now, how to install the patch? Pretty simple..... put all the files of 
+the package into the sniffit.0.3.0 directory (the dir with the sniffit 
+sourcefiles).... once you have done that type "make -f Makepatch.0.3.1".
+From then on, compiling is the same as with the previous version. 
+
+The sniffer is still under development (no change there), so you'll find 
+some parts that should be extended some more!
+
+I use the libpcap library developped at Berkeley Laboratory, for easy 
+porting (Read the licence).
+
+Credits go to: 
+    Wim Vandeputte, for testing and providing me with a WWW and FTP site.
+    Godmar Back, for fixing that kernel 1.2.X bug (Sniffit 0.1.X).
+    Peter Kooiman, of Paradigm Systems Technology for providing the 
+                   facilities to port Sniffit, and for the endless testing 
+                   (although he laughs this away with "no big deal, I 
+                   don't need no credits").
+                   Without him, there would have been no ports at all.
+    Brooke Paul, for providing me with an SGI account.
+    Qing Long, for the bash/zsh libpcap/configure script
+    Guy Gustavson, For giving me a FreeBSD account. 
+    Woju (woju@freebsd.ee.ntu.edu.tw), for the ncurses SunOS/FreeBSD fixing, 
+                                       and for his other effords.
+    everybody, who ever mailed me with sugestions help, etc...
+
+This is free software, spread it if you want, but keep the package 
+complete and unmodified. Do not use any code from this package without 
+mentioning the source in your docs and advertisement. Do not use any of 
+this code in Commercial Software/Commercial Packages.
+
+Sugestions and comments can be sent to:
+  coder@reptile.rug.ac.be
+The original distribution program can be optained from: 
+  http://reptile.rug.ac.be/~coder/sniffit/sniffit.html
+
+MIND YOU: this program is ran as root, and thus could easily contain 
+          dangerous trojans. If you get it from the above site you can 
+          safely compile and use it. 
+
+
+Compiling:
+
+Look at the "config.h" file for options. PLEASE CHECK THAT CONFIG FILE! 
+First, try "make all" (except FreeBSD users), if that doesn't work, you 
+should look into the process of compilation more carefull.
+
+make clean  : cleans all directories for a compiling from scratch
+make config : needed for the compilation of libpcap
+make sniffit: compile the sniffer program
+make freebsd: compile sniffit on FreeBSD
+make sniffit_manual: look at the end of the makefile, this part is easily 
+                     modified manually. If the program doesn't compile and 
+                     you want to add some comliling options
+
+
+1. Use of the program
+---------------------
+
+(Only new stuff listed)
+
+Options:
+  (you can't mix with -i, -s or -t)
+  -c <file>   Use <file> as a config file for Sniffit 
+              See below for format of the config file.
+
+Parameters both modes (non-interactive and interactive):
+  Noting new
+
+Parameters for not running in -i:
+  Noting new
+
+Parameters with -i:
+  Noting new
+  
+Format of the config file:
+(I'm going to stick with this format of config file, and always maintain 
+backward compatibility)
+
+The config file is an new kind of telling Sniffit what TCP packets to 
+intercept. In 0.3.0 flexibility was added with wildcards, with this 
+patch, you will be able to really specify what you want to see.
+
+The configfile should have lines with the following format:
+<field1> <field2> <field3> <field4> [<field5>]
+(seperators are spaces (any number of), NO TABS!!!)
+
+Lines that don't match this pattern are discarded, so standard unix 
+comments '#' can be used in this file... (this also means that if you 
+have a typo there, Sniffit won't report it but just discard the line)
+
+(read this list, even if you don't get it at first, it will become clear 
+in the examples)
+ 
+<field1> can be: 
+   select      : Sniffit will look for packets that match the following 
+                 description (other fields)
+   deselect    : Sniffit will ignore packets that match the description
+
+<field2> can be:
+   from        : Packets FROM the host matching the following desc. are 
+                 considered 
+   to          : similar, Packets TO the....
+   both        : similar, Packets FROM or TO the....
+
+<field3> can be: 
+   host        : The (de)selection criteria involves a hostname.
+   port        : similar, ... a portnumber
+   mhosts      : The (de)selection criteria involves multiple-hosts, like 
+                 with the wildcars in 0.3.0, but without the 'x'
+
+<field4> can be: 
+   either a hostname, a portnumber or a numbet-dot partial notatiion 
+   indicating multiple hosts depending on <field3>
+
+<field5> can be: 
+   a portnumber, if <field3> was 'host' or 'mhosts'
+
+examples:
+
+1. Look at this configuration file:
+	select from host 100.100.12.2
+	select from host 100.100.12.3 1400
+        select to host coder.sniffit.com
+        select both port 23
+   
+   This file would cause Sniffit to give you the packets:
+        a) Send by host 100.100.12.2
+        b) Send by host 100.100.12.3 from port 1400
+        c) Send to coder.sniffit.com
+        d) All packets on our subnet going to or comming from a telnet port.
+
+2. another example:
+	select both mhosts 100.100.12.
+        deselect both port 80
+   	select host enemy.sniffit.com
+
+   This file would cause Sniffit to give you the packets:
+	a) Send by hosts '100.100.12.*'
+        b) EXCEPT the WWW packets
+	c) BUT showing the WWW packets concerning enemy.sniffit.com
+   
+   The config file in interpreted SEQUENTIAL, so mixing up those lines 
+   could have unwanted results e.g.:
+	select both mhosts 100.100.12.
+   	select host enemy.sniffit.org 
+        deselect both port 80
+
+   This will give you the packets:
+	a) Send by hosts '100.100.12.*'
+	b) Send from/to enemy.sniffit.org
+        c) deselecting all WWW packets on the subnet
+
+   So if someone on enemy.sniffit.org is netscaping (assuming his 'target' 
+   has his httpd installed on port 80), you would see the packets with 
+   the first config file, BUT NOT with the second file, and that could 
+   spoil y'r fun when he's surfing to some kinky page.    
+   
+3. Last usefull example:
+	select both mhosts 1
+	select both mhosts 2
+        deselect both mhosts 1 80
+        deselect both mhosts 2 80
+ 
+   This would show you all subnet trafic excluding WWW trafic 
+   (concerning port 80.)
+   
+NOTE: Everything is DESELECTED by default, so an empty config file will 
+      get you nothing.   
+
+2. The output
+-------------------- 
+
+Nothing changed
+
+
+3. IMPORTANT NOTES, READ!
+-------------------------
+
+Nothing changed
+
+
+6. BUGFIXES
+-----------
+
+(PRIOR TO 0.2.0 - some are LINUX only)
+   - Kernel 1.2.(some) incompatibility should be fixed. (like 1.2.5)
+     (all credit for that to Godmar Back)
+   - logging connections with lots of data is okay too now.
+     'the integer that needed to be a long'-bug. 
+     It was an overflow prob.
+   - off course there are always minor ameliorations not worth mentioning
+
+(SINCE 0.2.0)
+   - MAXCOUNT bug 
+   - interactive part lock-up bugs
+   - output format 
+
+(SINCE 0.3.0)
+   - a wildcard bug
+
+7. NEW STUFF
+------------
+
+V.0.1.0
+   - First test of the ncurses interface (never use this version, it's 
+     megaslow)
+
+V.0.1.1
+   - Added '-x' for extra information on TCP packets
+   - Added '-A <char>' for you 'password-horny-dudes' ;)  
+   - beginning of ICMP support ('-P <protocol>')
+   - First 'real' test for the interface
+
+V.0.1.2
+   - IP debugging info
+   - UDP support
+   - extended ICMP info (almost complete....)
+   - logging on another terminal
+
+V.0.2.0
+   - SUN port (I now hate SPARC's ;)
+
+V.0.2.1
+   - SGI port
+
+V.0.2.2
+   - Netload statistics (interactive part)
+   - Massive debugging of interactive part 
+
+V.0.3.0
+   - Wildcards in non-interactive mode
+   - time-out in non interactive mode, so you won't stuff memory by 
+     connections that weren't closed like they're supposed to be. 
+   - Forcing the use of a snif device
+   - MTU changeble in config.h
+   - ppp use 
+
+V.0.3.1
+   - Flexible network trafic selection with config file.
+
+I'm working on (if you still believe me):
+   - All the usual crap....
+   - More monitoring utils...
+   - debugging and optimizing (sigh...)
+
+------------------------ Thx for using Sniffit(tm) ---------------------------

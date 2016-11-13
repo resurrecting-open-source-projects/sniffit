@@ -1,0 +1,739 @@
+diff -u ./Makefile ./Makefile
+--- ./Makefile	Fri Sep 13 11:14:21 1996
++++ ./Makefile.n	Fri Sep 13 14:50:03 1996
+@@ -4,20 +4,35 @@
+ .PHONY : clean
+ .PHONY : config
+ .PHONY : no_arguments
++.PHONY : all
++.PHONY : sniffit
+ 
+ #This is executed when just typing Make, don't change
++
+ no_arguments:
+-	@echo 'Please read the README.FIRST and IMPORTANT files'
+-	@echo 'use "make clean", "make config" and "make sniffit"'
+-	@echo 'or "make all" for a full recompile.'
+-	@echo 'use "make freebsd" for FreeBSD, after you applied the patch' 
+-	@echo '(read IMPORTANT)' 
++	@echo 'Please read the README.* and IMPORTANT files'
++	@echo 'use: make system'
++	@echo 'where system can be: linux, sunos, irix, freebsd'
++	@echo '(sunos: compiles for SunOS/Solaris)'
++	@echo '(freebsd: first make the patch!!!!! read IMPORTANT)' 
++sniffit:
++	@echo 'Please read the README.* and IMPORTANT files'
++	@echo 'use: make system'
++	@echo 'where system can be: linux, sunos, irix, freebsd'
++	@echo '(sunos: compiles for SunOS/Solaris)'
++	@echo '(freebsd: first make the patch!!!!! read IMPORTANT)' 
++all:
++	@echo 'Please read the README.* and IMPORTANT files'
++	@echo 'use: make system'
++	@echo 'where system can be: linux, sunos, irix, freebsd'
++	@echo '(sunos: compiles for SunOS/Solaris)'
++	@echo '(freebsd: first make the patch!!!!! read IMPORTANT)' 
+ 
+ #Some Vars (you could change if you know what y'r doing)
+ CC         = gcc
+-SNIFFIT    = sniffit.0.3.1.c
++SNIFFIT    = sniffit.0.3.2.c
+ DEP_FILES  = config.h sn_packets.h pcap.h sn_data.h sn_defines.h \
+-             sn_interface.h sn_oldether.h
++             sn_interface.h sn_oldether.h sn_cfgfile.h sn_logfile.h
+ HELP_FILES = detect_system 
+ GEN_FLAG   = -w -O2 -o sniffit
+ GEN_OPT    = -I./libpcap -L./libpcap -lpcap
+@@ -28,31 +43,50 @@
+ 	cd libpcap; make clean; cd ..
+ 	rm -f *.o sniffit
+ 
+-#start from zero, don't change
+-all: clean config sniffit
+-
+ #Config the libpcap, don't change 
+ config:
+ 	cd libpcap; ./configure; cd ..
+-	@echo 'You can now "make sniffit"'
++	@echo 'You can now "make system"'
++
++# Linux
++SYSTEM_OPT_LINUX := -DLINUX -USUNOS -UIRIX -UFREEBSD -UBSDI -I/usr/include/ncurses -L/usr/include/ncurses -lncurses
++linux:	$(SNIFFIT) $(DEP_FILES) $(HELP_FILES)
++	cd libpcap; ./configure; make; cd .. 
++	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) $(SYSTEM_OPT_LINUX) 
++	strip sniffit
++
++# SunOS/Solaris
++SYSTEM_OPT_SUNOS := -ULINUX -DSUNOS -UIRIX -UFREEBSD -UBSDI -lsocket -lnsl -lncurses 
++# If SunOS/Solaris compile doesn't work, try this...
++#SYSTEM_OPT_SUNOS := -ULINUX -DSUNOS -UIRIX -UFREEBSD -UBSDI -lnsl -lncurses
++sunos:	$(SNIFFIT) $(DEP_FILES) $(HELP_FILES)
++	cd libpcap; ./configure; make; cd .. 
++	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) $(SYSTEM_OPT_SUNOS) 
++	strip sniffit
+ 
+-#auto compilation, don't modify
+-SYSTEM_OPT := $(shell ./detect_system)  
+-sniffit: $(SNIFFIT) $(DEP_FILES) $(HELP_FILES)
+-	cd libpcap; make; cd .. 
+-	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) $(SYSTEM_OPT) 
++# IRIX
++SYSTEM_OPT_IRIX := -ULINUX -USUNOS -DIRIX -UFREEBSD -UBSDI 
++irix:	$(SNIFFIT) $(DEP_FILES) $(HELP_FILES)
++	cd libpcap; ./configure; make; cd .. 
++	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) $(SYSTEM_OPT_IRIX) 
+ 	strip sniffit
++# BSDI
++#SYSTEM_OPT_BSDI := -ULINUX -USUNOS -UIRIX -UFREEBSD -DBSDI
++#bsdi:	$(SNIFFIT) $(DEP_FILES) $(HELP_FILES)
++#	cd libpcap; ./configure; make; cd .. 
++#	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) $(SYSTEM_OPT_BSDI) 
++#	strip sniffit
+ 
+-#FreeBSD compilation, don't modify
+-SYSTEM_OPT_FREEBSD = -ULINUX -USUNOS -UIRIX -DFREEBSD -lncurses  
++#FreeBSD
++SYSTEM_OPT_FREEBSD = -ULINUX -USUNOS -UIRIX -UBSDI -DFREEBSD -lncurses  
+ freebsd:$(SNIFFIT) $(DEP_FILES) $(HELP_FILES)
+-	cd libpcap; make; cd ..
++	cd libpcap; ./configure; make; cd ..
+ 	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) $(SYSTEM_OPT_FREEBSD)
+ 	strip sniffit
+ 
+ #adjust this section for experimental compiling
+ sniffit_manual: $(SNIFFIT) $(DEP_FILES)
+-	cd libpcap; make; cd ..
++	cd libpcap; ./configure; make; cd ..
+ #add y'r flags to this line...
+ 	$(CC) $(GEN_FLAG) $(SNIFFIT) $(GEN_OPT) 
+ 
+diff -u ./README.0.3.1 ./README.0.3.1
+--- ./README.0.3.1	Wed Aug 14 14:52:20 1996
++++ ./README.0.3.1.n	Sun Sep  8 23:25:45 1996
+@@ -73,6 +73,12 @@
+ 
+ Sugestions and comments can be sent to:
+   coder@reptile.rug.ac.be
++
++  Brecht Claerhout
++  Meulebeeksestw. 51
++  8700 Tielt
++  Belgium
++
+ The original distribution program can be optained from: 
+   http://reptile.rug.ac.be/~coder/sniffit/sniffit.html
+ 
+@@ -81,7 +87,7 @@
+           safely compile and use it. 
+ 
+ 
+-Compiling:
++Compiling (if patching >= patchlevel 2, this info is obsoleted by README.0.3.2):
+ 
+ Look at the "config.h" file for options. PLEASE CHECK THAT CONFIG FILE! 
+ First, try "make all" (except FreeBSD users), if that doesn't work, you 
+@@ -107,13 +113,13 @@
+               See below for format of the config file.
+ 
+ Parameters both modes (non-interactive and interactive):
+-  Noting new
++  Nothing new
+ 
+ Parameters for not running in -i:
+-  Noting new
++  Nothing new
+ 
+ Parameters with -i:
+-  Noting new
++  Nothing new
+   
+ Format of the config file:
+ (I'm going to stick with this format of config file, and always maintain 
+@@ -175,7 +181,7 @@
+ 2. another example:
+ 	select both mhosts 100.100.12.
+         deselect both port 80
+-   	select host enemy.sniffit.com
++   	select both host enemy.sniffit.com
+ 
+    This file would cause Sniffit to give you the packets:
+ 	a) Send by hosts '100.100.12.*'
+@@ -185,7 +191,7 @@
+    The config file in interpreted SEQUENTIAL, so mixing up those lines 
+    could have unwanted results e.g.:
+ 	select both mhosts 100.100.12.
+-   	select host enemy.sniffit.org 
++   	select both host enemy.sniffit.org 
+         deselect both port 80
+ 
+    This will give you the packets:
+diff -u ./README.FIRST ./README.FIRST
+--- ./README.FIRST	Wed Jul 17 20:02:32 1996
++++ ./README.FIRST.n	Sun Sep  8 23:25:15 1996
+@@ -85,10 +85,16 @@
+ 
+ Sugestions and comments can be sent to:
+   coder@reptile.rug.ac.be
++
++  Brecht Claerhout
++  Meulebeeksestw. 51
++  8700 Tielt
++  Belgium
++
+ The program can be optained via: 
+   http://reptile.rug.ac.be/~coder/sniffit/sniffit.html
+ 
+-Compiling:
++Compiling (if patching >= patchlevel 2, this info is obsoleted by README.0.3.2):
+ 
+ Look at the "config.h" file for options. PLEASE CHECK THAT CONFIG FILE! 
+ First, try "make all", if that doesn't work, you should look into the 
+@@ -103,6 +109,7 @@
+                      you want to add some comliling options
+ 
+ 
++
+ 1. Programmers notes
+ --------------------
+ 
+@@ -353,7 +360,6 @@
+ 
+ Some other notes:
+  
+-  - You can not sniff packets sent by the host that's running the sniffer.
+   - Working with '-d' or '-a' give you raw packets, they are still 
+     packed in IP, when logging to files, only send data is logged, 
+     the packets are 'unwrapped'.
+diff -u ./config.h ./config.h
+--- ./config.h	Fri Sep 13 11:14:21 1996
++++ ./config.h.n	Fri Sep 13 10:49:49 1996
+@@ -8,12 +8,28 @@
+ /* If you 'define' INCLUDE_INTERFACE, your kernel should support          */
+ /* System V IPC (it probably does)                                        */
+ 
++#ifdef LINUX
++/*#undef INCLUDE_INTERFACE */
++#define INCLUDE_INTERFACE  
++#endif
++
++#ifdef SUNOS
++/*#undef INCLUDE_INTERFACE */
++#define INCLUDE_INTERFACE  
++#endif
++
+ #ifdef IRIX
+-  #undef INCLUDE_INTERFACE   /* interactive support not tested yet for IRIX */
+-#else
+-/*  #undef INCLUDE_INTERFACE */  
+-   #define INCLUDE_INTERFACE  
+-#endif     
++#undef INCLUDE_INTERFACE 
++#endif
++
++#ifdef FREEBSD
++/*#undef INCLUDE_INTERFACE */
++#define INCLUDE_INTERFACE  
++#endif
++
++#ifdef BSDI
++#undef INCLUDE_INTERFACE 
++#endif
+ 
+ /* Following parameters describe the connections that can be handled at */ 
+ /* once, MAXCOUNT stands for connections handled in normal mode. As     */
+@@ -24,9 +40,9 @@
+ /* more dangerous to change, if you machine goes to slow (when sniffing */
+ /* in interactive mode), lower this number.                             */
+ 
+-	#define MAXCOUNT  		50
++#define MAXCOUNT  		100
+ #ifdef INCLUDE_INTERFACE
+-	#define CONNECTION_CAPACITY  	50
++#define CONNECTION_CAPACITY  	50
+ #endif
+ 
+ /* This is the interval time for the netstatistics */
+@@ -46,9 +62,9 @@
+ /*************** Don't change anything below this line *********************/
+ 
+ #undef DEBUG                   /* Debugging (to tty) - sigh */
+-/* #define DEBUG */ 
++/*#define DEBUG */ 
+ #define DEBUG_DEVICE	"/dev/ttyp3"
+ 
+ #undef DEBUG_ONSCREEN                  /* Debugging (to screen) - sigh */
+-/* #define DEBUG_ONSCREEN */ 
++/*#define DEBUG_ONSCREEN */
+ 
+diff -u ./detect_system ./detect_system
+--- ./detect_system	Sun Jul 21 13:26:29 1996
++++ ./detect_system.n	Sun Sep  8 23:19:37 1996
+@@ -2,19 +2,6 @@
+ #
+ #Sniffit argument generating file -- Brecht Claerhout
+ 
+-if uname -a|grep -i linux >/dev/null ; then
+- echo '-DLINUX -USUNOS -UIRIX -UFREEBSD -I/usr/include/ncurses -L/usr/include/ncurses -lncurses' 
+-else
+- if uname -a|grep -i sunos >/dev/null; then
+-  echo '-ULINUX -DSUNOS -UIRIX -UFREEBSD -lsocket -lnsl -lncurses'
+-# Could be needed to change
+-# echo '-ULINUX -DSUNOS -UIRIX -UFREEBSD -lnsl -lncurses'
+- else 
+-  if uname -a|grep -i irix >/dev/null; then
+-   echo '-ULINUX -USUNOS -DIRIX -UFREEBSD'
+-  else
+-   echo 'NOT_AUTODETECTED'
+-  fi
+- fi
+-fi
++echo 'This file became useless in the 0.3.2 distribution....'
++echo 'It is still here because of the patches...'
+ 
+diff -u ./sample_config_file ./sample_config_file
+--- ./sample_config_file	Wed Aug 14 12:28:44 1996
++++ ./sample_config_file.n	Wed Sep  4 22:24:31 1996
+@@ -6,4 +6,5 @@
+ 
+ # Now deselect all packets from/to those damn 'surfers' 
+ deselect both port 80
++deselect both port 8001
+ 
+diff -u ./sn_cfgfile.h ./sn_cfgfile.h
+--- ./sn_cfgfile.h	Wed Aug 14 12:31:51 1996
++++ ./sn_cfgfile.h.n	Sat Sep  7 14:50:38 1996
+@@ -94,6 +94,25 @@
+ return string;
+ }
+ 
++char *clean_filename (char *string)
++{
++char help[20];
++int i, j;
++
++j=0;
++for(i=0;i<strlen(string);i++)
++	{
++	if( !(iscntrl(string[i])) && !(isspace(string[i])) )
++		{
++		help[j]=string[i];
++		help[j+1]=0;
++		}
++	j++;
++	}
++strcpy(string, help);
++return string;
++}
++
+ void make_nr_dot (char *host)
+ {
+ unsigned long hostnr;
+@@ -116,32 +135,36 @@
+ field=strtok(line," ");
+ if(field!=NULL)
+ 	{
+-	for(i=0;i<strlen(field);i++)
+-   		*(field+i) = ( islower(*(field+i)) ? tolower(*(field+i)) : *(field+i) );
+-	if(strcmp(field,"select")==0)
++	strlower(field);
++	if(strcmp(strlower(field),"logfile")==0)
++	  {
++	  field=clean_filename(strtok(NULL," "));
++     	  if(field != NULL) strcpy(Logfile,field);
++	  }
++	if(strcmp(strlower(field),"select")==0)
+ 	  {
+ 	  field=strtok(NULL," ");
+-          if(strcmp(field,"from")==0)
++          if(strcmp(strlower(field),"from")==0)
+ 	    {
+             field=strtok(NULL," ");
+-            if(strcmp(field,"host")==0)  /* select from host */
++            if(strcmp(strlower(field),"host")==0)  /* select from host */
+ 	      {
+ 	      help=adjust_select_from_list();
+-              field=strtok(NULL," ");
+-              make_nr_dot(field); 
++              make_nr_dot(strtok(NULL," "));
++              strcpy(help->host,dot_notation);
+               if( (field=strtok(NULL," "))!=NULL) 
+ 			help->port=atoi(field);
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"port")==0)  /* select from port */
++            if(strcmp(strlower(field),"port")==0)  /* select from port */
+ 	      {                           
+ 	      help=adjust_select_from_list();
+ 	      help->port=atoi( strtok(NULL," ") ); 
+ 	      help->priority=Priority;
+ 	      return;
+ 	      }
+-            if(strcmp(field,"mhosts")==0)  /* select from mhosts */
++            if(strcmp(strlower(field),"mhosts")==0)  /* select from mhosts */
+ 	      {
+ 	      help=adjust_select_from_list();
+ 	      strcpy(help->host, clean_string(strtok(NULL," ")));
+@@ -152,10 +175,10 @@
+  	      return;
+ 	      }
+  	    }
+-          if(strcmp(field,"to")==0)
++          if(strcmp(strlower(field),"to")==0)
+ 	    {
+             field=strtok(NULL," ");
+-            if(strcmp(field,"host")==0)  /* select to host */
++            if(strcmp(strlower(field),"host")==0)  /* select to host */
+ 	      {
+ 	      help=adjust_select_to_list();
+               make_nr_dot(strtok(NULL," "));
+@@ -165,14 +188,14 @@
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"port")==0)  /* select to port */
++            if(strcmp(strlower(field),"port")==0)  /* select to port */
+ 	      {                           
+ 	      help=adjust_select_to_list();
+ 	      help->port=atoi( strtok(NULL," ") ); 
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"mhosts")==0)  /* select to mhosts */
++            if(strcmp(strlower(field),"mhosts")==0)  /* select to mhosts */
+ 	      {                           
+ 	      help=adjust_select_to_list();
+ 	      strcpy(help->host, clean_string(strtok(NULL," ")));
+@@ -183,10 +206,10 @@
+               return;
+  	      }
+  	    }
+-          if(strcmp(field,"both")==0)
++          if(strcmp(strlower(field),"both")==0)
+ 	    {
+             field=strtok(NULL," ");
+-            if(strcmp(field,"host")==0)  /* select both host */
++            if(strcmp(strlower(field),"host")==0)  /* select both host */
+ 	      {
+ 	      help=adjust_select_from_list();
+ 	      helpp=adjust_select_to_list();
+@@ -199,7 +222,7 @@
+  	      helpp->priority=Priority;
+               return;
+ 	      }
+-            if(strcmp(field,"port")==0)  /* select both port */
++            if(strcmp(strlower(field),"port")==0)  /* select both port */
+ 	      {                           
+ 	      help=adjust_select_from_list();
+ 	      helpp=adjust_select_to_list();
+@@ -210,7 +233,7 @@
+ 	      helpp->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"mhosts")==0)  /* select both mhosts */
++            if(strcmp(strlower(field),"mhosts")==0)  /* select both mhosts */
+ 	      {                           
+ 	      help=adjust_select_from_list();
+ 	      helpp=adjust_select_to_list();
+@@ -227,13 +250,13 @@
+ 	      }
+  	    }
+ 	  }
+-	if(strcmp(field,"deselect")==0)
++	if(strcmp(strlower(field),"deselect")==0)
+ 	  {
+ 	  field=strtok(NULL," ");
+-          if(strcmp(field,"from")==0)
++          if(strcmp(strlower(field),"from")==0)
+ 	    {
+             field=strtok(NULL," ");
+-            if(strcmp(field,"host")==0)  /* select from host */
++            if(strcmp(strlower(field),"host")==0)  /* select from host */
+ 	      {
+ 	      help=adjust_deselect_from_list();
+               make_nr_dot(strtok(NULL," "));
+@@ -243,14 +266,14 @@
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"port")==0)  /* select from port */
++            if(strcmp(strlower(field),"port")==0)  /* select from port */
+ 	      {                           
+ 	      help=adjust_deselect_from_list();
+ 	      help->port=atoi(strtok(NULL," ")); 
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"mhosts")==0)  /* select from mhosts */
++            if(strcmp(strlower(field),"mhosts")==0)  /* select from mhosts */
+ 	      {                           
+ 	      help=adjust_deselect_from_list();
+ 	      strcpy(help->host, clean_string(strtok(NULL," ")));
+@@ -261,10 +284,10 @@
+               return;
+  	      }
+  	    }
+-          if(strcmp(field,"to")==0)
++          if(strcmp(strlower(field),"to")==0)
+ 	    {
+             field=strtok(NULL," ");
+-            if(strcmp(field,"host")==0)  /* deselect to host */
++            if(strcmp(strlower(field),"host")==0)  /* deselect to host */
+ 	      {
+ 	      help=adjust_deselect_to_list();
+               make_nr_dot(strtok(NULL," "));
+@@ -274,14 +297,14 @@
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"port")==0)  /* deselect to port */
++            if(strcmp(strlower(field),"port")==0)  /* deselect to port */
+ 	      {                           
+ 	      help=adjust_deselect_to_list();
+ 	      help->port=atoi(strtok(NULL," ")); 
+ 	      help->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"mhosts")==0)  /* deselect to mhosts */
++            if(strcmp(strlower(field),"mhosts")==0)  /* deselect to mhosts */
+ 	      {                           
+ 	      help=adjust_deselect_to_list();
+ 	      strcpy(help->host, clean_string(strtok(NULL," ")));
+@@ -292,10 +315,10 @@
+               return;
+ 	      }
+  	    }
+-          if(strcmp(field,"both")==0)
++          if(strcmp(strlower(field),"both")==0)
+ 	    {
+             field=strtok(NULL," ");
+-            if(strcmp(field,"host")==0)  /* deselect both host */
++            if(strcmp(strlower(field),"host")==0)  /* deselect both host */
+ 	      {
+ 	      help=adjust_deselect_from_list();
+ 	      helpp=adjust_deselect_to_list();
+@@ -308,7 +331,7 @@
+ 	      helpp->priority=Priority;
+               return;
+  	      }
+-            if(strcmp(field,"port")==0)  /* deselect both port */
++            if(strcmp(strlower(field),"port")==0)  /* deselect both port */
+ 	      {                           
+ 	      help=adjust_deselect_from_list();
+ 	      helpp=adjust_deselect_to_list();
+@@ -319,7 +342,7 @@
+ 	      helpp->priority=Priority;
+               return;
+ 	      }
+-            if(strcmp(field,"mhosts")==0)  /* deselect both mhosts */
++            if(strcmp(strlower(field),"mhosts")==0)  /* deselect both mhosts */
+ 	      {                           
+ 	      help=adjust_deselect_from_list();
+ 	      helpp=adjust_deselect_to_list();
+diff -u ./sn_data.h ./sn_data.h
+--- ./sn_data.h	Fri Sep 13 11:14:21 1996
++++ ./sn_data.h.n	Tue Aug 27 20:58:05 1996
+@@ -12,16 +12,27 @@
+         char proto, filename[50];
+         FILE *f;
+         unsigned long bytes;
+-	int time_out;
++        unsigned long exp_seq;     /* expected seq to avoid double logging */
++	int time_out;   
++	char log;                      /* log=0  : do nothing        */
++	                               /* log=1  : log 'login'       */
++	                               /* log=2  : 'login' logged    */
++	                               /* log=3  : log password      */
++	                               /* log=4  : password logged   */
++	                               /* log=99 : no more detection */
++	char scroll_buf[SCBUF+1];                  /* scroll buffer */
++	char *buffer;			     /* pointer to a buffer */
+ 	struct file_info *next;
+ };
+ void *start_dynam;
+ int dynam_len;
+ 
++char Logfile[250];                          /* Stuff for logging file mode */
++FILE *LogFILE;       
++
+ char *IP;
+ unsigned long SNIFLEN;                            /* bytes we need to snif */
+-short DEST_PORT;                           /* destination port */
+-char SNIFMODE, DUMPMODE, PROTOCOLS, ASC, WILDCARD, CFG_FILE;
++short DEST_PORT;                                       /* destination port */
+ char non_printable, *logging_device;
+ 
+ #ifdef INCLUDE_INTERFACE
+@@ -65,6 +76,7 @@
+ 		const struct packetheader *p_header,
+                 const u_char *sp,
+                 char *file,
++                char *file2,
+                 struct unwrap *info,
+ 		char *detail,
+                 int MODE);
+@@ -72,6 +84,7 @@
+ 			const struct packetheader *p_header,
+                         const u_char *sp);
+ static u_long getaddrbyname(char *name);
++char *strlower (char *string);
+ 
+ #ifdef INCLUDE_INTERFACE
+ /*** Interface functions */
+diff -u ./sn_defines.h ./sn_defines.h
+--- ./sn_defines.h	Fri Sep 13 11:14:21 1996
++++ ./sn_defines.h.n	Fri Sep 13 10:49:52 1996
+@@ -16,16 +16,19 @@
+ 
+ #define PPP_DEV "ppp"
+ #ifdef LINUX
+-	#define	ETH_DEV	"eth"
++#define	ETH_DEV	"eth"
+ #endif
+ #ifdef SUNOS
+-	#define	ETH_DEV	"le"
++#define	ETH_DEV	"le"
+ #endif
+ #ifdef IRIX
+-	#define	ETH_DEV	"et"
++#define	ETH_DEV	"et"
+ #endif
+ #ifdef FREEBSD
+-	#define	ETH_DEV	"ed"
++#define	ETH_DEV	"ed"
++#endif
++#ifdef BSDI
++#define	ETH_DEV	"ef"
+ #endif
+ 
+ /*** Extra system dependent stuff  ***/
+@@ -41,12 +44,16 @@
+ 
+ /*** Normal Sniffit operations */
+ 
+-#define VERSION   "0.3.1"                          /* Program Version */
+-#define SNAPLEN   MTU                              /* Ethernet Packet Length */
+-#define MSDELAY   0                                /* Delay between Packets */
+-#define PACKETS   1                                /* Number of packets to dispatch */
+-#define LENGTH_OF_INTERPROC_DATA	5*SNAPLEN  /* buffer capacity */
+-
++#define VERSION   "0.3.2"                               /* Program Version */
++#define SNAPLEN   MTU                            /* Ethernet Packet Length */
++#define MSDELAY   0                               /* Delay between Packets */
++#define PACKETS   1                       /* Number of packets to dispatch */
++#define LENGTH_OF_INTERPROC_DATA	5*SNAPLEN       /* buffer capacity */
++#define SCBUF     30			           /* scroll buffer length */
++#define LOG_PASS_BUF  20+1	                /* login/pwd buffer length */
++#define TELNET_ENTER	0x0d		 /* Enter in telnet login session  */
++#define FTP_ENTER	0x0d  /* first char of Enter in FTP login session  */
++ 
+ #define DEST        0
+ #define SOURCE      1
+ #define BOTH        2
+diff -u ./sn_packets.h ./sn_packets.h
+--- ./sn_packets.h	Wed Jul 17 20:02:39 1996
++++ ./sn_packets.h.n	Thu Aug 29 17:09:53 1996
+@@ -12,6 +12,7 @@
+ #define SYN 2
+ #define FIN 1
+ 
++#define NO_IP	0
+ #define ICMP	1			/* Protocol Numbers */
+ #define TCP	6
+ #define UDP	17
+@@ -95,9 +96,34 @@
+ 
+ struct unwrap                                           /* some extra info */
+ {
+-	int IP_len, TCP_len, ICMP_len, UDP_len, DATA_len;
++	int IP_len, TCP_len, ICMP_len, UDP_len;         /* header lengths */ 
++	int DATA_len;
+ };
+ 
++/* This routine stolen from ping.c */
++u_short in_cksum(u_short *addr,int len)
++{
++register int nleft = len;   /* leave this alone.. my opinion is that the   */
++register u_short *w = addr; /* register is needed to make it work for both */ 
++register int sum = 0;       /* BIG and LITTLE endian machines              */ 
++u_short answer = 0;     /* but then again, who am I to make such statement */
++
++while (nleft > 1)
++        {
++        sum += *w++;
++        nleft -= 2;
++        }
++if (nleft == 1)
++        {
++        *(u_char *)(&answer) = *(u_char *)w ;
++        sum += answer;
++        }
++sum = (sum >> 16) + (sum & 0xffff);
++sum += (sum >> 16);
++answer = ~sum;
++return(answer);
++}
++
+ int unwrap_packet (const u_char *sp, struct unwrap *unwrapped) 
+ { 
+ 	struct IP_header  IPhead;
+@@ -105,10 +131,29 @@
+ 	struct ICMP_header ICMPhead;
+ 	struct UDP_header UDPhead;
+ 
++int i;
++
+ 	memcpy(&IPhead,(sp+PROTO_HEAD),sizeof(struct IP_header));
+                                                   /* IP header Conversion */
+-	unwrapped->IP_len = (IPhead.verlen & 0xF) << 2;
+-	if(IPhead.protocol == TCP )		  /* not TCP */
++ 	unwrapped->IP_len = (IPhead.verlen & 0xF) << 2;
++        
++	if(NO_CHKSUM == 0)
++		{
++		sp[PROTO_HEAD+10]=0;       /* reset checksum to zero, Q&D way*/
++		sp[PROTO_HEAD+11]=0;             
++		if(in_cksum((sp+PROTO_HEAD),unwrapped->IP_len) != IPhead.checksum)
++			{
++#ifdef DEBUG_ONSCREEN
++			printf("Packet dropped... (invalid IP chksum)\n");
++			printf("%X   %X (len %d)\n",in_cksum((sp+PROTO_HEAD),unwrapped->IP_len),IPhead.checksum,unwrapped->IP_len);
++#endif
++			return NO_IP;
++			}
++		memcpy((sp+PROTO_HEAD),&IPhead,sizeof(struct IP_header));
++					/* restore orig buffer      */
++        			 	/* general programming rule */
++		}
++	if(IPhead.protocol == TCP )		             /* TCP */
+ 		{
+ 		memcpy(&TCPhead,(sp+PROTO_HEAD+(unwrapped->IP_len)),
+ 						sizeof(struct TCP_header));
+@@ -116,10 +161,9 @@
+ 		unwrapped->TCP_len >>= 10; 
+ 		unwrapped->DATA_len = ntohs(IPhead.length) -
+ 				(unwrapped->IP_len) - (unwrapped->TCP_len); 
+-                                                /* ICMP header Conversion */
+ 		return TCP;
+ 		}
+-	if(IPhead.protocol == ICMP )		  /* not ICMP */
++	if(IPhead.protocol == ICMP )		             /* ICMP */
+ 		{
+ 		memcpy(&ICMPhead,(sp+PROTO_HEAD+(unwrapped->IP_len)),
+ 						sizeof(struct ICMP_header));
+@@ -128,7 +172,7 @@
+ 				(unwrapped->IP_len) - (unwrapped->ICMP_len); 
+ 		return ICMP; 
+ 		}
+-	if(IPhead.protocol == UDP )		  /* not UDP */
++	if(IPhead.protocol == UDP )		               /* UDP */
+ 		{
+ 		memcpy(&UDPhead,(sp+PROTO_HEAD+(unwrapped->IP_len)),
+ 						sizeof(struct UDP_header));
+@@ -139,4 +183,5 @@
+ 		}
+ 	return -1; 
+ }
++
+ 

@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+#Sniffit argument generating file -- Brecht Claerhout
+
+echo 'This file became useless in the 0.3.2 distribution....'
+echo 'It is still here because of the patches...'
+
