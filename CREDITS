@@ -2,3 +2,14 @@
 
 - Joshua Kwan <joshk@triplehelix.org>
   Sent a patch to solve Debian bug #195548. It solved a fail with gcc-3.3.
+
+
+- Debian maintainers over time:
+  1997      Patrick J. Edwards <edwards@cambridgenet.sk.ca>
+  1998      Damjan Marion <dmarion@debian.org>
+  1999      Hamish Moffatt <hamish@debian.org>
+  1999-2008 Edward Betts <edward@debian.org>
+  2000-2002 Torsten Landschoff <torsten@debian.org>
+  2008-2012 William Vera <billy@billy.com.mx>
+  2011      HIGUCHI Daisuke (VDR dai) <debian@vdr.jp>
+  2012      Aron Xu <aron@debian.org>
