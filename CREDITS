@@ -22,6 +22,9 @@
 - Sebastian Harl <tokkee@debian.org>
   Sent a patch to solve Debian bug #644978. It fixed a segfault on amd64.
 
+- "VDR dai \(deb\)" <d+deb@vdr.jp>
+  Sent a patch to solve Debian bug #649817. It enabled hardening options.
+
 
 - Debian maintainers over time, up to November 2016:
 
