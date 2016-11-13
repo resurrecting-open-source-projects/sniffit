@@ -151,16 +151,18 @@ if( (ntohs(tcphead.destination) == 25) ) /* to MAIL */
     {
     char workbuf1[MTU];
     char *wb_dummy;
+    char *p;
+    size_t len = info.DATA_len <= MTU-1 ? info.DATA_len : MTU-1;
 
-    strncpy(workbuf1,data,info.DATA_len);
-    workbuf1[info.DATA_len]=0;
+    strncpy(workbuf1,data,len);
+    workbuf1[len]=0;
     strlower(workbuf1);
 
-    if(strstr(workbuf1,"mail from")!=NULL)
+    if((p=strstr(workbuf1,"mail from"))!=NULL)
       {
       char workbuf2[MTU];
 
-      strcpy(workbuf2, strstr(workbuf1,"mail from"));
+      strcpy(workbuf2, p);
       if(strchr(workbuf2,13)!=NULL)                   /* remove trailing enter */    
      	{wb_dummy=strchr(workbuf2,13); *wb_dummy=0;}    
       if(strchr(workbuf2,10)!=NULL)    
@@ -168,11 +170,11 @@ if( (ntohs(tcphead.destination) == 25) ) /* to MAIL */
       print_mail(filename,workbuf2);
       }
 
-    if(strstr(workbuf1,"rcpt to")!=NULL)
+    if((p=strstr(workbuf1,"rcpt to"))!=NULL)
       {
       char workbuf2[MTU];
 
-      strcpy(workbuf2, strstr(workbuf1,"rcpt to"));
+      strcpy(workbuf2, p);
       if(strchr(workbuf2,13)!=NULL)                          /* remove trailing enter */    
      	{wb_dummy=strchr(workbuf2,13); *wb_dummy=0;}    
       if(strchr(workbuf2,10)!=NULL)    

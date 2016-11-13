@@ -44,42 +44,42 @@ fflush(LogFILE);
 void print_ftp_user (char *conn, char *user)
 {
 char line[250];
-sprintf(line,"%s: USER [%s]",conn,user);
+snprintf(line,sizeof(line),"%s: USER [%s]",conn,user);
 print_logline (line);
 }
 
 void print_ftp_pass(char *conn, char *pass)
 {
 char line[250];
-sprintf(line,"%s: PASS [%s]",conn,pass);
+snprintf(line,sizeof(line),"%s: PASS [%s]",conn,pass);
 print_logline (line);
 }
 
 void print_login (char *conn, char *login)
 {
 char line[250];
-sprintf(line,"%s: login [%s]",conn,login);
+snprintf(line,sizeof(line),"%s: login [%s]",conn,login);
 print_logline (line);
 }
 
 void print_mail (char *conn, char *msg)
 {
 char line[250];
-sprintf(line,"%s: mail [%s]",conn,msg);
+snprintf(line,sizeof(line),"%s: mail [%s]",conn,msg);
 print_logline (line);
 }
 
 void print_pwd (char *conn, char *pwd)
 {
 char line[250];
-sprintf(line,"%s: password [%s]",conn,pwd);
+snprintf(line,sizeof(line),"%s: password [%s]",conn,pwd);
 print_logline (line);
 }
 
 void print_conn (char *conn, char *msg)
 {
 char line[250];
-sprintf(line,"%s: %s",conn,msg);
+snprintf(line,sizeof(line),"%s: %s",conn,msg);
 print_logline (line);
 }
 

@@ -5,6 +5,7 @@
 
 #ifdef INCLUDE_INTERFACE
 #include <signal.h>
+#include <termios.h>
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>       
@@ -513,8 +514,11 @@ kill(Pid,SIGKILL);
 
 void screen_exit (void)
 {
-clear();
 endwin();
+/* next line added by Edward Betts <edward@debian.org>, should not be needed
+ * because endwin should be calling it, without this the console has no echo
+ * after exiting in an xterm */
+reset_shell_mode(); 
 };
 
 void mem_exit (void)
