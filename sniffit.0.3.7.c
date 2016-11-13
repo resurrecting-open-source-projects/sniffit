@@ -1093,19 +1093,19 @@ packethandler (unsigned char *ipaddrpoint,
   finish = check_packet (ipaddr, p_header, sp, filename, filename2, &info, header, SNIFMODE);
 
   if (finish == DROP_PACKET)
-    return;			/* Packet is broken */
+    return 0;			/* Packet is broken */
 
   if( (PROTOCOLS&F_IP)&&((PROTOCOLS&F_TCP)==0))
     memcpy (&iphead, (sp + PROTO_HEAD), sizeof (struct IP_header)),
       print_iphead (&iphead, 0);
 
   if (finish == DONT_EXAMINE)
-    return;			/* Packet is not for us */
+    return 0;			/* Packet is not for us */
 
   if(DUMPMODE==8)               /* Recording */
     {
     pcap_dump((unsigned char *) dev_dump, p_header, sp);
-    return;
+    return 1;
     }
 
   if((PROTOCOLS & F_IP)&&(PROTOCOLS & F_TCP)&&(finish<10))
@@ -1186,11 +1186,11 @@ packethandler (unsigned char *ipaddrpoint,
 	  if (status == 0)
 	    {
 	      if (finish == TCP_FINISH)
-		return;
+		return 1;
 	      /* there was never data transmitted */
 	      /* seq_nr & datalen not important here yet */
 	      if ((dummy_pointer = add_dynam (filename, TCP, 1, 0, 0)) == NULL)
-		return;
+		return 1;
 	    }
 	  f = dummy_pointer->f;
 
@@ -1256,7 +1256,7 @@ packethandler (unsigned char *ipaddrpoint,
 	  printf ("\nYou mixed incompatible options!\n");
 	  exit (1);
 	}
-      return;
+      return 1;
     }
 
   if ((finish < 10) && (LOGPARAM != 0))		/*  TCP packet - logfile   */
@@ -1336,7 +1336,7 @@ packethandler (unsigned char *ipaddrpoint,
 	  break;
 	}
       printf ("\n");
-      return;
+      return 1;
     }
   if (finish < 30)		/* nothing yet */
     {
@@ -1369,7 +1369,7 @@ packethandler (unsigned char *ipaddrpoint,
 	  printf ("\nImpossible error! Sniffer Hartattack!\n");
 	  exit (0);
 	}
-      return;
+      return 1;
     }
 }
 
@@ -1482,9 +1482,9 @@ interactive_packethandler (char *dummy,
 
   finish = check_mask (p_header, sp, conn_name, conn_name2, desc_string, &info);
   if (finish == DROP_PACKET)
-    return;			/* Packet is broken */
+    return 0;			/* Packet is broken */
   if (finish == DONT_EXAMINE)
-    return;			/* Packet is not for us */
+    return 0;			/* Packet is not for us */
 
   if (finish != TCP_FINISH)	/* finish: already logged, or to short to add */
     add_itemlist (running_connections, conn_name, desc_string);

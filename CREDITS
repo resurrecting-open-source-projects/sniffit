@@ -12,11 +12,15 @@
   Sent a patch to solve Debian bug #195548. It solved a fail with gcc-3.3.
 
 - LaMont Jones <lamont@smallone.fc.hp.com>
-  Sent a patch to solve Debian bug  #103633. It fixed some issues in on-line
+  Sent a patch to solve Debian bug #103633. It fixed some issues in on-line
   program help.
 
+- Nicolas Sévelin-Radiguet <nicosr@free.fr>
+  Sent a patch to solve Debian bug #741125. I fixed a fail when building
+  sniffit with clang.
+
 - Sebastian Harl <tokkee@debian.org>
-  Sent a patch to solve Debian bug  #644978. It fixed a segfault on amd64.
+  Sent a patch to solve Debian bug #644978. It fixed a segfault on amd64.
 
 
 - Debian maintainers over time, up to November 2016:
