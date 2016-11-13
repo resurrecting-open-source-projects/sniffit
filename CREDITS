@@ -3,6 +3,10 @@
 - Joshua Kwan <joshk@triplehelix.org>
   Sent a patch to solve Debian bug #195548. It solved a fail with gcc-3.3.
 
+- LaMont Jones <lamont@smallone.fc.hp.com>
+  Sent a patch to solve Debian bug  #103633. It fixed some issues in on-line 
+  program help.
+
 
 - Debian maintainers over time, up to November 2016:
 
