@@ -67,7 +67,7 @@ struct shared_logged_conn            /* shared memory logging datastructure */
 struct snif_mask                                         /* struct for mask */
   {
   _32_bit source_ip, destination_ip;
-  _32_bit short source_port, destination_port;
+  _16_bit source_port, destination_port;
   };
 
 /* (packet generation) */
