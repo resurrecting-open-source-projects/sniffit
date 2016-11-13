@@ -4,7 +4,8 @@
   Sent a patch to solve Debian bug #195548. It solved a fail with gcc-3.3.
 
 
-- Debian maintainers over time:
+- Debian maintainers over time, up to November 2016:
+
   1997      Patrick J. Edwards <edwards@cambridgenet.sk.ca>
   1998      Damjan Marion <dmarion@debian.org>
   1999      Hamish Moffatt <hamish@debian.org>
@@ -13,3 +14,6 @@
   2008-2012 William Vera <billy@billy.com.mx>
   2011      HIGUCHI Daisuke (VDR dai) <debian@vdr.jp>
   2012      Aron Xu <aron@debian.org>
+  2015-2016 Joao Eriberto Mota Filho <eriberto@debian.org>
+
+ (I am Eriberto, the current maintainer in Debian)
