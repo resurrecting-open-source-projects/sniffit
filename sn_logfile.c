@@ -8,6 +8,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <time.h>
 #include "sn_defines.h"
 #include "sn_structs.h"
 #include "sn_logfile.h"
