@@ -1,3 +1,26 @@
+Version 0.4.0, 2016-11-14
+
+  [ Joao Eriberto Mota Filho ]
+
+* Source code reorganized.
+* Full conversion to autotools:
+    - Previous configure.ac rewritten.
+    - Created Makefile.am.
+    - Created autogen.sh to use autoreconf (yes, it works fine now).
+* Added all patches from Debian.
+* Several adjustments.
+* Long life to sniffit!
+
+
+
+
+############################################################################
+###                                                                      ###
+### THE FOLLOWING LINES ARE THE OLD CHANGELOG (UP TO 0.3.7 BETA VERSION) ###
+###                                                                      ###
+############################################################################
+
+
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
 *                            Sniffit History                                  *
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
