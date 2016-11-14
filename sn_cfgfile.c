@@ -119,6 +119,11 @@ char *clean_string (char *string)
 char help[20];
 int i, j;
 
+if(strlen(string) >= 20){
+   fprintf(stderr, "Error: String too long [%s]\n", string);
+   exit(-1);
+}
+
 j=0;
 for(i=0;i<strlen(string);i++)
 	{
@@ -137,6 +142,11 @@ char *clean_filename (char *string)
 {
 char help[20];
 int i, j;
+
+if(strlen(string) >= 20){
+   fprintf(stderr, "Error: String too long [%s]\n", string);
+   exit(-1);
+}
 
 j=0;
 for(i=0;i<strlen(string);i++)

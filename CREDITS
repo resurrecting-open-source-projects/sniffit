@@ -4,6 +4,10 @@
   Sent a patch to solve Debian bug #535506. It fixed a fail to build on
   GNU/kFreeBSD.
 
+- Hector Marco < hmarco@hmarco.org> and Ismael Ripoll <iripoll@upv.es> written
+  a fix for CVE-2014-5439 (Root shell on Sniffit). It was published at
+  http://hmarco.org/bugs/CVE-2014-5439-sniffit_0.3.7-stack-buffer-overflow.html
+
 - James Westby <james.westby@ubuntu.com>
   Sent a patch to solve Debian bug #532581. It fixed crashes caused by missing
   #includes leads to wrong prototypes.
