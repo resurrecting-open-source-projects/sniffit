@@ -1,6 +1,6 @@
 AC_PREREQ([2.69])
 AC_INIT([sniffit], [0.4.0], [https://github.com/eribertomota/sniffit/issues])
-AC_CONFIG_SRCDIR([sn_generation.h])
+AC_CONFIG_SRCDIR([src/sn_generation.h])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -53,7 +53,7 @@ else
     fi
 fi
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_OUTPUT

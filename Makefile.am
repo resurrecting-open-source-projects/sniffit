@@ -1,26 +1,26 @@
-bin_PROGRAMS = sniffit
-sniffit_SOURCES = sn_packets.c sn_generation.c sn_interface.c sn_cfgfile.c sn_logfile.c sn_resolv.c sniffit.c
+SUBDIRS = src
 
-AM_CPPFLAGS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_LIBNCURSES=1 -DHAVE_SHMGET=1 -DHAVE_ATEXIT=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DSIZEOF_UNSIGNED_SHORT_INT=2 -DSIZEOF_UNSIGNED_LONG_INT=8 -DSIZEOF_UNSIGNED_INT=4 -DUSE_32_INT=1 -DLINUX=1
-AM_CFLAGS = -lncurses -lpcap
+man_MANS = man/sniffit.5 man/sniffit.8
 
 clean:
-	rm -f Makefile
 	rm -f config.cache
-	rm -f config.status
 	rm -f config.log
-	rm -f *.o sniffit
+	rm -f config.status
+	rm -f Makefile
+	rm -f src/*.o
+	rm -f src/Makefile
+	rm -f src/sniffit
 
 distclean: clean
 	rm -f aclocal.m4
-	rm -rf autom4te.cache
 	rm -f compile
 	rm -f configure
-	rm -rf config.h*
 	rm -f depcomp
-	rm -rf .deps
 	rm -f install-sh
 	rm -f Makefile.in
 	rm -f missing
 	rm -f stamp-h1
-
+	rm -rf autom4te.cache
+	rm -rf config.h*
+	rm -rf src/.deps
+	rm -f src/Makefile.in
