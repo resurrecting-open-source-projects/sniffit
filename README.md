@@ -47,7 +47,7 @@ Please, help this project (see above how to do it).
 -------------------
 
 sniffit is a packet sniffer for TCP/UDP/ICMP packets over IPv4. It is able
-to give you very detailed technical info on these packets, as SEQ, ACK, TTL,
+to give you a very detailed technical info on these packets, as SEQ, ACK, TTL,
 Window, etc. The packet contents also can be viewed, in different formats
 (hex or plain text, etc.).
 
