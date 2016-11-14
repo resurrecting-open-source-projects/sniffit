@@ -33,7 +33,7 @@ int count, pos, i, j;
 unsigned short offset;
 
 j=start_string;
-pos=start_pos;	
+pos=start_pos;
 
 if(pos > PL_pos_max)	return -1;
 if( (count=(buf[pos]&63))!=buf[pos] )
@@ -51,7 +51,7 @@ while(count!=0)
 		if(pos > PL_pos_max)	return -1;
 		if(string==NULL)
 		   {printf("%c",buf[pos]);}
-		else 
+		else
 		   {string[j]=buf[pos];string[j+1]=0;j++;}
 		}
 	printf(".");
@@ -153,6 +153,6 @@ for(i=0;i<answers;i++)
 		printf("%u.",(unsigned char)dns_p[dec_pos+j]);
 	}
   dec_pos+=ntohs(*r_dlen);
-  }	
+  }
 printf("\n\n");
 }

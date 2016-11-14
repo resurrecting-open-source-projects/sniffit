@@ -24,7 +24,7 @@ typedef unsigned short _16_bit;
 #define LOG_PASS_BUF  20+1	                /* login/pwd buffer length */
 #define TELNET_ENTER	0x0d		 /* Enter in telnet login session  */
 #define FTP_ENTER	0x0d  /* first char of Enter in FTP login session  */
- 
+
 #define DEST        0
 #define SOURCE      1
 #define BOTH        2
@@ -119,7 +119,7 @@ typedef unsigned short _16_bit;
 #define IP_RELIABILITY  8
 
 #define IP_DF   2
-#define IP_MF   1                         
+#define IP_MF   1
 
 /*** ICMP types ********************************************************/
 #define ICMP_TYPE_0     "Echo reply"
@@ -135,18 +135,18 @@ typedef unsigned short _16_bit;
 #define ICMP_TYPE_16    "Information reply"
 #define ICMP_TYPE_17    "Address mask request"
 #define ICMP_TYPE_18    "Address mask reply"
-                                               
+
 /*** Services (standardised) *******************************************/
 #define FTP_DATA_1	20
 #define FTP_1		21
 #define SSH_1	 	22
 #define TELNET_1	23
 #define MAIL_1		25
-#define IDENT_1		113	
-#define HTTP_1		80	
-#define HTTP_2		80	
-#define HTTP_3		80	
-#define HTTP_4		80	
-#define IRC_1		6667	
-#define X11_1		6000	
+#define IDENT_1		113
+#define HTTP_1		80
+#define HTTP_2		80
+#define HTTP_3		80
+#define HTTP_4		80
+#define IRC_1		6667
+#define X11_1		6000
 

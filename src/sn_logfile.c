@@ -1,6 +1,6 @@
 /* Sniffit Logfile include file                                           */
 /*   - by: Brecht Claerhout                                               */
-                     
+
 #include "sn_config.h"
 
 #include <stdlib.h>
@@ -14,10 +14,10 @@
 #include "sn_logfile.h"
 
 extern char Logfile[250];                                /* name of logfile */
-extern FILE *LogFILE;                                     /* logfile stream */ 
+extern FILE *LogFILE;                                     /* logfile stream */
 extern char LOGPARAM;
 extern char DUMPMODE;				   	 /* recorded or not */
-      
+
 void logfile_exit (void)         /* at/on_exit closing of logfile */
 {
 printf("Sniffit Logging session ended.\n");
@@ -91,7 +91,7 @@ void open_logfile (void)
 if(Logfile[0]==0)       strcpy(Logfile,"sniffit.log");
 LogFILE=fopen(Logfile,"a");
 if(LogFILE==NULL)
-  printf("Sniffit hardattack.. couldn't create/open logfile...\n"), exit(1); 
+  printf("Sniffit hardattack.. couldn't create/open logfile...\n"), exit(1);
 exit_func(logfile_exit);
 fchmod(LogFILE,  S_IWUSR|S_IRUSR);
 print_logline("Sniffit session started.");

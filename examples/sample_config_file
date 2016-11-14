@@ -1,10 +1,10 @@
 # Sniffit V.0.3.3-0.3.7 Sample Config file -- Brecht Claerhout
 
-# First select all packets! 
+# First select all packets!
 select both mhosts 1
 select both mhosts 2
 
-# Now deselect all packets from/to those damn 'surfers' 
+# Now deselect all packets from/to those damn 'surfers'
 deselect both port 80
 deselect both port 8001
 

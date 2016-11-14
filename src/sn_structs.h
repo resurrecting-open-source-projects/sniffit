@@ -6,14 +6,14 @@
 #include <stdio.h>
 #include "sn_packetstructs.h"
 
-/**** Global data **********************************************************/ 
-struct file_info 
+/**** Global data **********************************************************/
+struct file_info
 {
         char proto, filename[50];
         FILE *f;
         unsigned long bytes;
         _32_bit exp_seq;     /* expected seq to avoid double logging */
-	int time_out;   
+	int time_out;
 	char log;                      /* log=0  : do nothing        */
 	                               /* log=1  : log 'login'       */
 	                               /* log=2  : 'login' logged    */
@@ -25,7 +25,7 @@ struct file_info
 	struct file_info *next;
 };
 
-/**** Global data (config) **************************************************/ 
+/**** Global data (config) **************************************************/
 struct cfg_file_contense
 {
 unsigned char host[16];
@@ -44,8 +44,8 @@ struct Plugin_data {
 	unsigned char PL_packet[MTU];
 };
 
-/**** Global data (interactive) *********************************************/ 
-#ifdef INCLUDE_INTERFACE                               
+/**** Global data (interactive) *********************************************/
+#ifdef INCLUDE_INTERFACE
 #include "sn_curses.h"
 
 struct box_window
@@ -58,7 +58,7 @@ struct shared_conn_data           /* shared memory connection datastructure */
   {
   char connection [CONN_NAMELEN];                 /* full ID string of conn */
   char desc [DESC_BYTES];                         /* connection description */
-  int timeout;                   
+  int timeout;
   };
 struct shared_logged_conn            /* shared memory logging datastructure */
   {
@@ -89,7 +89,7 @@ struct sp_data_exchange {
         char *buffer;               /* work buffer */
         int IP_optlen;             /* IP options length in bytes  */
         int TCP_optlen;            /* TCP options length in bytes */
-        };                            
+        };
 #endif
 
 #endif

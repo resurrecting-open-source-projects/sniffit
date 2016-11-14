@@ -14,53 +14,53 @@ me back the results. (coder@reptile.rug.ac.be)
 -----------------------------------------------------------------------------
 
 1. LINUX
-  
+
   - Does sniffing a SLIP connection work?
 
 
 2. SunOS/Solaris
 
- 
+
 3. Irix
 
   - Does sniffing a PPP connection work?
-    
+
     If sniffit just sits there, doing nothing, try changing (sn_data.h)
-    
+
     #ifdef IRIX
     #define NETDEV_NR      2
     char *NETDEV[]={"ppp","et"};
     int HEADSIZE[]={0    ,14};              /* ppp: 4 or 0 or nothing */
-    #endif             
+    #endif
 
-    to:   
+    to:
 
     #ifdef IRIX
     #define NETDEV_NR      2
     char *NETDEV[]={"ppp","et"};
     int HEADSIZE[]={4    ,14};              /* ppp: 4 or 0 or nothing */
-    #endif               
+    #endif
 
 
 4. FreeBSD
 
   - Does sniffing a PPP connection work?
     To try this, remove the lines that are marked below with X in the
-    sn_data.h file:  
+    sn_data.h file:
 
-    #ifdef FREEBSD                          /* ppp: 4 or 0 ? */      
+    #ifdef FREEBSD                          /* ppp: 4 or 0 ? */
     /*									X
-    #define NETDEV_NR      2                                         
-    char *NETDEV[]={"ppp","ed"};            
-    int HEADSIZE[]={4    ,14};                                       
+    #define NETDEV_NR      2
+    char *NETDEV[]={"ppp","ed"};
+    int HEADSIZE[]={4    ,14};
     */									X
     #define NETDEV_NR      1						X
     char *NETDEV[]={"ed"};          					X
     int HEADSIZE[]={14}; 						X
-    #endif                             
+    #endif
 
     If it doesn't work, and sniffit just sits there, try changing:
-    
+
     int HEADSIZE[]={4    ,14};
 
     to:
@@ -76,20 +76,20 @@ me back the results. (coder@reptile.rug.ac.be)
 
     #ifdef BSDI                             /* ppp: 4 or 0 ? */
     /*									X
-    #define NETDEV_NR      2                                         
-    char *NETDEV[]={"ppp","ef"};                                     
-    int HEADSIZE[]={4    ,14};                                       
+    #define NETDEV_NR      2
+    char *NETDEV[]={"ppp","ef"};
+    int HEADSIZE[]={4    ,14};
     */									X
     #define NETDEV_NR      1						X
     char *NETDEV[]={"ef"};  						X
     int HEADSIZE[]={14}; 						X
-    #endif                               
+    #endif
 
     If it doesn't work, and sniffit just sits there, try changing:
 
     int HEADSIZE[]={4    ,14};
 
-    to:   
+    to:
 
     int HEADSIZE[]={0    ,14};
 
@@ -97,14 +97,14 @@ me back the results. (coder@reptile.rug.ac.be)
 6. DEC/OSF
 
 
-7. NetBSD 
+7. NetBSD
 
  - Does sniffing a PPP connection work?
 
    If sniffit just sits there, doing nothing, try changing the sn_data.h
    file. Search the line:
-   
-   #ifdef NETBSD   
+
+   #ifdef NETBSD
 
    from there on change in every "int HEADSIZE[]={}" the 4 to a 0.
 

@@ -5,7 +5,7 @@
 /* Simple PORT BASED detection */
 
 /*** FTP sessions ********************************************************/
-if( 
+if(
 (ntohs(tcphead.source)==FTP_DATA_1)||(ntohs(tcphead.destination)==FTP_DATA_1) )
   {strcpy(desc_string, "FTP DATA");}
 
@@ -63,8 +63,8 @@ if( (ntohs(tcphead.source)==HTTP_1)||(ntohs(tcphead.source)==HTTP_2)||
   strcpy(desc_string, "HTTP");
   }
 
-if( (ntohs(tcphead.destination)==HTTP_1)||(ntohs(tcphead.destination)==HTTP_2) || 
-    (ntohs(tcphead.destination)==HTTP_3)||(ntohs(tcphead.destination)==HTTP_4) 
+if( (ntohs(tcphead.destination)==HTTP_1)||(ntohs(tcphead.destination)==HTTP_2) ||
+    (ntohs(tcphead.destination)==HTTP_3)||(ntohs(tcphead.destination)==HTTP_4)
   )
   {
   if(info->DATA_len==0)

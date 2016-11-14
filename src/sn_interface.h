@@ -8,7 +8,7 @@ int add_itemlist(char *, char *, char *);
 void child_exit (void);
 void clear_shared_mem(char);
 void data_device (char *, int);
-void data_window (struct box_window *, struct box_window *, int, int, int, 
+void data_window (struct box_window *, struct box_window *, int, int, int,
 						    	       int, char *, int);
 int del_itemlist(char *, char *);
 void exec_mask (void);
@@ -27,7 +27,7 @@ void screen_exit (void);
 void set_signal (int, sig_hand);
 void sig_blocking(char, int);
 void stop_logging (void);
-int check_mask (const struct packetheader *,const unsigned char *, char *, 
+int check_mask (const struct packetheader *,const unsigned char *, char *,
                                             char *, char *, struct unwrap *);
 pcap_handler interactive_packethandler( char *, const struct packetheader *,
                  		        const unsigned char *);

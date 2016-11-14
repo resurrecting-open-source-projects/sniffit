@@ -14,10 +14,10 @@ extern char NO_CHKSUM;
 unsigned short in_cksum(unsigned short *addr,int len)
 {
 register int nleft = len;   /* leave this alone.. my opinion is that the   */
-register unsigned short *w = addr; 
-                            /* register is needed to make it work for both */ 
-register int sum = 0;       /* BIG and LITTLE endian machines              */ 
-unsigned short answer = 0;     
+register unsigned short *w = addr;
+                            /* register is needed to make it work for both */
+register int sum = 0;       /* BIG and LITTLE endian machines              */
+unsigned short answer = 0;
                         /* but then again, who am I to make such statement */
 
 while (nleft > 1)
@@ -36,8 +36,8 @@ answer = ~sum;
 return(answer);
 }
 
-int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped) 
-{ 
+int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
+{
 	struct IP_header  IPhead;
 	struct TCP_header TCPhead;
 	struct ICMP_header ICMPhead;
@@ -54,17 +54,17 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
 	memcpy(&IPhead,(sp+PROTO_HEAD),sizeof(struct IP_header));
                                                   /* IP header Conversion */
  	unwrapped->IP_len = (IPhead.verlen & 0xF) << 2;
-	
+
 	unwrapped->TCP_len = 0;         	/* Reset structure NEEDED!!! */
 	unwrapped->UDP_len = 0;
         unwrapped->DATA_len= 0;
 	unwrapped->FRAG_f  = 0;
 	unwrapped->FRAG_nf = 0;
-        
+
 	if(NO_CHKSUM == 0)
 		{
 		sp[PROTO_HEAD+10]=0;       /* reset checksum to zero, Q&D way*/
-		sp[PROTO_HEAD+11]=0;             
+		sp[PROTO_HEAD+11]=0;
 		if(in_cksum((sp+PROTO_HEAD),unwrapped->IP_len) != IPhead.checksum)
 			{
 #ifdef DEBUG_ONSCREEN
@@ -87,7 +87,7 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
 
 #ifdef DEBUG_ONSCREEN
 	printf("IPheadlen: %d   total length: %d\n", unwrapped->IP_len,
-						    ntohs(IPhead.length)); 
+						    ntohs(IPhead.length));
 #endif
 
         dummy=ntohs(IPhead.flag_offset); dummy<<=3;
@@ -104,27 +104,27 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
 	if(IPhead.protocol == TCP )		             /* TCP */
 		{
                 if(unwrapped->FRAG_nf == 0)   /* packet contains TCP header */
-                  {  
+                  {
 		  if( (ntohs(IPhead.length)-(unwrapped->IP_len))<20 )
 		    {
 		    if(unwrapped->FRAG_f==1)
-	              {unwrapped->DATA_len = ntohs(IPhead.length) - 
+	              {unwrapped->DATA_len = ntohs(IPhead.length) -
                                                          (unwrapped->IP_len);
-                       if(unwrapped->DATA_len<0) 
+                       if(unwrapped->DATA_len<0)
                          {unwrapped->DATA_len=0; return CORRUPT_IP;}
                        return TCP_FRAG_HEAD;
                       }
-                    else 
+                    else
                       {return CORRUPT_IP;}
                     }
 
 		  memcpy(&TCPhead,(sp+PROTO_HEAD+(unwrapped->IP_len)),
 						sizeof(struct TCP_header));
 		  unwrapped->TCP_len = ntohs(TCPhead.offset_flag) & 0xF000;
-		  unwrapped->TCP_len >>= 10; 
+		  unwrapped->TCP_len >>= 10;
 		  unwrapped->DATA_len = ntohs(IPhead.length) -
-				(unwrapped->IP_len) - (unwrapped->TCP_len); 
-                  
+				(unwrapped->IP_len) - (unwrapped->TCP_len);
+
                   /* IP options can not cause SEGFAULT */
                   if(unwrapped->DATA_len<0) /* Fragmented TCP options */
                     {
@@ -132,7 +132,7 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
                       {unwrapped->TCP_len=0;
                        unwrapped->DATA_len = ntohs(IPhead.length) -
                                                       (unwrapped->IP_len);
-                       if(unwrapped->DATA_len<0) 
+                       if(unwrapped->DATA_len<0)
                          {unwrapped->DATA_len=0; return CORRUPT_IP;}
                        return TCP_FRAG_HEAD;
                       }
@@ -143,7 +143,7 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
                 else
                   {
 		  unwrapped->DATA_len = ntohs(IPhead.length) - (unwrapped->IP_len);
-                  if(unwrapped->DATA_len<0) 
+                  if(unwrapped->DATA_len<0)
                          {unwrapped->DATA_len=0; return CORRUPT_IP;}
                   }
 		return TCP;
@@ -151,7 +151,7 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
 	if(IPhead.protocol == ICMP )		             /* ICMP */
 		{
                 if(unwrapped->FRAG_nf == 0) /* Should contain header */
-                  {  
+                  {
 		  if( (ntohs(IPhead.length)-(unwrapped->IP_len))<4 )
 		    {return NOT_SUPPORTED;}; /* no handling of frag headers*/
 
@@ -159,32 +159,32 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
 						sizeof(struct ICMP_header));
 		  unwrapped->ICMP_len = ICMP_HEADLENGTH;
 		  unwrapped->DATA_len = ntohs(IPhead.length) -
-				(unwrapped->IP_len) - (unwrapped->ICMP_len); 
-		  
-                  if(unwrapped->DATA_len<0) 
+				(unwrapped->IP_len) - (unwrapped->ICMP_len);
+
+                  if(unwrapped->DATA_len<0)
                     {
 		    if(unwrapped->FRAG_f==1)
                       {unwrapped->TCP_len=0;
                        unwrapped->DATA_len = ntohs(IPhead.length) -
                                                       (unwrapped->IP_len);
-                       if(unwrapped->DATA_len<0) 
+                       if(unwrapped->DATA_len<0)
                          {unwrapped->DATA_len=0; return CORRUPT_IP;}
                        return NOT_SUPPORTED;  /* don't handle fragmented ICMP */
                       }
                     else
                       {return CORRUPT_IP;}
-                    }   
+                    }
                   return ICMP;
 		  }
                 else
                   {
                   return NOT_SUPPORTED; /* don't handle fragmented ICMP */
-                  } 
+                  }
 		}
 	if(IPhead.protocol == UDP )		               /* UDP */
 		{
                 if(unwrapped->FRAG_nf == 0)
-                  {  
+                  {
 		  if( ((IPhead.length)-(unwrapped->IP_len))<8 )
 		    {return NOT_SUPPORTED;}; /* don't handle frag. header */
 
@@ -192,29 +192,29 @@ int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)
 						sizeof(struct UDP_header));
 		  unwrapped->UDP_len = UDP_HEADLENGTH;
 		  unwrapped->DATA_len = ntohs(IPhead.length) -
-				(unwrapped->IP_len) - (unwrapped->UDP_len); 
-		               
-                  if(unwrapped->DATA_len<0) 
+				(unwrapped->IP_len) - (unwrapped->UDP_len);
+
+                  if(unwrapped->DATA_len<0)
                     {
 		    if(unwrapped->FRAG_f==1)
                       {unwrapped->UDP_len=0;
                        unwrapped->DATA_len = ntohs(IPhead.length) -
                                                       (unwrapped->IP_len);
-                       if(unwrapped->DATA_len<0) 
+                       if(unwrapped->DATA_len<0)
                          {unwrapped->DATA_len=0; return CORRUPT_IP;}
                        return NOT_SUPPORTED;
                       } /* don't handle fragmented UDP */
                     else
                       {return CORRUPT_IP;}
                     }
-                  return UDP;  
+                  return UDP;
                   }
                 else
 		  {
                   return NOT_SUPPORTED; /* don't handle fragmented UDP */
                   }
 		}
-	return NOT_SUPPORTED; 
+	return NOT_SUPPORTED;
 }
 
 

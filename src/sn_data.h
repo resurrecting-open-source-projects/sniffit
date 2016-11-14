@@ -12,11 +12,11 @@
 #ifdef LINUX
 /*
 #define NETDEV_NR      3
-char *NETDEV[]={"lo","ppp","eth"};     
+char *NETDEV[]={"lo","ppp","eth"};
 int HEADSIZE []={4  ,0   ,14};
 */
 #define NETDEV_NR      3
-char *NETDEV[]={"ppp","slip","eth"}; 		/* echo on loopback   */    
+char *NETDEV[]={"ppp","slip","eth"}; 		/* echo on loopback   */
 int HEADSIZE []={0   ,0     ,14};		/* slip needs testing */
 #endif
 
@@ -35,29 +35,29 @@ int HEADSIZE[]={0    ,14};		/* ppp: 4 or 0 or nothing */
 #ifdef FREEBSD				/* ppp: 4 or 0 ? */
 /*
 #define NETDEV_NR      2
-char *NETDEV[]={"ppp","ed"};		
-int HEADSIZE[]={4    ,14}; 
+char *NETDEV[]={"ppp","ed"};
+int HEADSIZE[]={4    ,14};
 */
 #define NETDEV_NR      1
-char *NETDEV[]={"ed"};		
-int HEADSIZE[]={14}; 
+char *NETDEV[]={"ed"};
+int HEADSIZE[]={14};
 #endif
 
 #ifdef BSDI				/* ppp: 4 or 0 ? */
 /*
 #define NETDEV_NR      2
-char *NETDEV[]={"ppp","ef"};	
-int HEADSIZE[]={4    ,14}; 
+char *NETDEV[]={"ppp","ef"};
+int HEADSIZE[]={4    ,14};
 */
 #define NETDEV_NR      1
-char *NETDEV[]={"ef"};	
-int HEADSIZE[]={14}; 
+char *NETDEV[]={"ef"};
+int HEADSIZE[]={14};
 #endif
 
 #ifdef DEC_OSF
 #define NETDEV_NR      1
 char *NETDEV[]={"ln"};
-int HEADSIZE[]={14}; 
+int HEADSIZE[]={14};
 #endif
 
 #ifdef NETBSD
@@ -81,16 +81,16 @@ int HEADSIZE[]={4    ,14  ,14   ,14  ,14  ,14};
 #ifdef AIX                          /* only for the AIX powerpack ;) */
 #define NETDEV_NR      4            /* not usefull without it        */
 char *NETDEV[]={"en","et","tr","fi"};
-int HEADSIZE[]={14  ,22  ,22  ,24}; 
+int HEADSIZE[]={14  ,22  ,22  ,24};
 #endif
 
 #ifdef HPUX                        /* only for the HPUX powerpack ;) */
 #define NETDEV_NR      2           /* not usefull without it        */
-char *NETDEV[]={"le","sam"};              
-int HEADSIZE[]={14  ,14   }; 
+char *NETDEV[]={"le","sam"};
+int HEADSIZE[]={14  ,14   };
 #endif
 
-/**** Global data **********************************************************/ 
+/**** Global data **********************************************************/
 pcap_t *dev_desc;
 pcap_dumper_t *dev_dump;
 void *start_dynam;
@@ -111,7 +111,7 @@ char *IP_TYPE_precedence[8]=
         "Critical", "Internetwork control", "Network control"};
 
 char *IP_PROTOCOL_number[34]=
-     
+
 {"Reserved","ICMP","IGMP","GGP","Unassigned","ST","TCP","UCL","EGP","IGP",
       "BBN-MON","NVP-II","PUP","ARGUS","EMCOM","XNET","CHAOS","UDP","MUX",
       "DCN-MEAS","HMP","PRM","XNS-IDP","TRUNK-1","TRUNK-2","LEAF-1","LEAF-2",
@@ -129,9 +129,9 @@ char *ICMP_type_5_code[4]=
         "Redirect datagrams for the \'type of service\' and the host"};
 char *ICMP_type_11_code[2]=
         {"Time-to-live exceeded in transmit",
-        "Fragment reassembly time exceeded"};         
+        "Fragment reassembly time exceeded"};
 
-/**** Global data (config) **************************************************/ 
+/**** Global data (config) **************************************************/
 struct cfg_file_contense *select_from_list;     /* pointers for cfg lists */
 struct cfg_file_contense *select_to_list;
 struct cfg_file_contense *deselect_from_list;
@@ -147,19 +147,19 @@ char dot_notation[20];                            /* for easy working, Q&D */
 /**** Global data (plugins) *************************************************/
 char Plugin_Active[10];
 
-/**** Global data (interactive) *********************************************/ 
-#ifdef INCLUDE_INTERFACE                               
+/**** Global data (interactive) *********************************************/
+#ifdef INCLUDE_INTERFACE
 
-/**** shared memory pointers ************************************************/ 
-char *SHARED, *connection_data, *timing, *running_connections, 
-						  *logged_connections; 
+/**** shared memory pointers ************************************************/
+char *SHARED, *connection_data, *timing, *running_connections,
+						  *logged_connections;
 int *LISTlength, *DATAlength, memory_id;
 unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets;
 unsigned int  *IP_nr_of_packets;
 unsigned long *TCP_bytes_in_packets, *UDP_bytes_in_packets;
 int *DESC_LEN;
 
-/**** data structures *******************************************************/ 
+/**** data structures *******************************************************/
 struct snif_mask *mask;
 struct shared_logged_conn *log_conn;
 FILE *log_dev_stream;
@@ -170,24 +170,24 @@ char PACKET_INFO;
 int POINTpos=0, LISTpos=0;
 unsigned char COLOR_AVAIL=0;
 
-/**** screen  **************************************************************/ 
+/**** screen  **************************************************************/
 int MASK_WINDOW_ROWS, MASK_WINDOW_COLS;
 int MAIN_WINDOW_ROWS, MAIN_WINDOW_COLS;
 int INFO_WINDOW_ROWS, INFO_WINDOW_COLS;
 int DATA_WINDOW_ROWS, DATA_WINDOW_COLS;
 int INFO_WINDOW_X, INFO_WINDOW_Y;
 int MASK_WINDOW_X, MASK_WINDOW_Y;
-int DATA_WINDOW_X, DATA_WINDOW_Y;    
+int DATA_WINDOW_X, DATA_WINDOW_Y;
 
 WINDOW *menu_window;
 struct box_window data_box, main_box, mask_box, packets_box;
 int Pid=0;
 #endif
- 
+
 /* DEBUG section */
 #ifdef DEBUG
 FILE *debug_dev;
 unsigned int debug_cnt=0;
 #endif
 
-                  
+

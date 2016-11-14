@@ -2,15 +2,15 @@
 
 void exec_generate(struct generate_mask *);
 
-void transmit_TCP (int, char *, 
+void transmit_TCP (int, char *,
 		     	   int, int , int ,
 		           _32_bit, unsigned short,
 			   _32_bit, unsigned short,
-                           _32_bit, _32_bit, 
+                           _32_bit, _32_bit,
                            unsigned short);
 
-void transmit_UDP (int, char *, 
-			   int, int, 
+void transmit_UDP (int, char *,
+			   int, int,
 		           _32_bit, unsigned short,
 			   _32_bit, unsigned short);
 

@@ -216,7 +216,7 @@ add_dynam (char *file, char ptype, char do_file,
   if (dynam_len >= MAXCOUNT)
     {
       /*
-       * remove less effective connection from list 
+       * remove less effective connection from list
        */
       search_pointer = start_dynam;
       dummy_pointer = start_dynam;
@@ -423,7 +423,7 @@ sbuf_update (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
     {
       sb_shift (dummy_pointer);
       if (data[i] != 0)		/*
-				 * used to be 'isprint', not possible for ftp logging 
+				 * used to be 'isprint', not possible for ftp logging
 				 */
 	{
 	  dummy_pointer->scroll_buf[SCBUF - 1] = data[i];
@@ -503,25 +503,25 @@ check_packet (_32_bit ipaddr,
     {
 #ifdef DEBUG_ONSCREEN
     printf("unwrap: NOT_SUPPORTED\n");
-#endif        
+#endif
     return DROP_PACKET;} /* no use in trying */
   if(proto == NO_IP)
     {
 #ifdef DEBUG_ONSCREEN
     printf("unwrap: NO_IP\n");
-#endif        
+#endif
     return DROP_PACKET;}	/* no use in trying */
   if(proto == NO_IP_4)
     {
 #ifdef DEBUG_ONSCREEN
     printf("unwrap: NO_IP_4\n");
-#endif    
-    return DROP_PACKET;}	/* no use in trying */ 
+#endif
+    return DROP_PACKET;}	/* no use in trying */
   if(proto == CORRUPT_IP)
     {
 #ifdef DEBUG_ONSCREEN
     printf("unwrap: CORRUPT_IP\n");
-#endif        
+#endif
      printf("Suspicious Packet detected... \n");
      return DROP_PACKET;}
 
@@ -580,7 +580,7 @@ check_packet (_32_bit ipaddr,
 	      sprintf (wc_dest, "%u.%u.%u.%u", dest[0], dest[1], dest[2], dest[3]);
 #ifdef DEBUG_ONSCREEN
 if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
-  printf ("CONCERNING: %s  %d - %s  %d\n", wc_so, ntohs (tcphead.source), wc_dest, ntohs (tcphead.destination)); 
+  printf ("CONCERNING: %s  %d - %s  %d\n", wc_so, ntohs (tcphead.source), wc_dest, ntohs (tcphead.destination));
 #endif
 	      /* Highest prior last (backward+break for speed)  */
 	      for (i = (select_from_length - 1); i >= 0; i--)
@@ -752,21 +752,21 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 	}
 
       if( (info->FRAG_nf==0)&&(proto!=TCP_FRAG_HEAD) )
-        if( (MODE!=BOTH && DEST_PORT && ntohs (tcphead.destination)!=DEST_PORT) 
+        if( (MODE!=BOTH && DEST_PORT && ntohs (tcphead.destination)!=DEST_PORT)
             ||
             (MODE!=BOTH && SRC_PORT && ntohs (tcphead.source)!=SRC_PORT)
             ||
             (MODE==BOTH && SRC_PORT && ntohs (tcphead.source)!=SRC_PORT
                                     && ntohs (tcphead.destination)!=SRC_PORT)
           ) /* with BOTH SRC_PORT&DEST_PORT should be the same!! */
-            /* DEST/SRC do not depend on the SOURCE or DEST modes! */ 
+            /* DEST/SRC do not depend on the SOURCE or DEST modes! */
           return DONT_EXAMINE;	/* Check dest. PORT */
 
 #ifdef DEBUG_ONSCREEN
       printf ("Packet accepted\n");
 #endif
 
-     
+
       if( (info->FRAG_nf==0)&&(proto!=TCP_FRAG_HEAD) )
         {
         /* inet_ntoa gave wrong output sometimes */
@@ -802,12 +802,12 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
         return TCP_FINISH; /* packet is a FIN */
 
       if ((ntohs(tcphead.offset_flag) & RST) != 0) /* check for reset conn. */
-        return TCP_FINISH; 
+        return TCP_FINISH;
 
       /*
        * Used to be for speed, '-x' needs all info, so this too!
        * if (info->DATA_len == 0)
-       * return DONT_EXAMINE;        
+       * return DONT_EXAMINE;
        */
 
       return TCP_EXAMINE;	/* interprete packet */
@@ -888,7 +888,7 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 		    {
 		      if (select_from_list[i].wildcard == 0)
 			{	/*
-				 * NO wildcard 
+				 * NO wildcard
 				 */
 			  if (strcmp (wc_so, str_IP) == 0)
 			    {
@@ -899,7 +899,7 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 			}
 		      else
 			{	/*
-				 * wildcard 
+				 * wildcard
 				 */
 			  if (strncmp (wc_so, str_IP, strlen (str_IP)) == 0)
 			    {
@@ -929,7 +929,7 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 		    {
 		      if (select_to_list[i].wildcard == 0)
 			{	/*
-				 * NO wildcard 
+				 * NO wildcard
 				 */
 			  if (strcmp (wc_dest, str_IP) == 0)
 			    {
@@ -940,7 +940,7 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 			}
 		      else
 			{	/*
-				 * wildcard 
+				 * wildcard
 				 */
 			  if (strncmp (wc_dest, str_IP, strlen (str_IP)) == 0)
 			    {
@@ -1039,15 +1039,15 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 
 	    }
 	}
-        
-      if( (MODE!=BOTH && DEST_PORT && ntohs (udphead.destination)!=DEST_PORT) 
+
+      if( (MODE!=BOTH && DEST_PORT && ntohs (udphead.destination)!=DEST_PORT)
           ||
           (MODE!=BOTH && SRC_PORT && ntohs (udphead.source)!=SRC_PORT)
           ||
           (MODE==BOTH && SRC_PORT && ntohs (udphead.source)!=SRC_PORT
                                   && ntohs (udphead.destination)!=SRC_PORT)
         ) /* with BOTH SRC_PORT&DEST_PORT should be the same!! */
-          /* DEST/SRC do not depend on the SOURCE or DEST modes! */ 
+          /* DEST/SRC do not depend on the SOURCE or DEST modes! */
         return DONT_EXAMINE;	/* Check dest. PORT */
 
       /* inet_ntoa gave wrong output sometimes */
@@ -1397,7 +1397,7 @@ check_mask (const struct packetheader *p_header,
     return DROP_PACKET;	/* no use in trying */
   if (proto == NO_IP_4)
     return DROP_PACKET;	/* no use in trying */
-  if(proto == CORRUPT_IP) 
+  if(proto == CORRUPT_IP)
     return DROP_PACKET; /* no use in trying */
 
   if((info->FRAG_nf!=0)||(info->FRAG_f!=0))
@@ -1520,12 +1520,12 @@ int main (int argc, char *argv[])
   extern char *optarg;
 
   signal (SIGINT,  my_exit);	/* gracefull termination in different ways */
-  signal (SIGHUP,  my_exit);	
+  signal (SIGHUP,  my_exit);
   signal (SIGTERM, my_exit);
- 
+
   SNIFLEN = 300;		/* Set defaults */
   DEST_PORT = SRC_PORT = 0;	/* dest & source Port    */
-  INTERACTIVE_EXTEND=SNIFMODE = DUMPMODE = PROTOCOLS = ASC = WILDCARD = 
+  INTERACTIVE_EXTEND=SNIFMODE = DUMPMODE = PROTOCOLS = ASC = WILDCARD =
 							   CFG_FILE = NO_CHKSUM = 0;
   LOGPARAM = 0;
   Logfile[0] = 0;
@@ -1635,39 +1635,39 @@ int main (int argc, char *argv[])
 	    PROTOCOLS |= F_IP;
 	  break;
 	case 's':
-	  {     
+	  {
           char hlp[300], *hlp2;
-                    
+
           flag++;
 	  SNIFMODE = SOURCE;
           hlp[299]=0;
-          strncpy(hlp,optarg,299); 
+          strncpy(hlp,optarg,299);
           hlp2=(char *)strtok(hlp,":");
           IP[255]=0;
-          strncpy(IP,hlp2,255);          
-          if((hlp2=(char *)strtok(NULL,":"))!=NULL) 
-            SRC_PORT = atoi(hlp2);          
-          break;          
+          strncpy(IP,hlp2,255);
+          if((hlp2=(char *)strtok(NULL,":"))!=NULL)
+            SRC_PORT = atoi(hlp2);
+          break;
           }
         case 't':
-	  {     
+	  {
           char hlp[300], *hlp2;
-                    
+
           flag++;
 	  SNIFMODE = DEST;
           hlp[299]=0;
-          strncpy(hlp,optarg,299); 
+          strncpy(hlp,optarg,299);
           hlp2=(char *)strtok(hlp,":");
           IP[255]=0;
-          strncpy(IP,hlp2,255);          
-          if((hlp2=(char *)strtok(NULL,":"))!=NULL) 
+          strncpy(IP,hlp2,255);
+          if((hlp2=(char *)strtok(NULL,":"))!=NULL)
             {
             if(DEST_PORT!=0)
             printf("Conflicting ports... (using %d as destination port)\n",
                                                                atoi(hlp2));
-            DEST_PORT = atoi(hlp2);          
+            DEST_PORT = atoi(hlp2);
             }
-          break;          
+          break;
           }
 	case 'i':
 	  flag++;
@@ -1729,7 +1729,7 @@ int main (int argc, char *argv[])
     SNIFMODE = BOTH;
     if( DEST_PORT&&SRC_PORT&&(DEST_PORT!=SRC_PORT) )
       printf("Conflicting ports... (result might not be what you want!)\n");
-    if(DEST_PORT==0) DEST_PORT=SRC_PORT;  
+    if(DEST_PORT==0) DEST_PORT=SRC_PORT;
                                      /* ports should be the same for BOTH */
     else SRC_PORT=DEST_PORT;
     }
@@ -1757,7 +1757,7 @@ int main (int argc, char *argv[])
     if(FORCE_DEV==0) quit(argv[0]);
     if((dev_desc=pcap_open_offline(DUMPfile,ebuf))==NULL)
       fprintf (stderr,"%s\n",ebuf), exit (0);
-    }                         /* real device */  
+    }                         /* real device */
 
   if (FORCE_DEV != 0)           /* 0.3.6 core dump fix */
     {
@@ -1772,7 +1772,7 @@ int main (int argc, char *argv[])
     {
     if((dev = pcap_lookupdev (ebuf)) == NULL)
        fprintf (stderr,"%s\n",ebuf), exit (1);
-    }  
+    }
 
   for (i = 0; i < NETDEV_NR; i++)
      if (strstr (dev, NETDEV[i]))	/* For expansion */
@@ -1795,8 +1795,8 @@ int main (int argc, char *argv[])
       fprintf (stderr,"%s\n",ebuf), exit (0);
     else
       exit_func(close_pcapdev);
-  if(FORCE_DEV!=0) {free(dev);}  /* no longer needed  */    
-  
+  if(FORCE_DEV!=0) {free(dev);}  /* no longer needed  */
+
 #ifdef PLUGIN0_INIT()
 if (Plugin_Active[0] == 1)
   PLUGIN0_INIT ();
@@ -1920,19 +1920,19 @@ if (Plugin_Active[9] == 1)
         {
         if((dev_dump=pcap_dump_open(dev_desc, DUMPfile))==NULL)
            fprintf (stderr, "Capturing Packets Failed\n"), exit (0);
-        exit_func(close_dumpfile);            
+        exit_func(close_dumpfile);
         }
-      
-    
+
+
       switch (pcap_loop (dev_desc, CNT, packethandler, (unsigned char *) &ipaddr))
         {
-        case -1:	
+        case -1:
           fprintf (stderr, "Capturing Packets Failed\n"), exit (0); break;
-	case 0: 
+	case 0:
 	  exit(0);
 	default:
-	  break;  
-	}    
+	  break;
+	}
 #ifdef INCLUDE_INTERFACE
     }
 #endif
