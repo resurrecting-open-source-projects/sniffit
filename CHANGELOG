@@ -34,14 +34,14 @@ Version 0.4.0, 2016-11-14
    - Kernel 1.2.(some) incompatibility should be fixed. (like 1.2.5)
      (all credit for that to Godmar Back)
    - logging connections with lots of data is okay too now.
-     'the integer that needed to be a long'-bug. 
+     'the integer that needed to be a long'-bug.
      It was an overflow prob.
    - off course there are always minor ameliorations not worth mentioning
 
 (SINCE 0.2.0)
-   - MAXCOUNT bug 
+   - MAXCOUNT bug
    - interactive part lock-up bugs
-   - output format 
+   - output format
 
 (SINCE 0.3.0)
    - a wildcard bug
@@ -66,18 +66,18 @@ Version 0.4.0, 2016-11-14
 
 (SINCE 0.3.5)
    - Seg fault on small Fragmented IP packets handled.
-   - core dump bug fixed with unknown network devices 
+   - core dump bug fixed with unknown network devices
 
  NEW STUFF
 -----------
 
 V.0.1.0
-   - First test of the ncurses interface (never use this version, it's 
+   - First test of the ncurses interface (never use this version, it's
      megaslow)
 
 V.0.1.1
    - Added '-x' for extra information on TCP packets
-   - Added '-A <char>' for you 'password-horny-dudes' ;)  
+   - Added '-A <char>' for you 'password-horny-dudes' ;)
    - beginning of ICMP support ('-P <protocol>')
    - First 'real' test for the interface
 
@@ -95,15 +95,15 @@ V.0.2.1
 
 V.0.2.2
    - Netload statistics (interactive part)
-   - Massive debugging of interactive part 
+   - Massive debugging of interactive part
 
 V.0.3.0
    - Wildcards in non-interactive mode
-   - time-out in non interactive mode, so you won't stuff memory by 
-     connections that weren't closed like they're supposed to be. 
+   - time-out in non interactive mode, so you won't stuff memory by
+     connections that weren't closed like they're supposed to be.
    - Forcing the use of a snif device
    - MTU changeble in config.h
-   - ppp use 
+   - ppp use
 
 V.0.3.1
    - Flexible network trafic selection with config file.
@@ -129,7 +129,7 @@ V.0.3.5
    - cleaned out 0.3.4 beta
 
 V.0.3.6 (alpha, special HIP preview)
-   - '-I' mode (locally refered to as 'Iliet' mode (pronounce in Dutch), 
+   - '-I' mode (locally refered to as 'Iliet' mode (pronounce in Dutch),
      officialy 'Extended Interactive')
    - alpha version session recording
    - alpha version 'sniffit_pb' added (concept canceled in 0.3.7)
