@@ -17,12 +17,12 @@
 0. Introduction, and some stuff you should know.
         0.1 Credits and contact
         0.2 Compiling
-        0.3 License	
+        0.3 License
 1. Programmers notes
 	excuses for my incompetence
 2. Use of the program
 	flags and examples
-3. Extra info on use 
+3. Extra info on use
         3.1 Running interactive mode
 	3.2 Forcing network devices   (*READ*)
 	3.3 Format of the config file

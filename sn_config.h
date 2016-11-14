@@ -12,16 +12,16 @@
 #ifndef HAVE_LIBNCURSES                             /* ncurses not found */ 
 #undef INCLUDE_INTERFACE
 #endif
-#ifndef HAVE_NCURSES_H                              /* ncurses not found */ 
-#undef INCLUDE_INTERFACE
-#endif
+//#ifndef HAVE_NCURSES_H                              /* ncurses not found */ 
+//#undef INCLUDE_INTERFACE
+//#endif
 #ifdef IRIX                                      /* No interface on IRIX */
-#undef INCLUDE_INTERFACE 
+#undef INCLUDE_INTERFACE
 #endif
 
 /* Not supported yet */
 #ifdef BSDI
-#undef INCLUDE_INTERFACE 
+#undef INCLUDE_INTERFACE
 #endif
 
 #ifdef HAVE_ATEXIT

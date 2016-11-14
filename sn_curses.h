@@ -1,1 +1,1 @@
-#include "/usr/include/ncurses.h"
+#include <ncurses.h>

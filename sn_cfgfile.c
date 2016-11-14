@@ -12,6 +12,7 @@
 #include "sn_structs.h"
 #include "sn_cfgfile.h"           
 #include "sn_resolv.h"
+
 #include "sniffit.h"
 /* #include "sn_generation.h" */
 
