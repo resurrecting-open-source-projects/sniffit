@@ -1,0 +1,8 @@
+When updating, change these files (if needed):
+
+- AUTHORS
+- ChangeLog
+- CREDITS
+- configure.ac (VERSION)
+- manpage version and date
+- src/sn_defines.h (VERSION) (check copyright years in header)
