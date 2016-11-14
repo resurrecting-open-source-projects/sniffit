@@ -1,4 +1,4 @@
-bin_PROGRAMS = sniffit
+sbin_PROGRAMS = sniffit
 sniffit_SOURCES = sn_packets.c sn_generation.c sn_interface.c sn_cfgfile.c sn_logfile.c sn_resolv.c sniffit.c
 
 AM_CPPFLAGS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" \
