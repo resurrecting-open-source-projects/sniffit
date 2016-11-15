@@ -35,7 +35,7 @@ if [ "$1" = "clean" -a ! -e Makefile ]
 then
     echo "Vanishing the code"
     rm -rf aclocal.m4 autom4te.cache compile config.h.* configure depcomp \
-           .deps install-sh Makefile.in missing stamp-h1
+           .deps install-sh Makefile.in missing stamp-h1 src/Makefile.in
     echo "Done"
     exit 0
 fi
