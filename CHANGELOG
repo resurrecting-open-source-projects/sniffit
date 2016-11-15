@@ -105,15 +105,15 @@ V.0.3.0
    - MTU changeble in config.h
    - ppp use
 
-V.0.3.1
+V.0.3.1 (1996)
    - Flexible network trafic selection with config file.
 
-V.0.3.2
+V.0.3.2 (1996)
    - IP checksum check
    - First introduction of a logfile for monitoring
    - Adding of loglevel: 1, 10, 12
 
-V.0.3.3
+V.0.3.3 (Oct 1996)
    - rewrite of some parts (big clean-up of interactive part)
    - Auto adjusting to screen of interface
    - Starting of external programs from interface
@@ -125,7 +125,7 @@ V.0.3.4 (Beta)
    - Added UDP selectivity
    - Added "plugins"
 
-V.0.3.5
+V.0.3.5 (April 1997)
    - cleaned out 0.3.4 beta
 
 V.0.3.6 (alpha, special HIP preview)
@@ -135,7 +135,7 @@ V.0.3.6 (alpha, special HIP preview)
    - alpha version 'sniffit_pb' added (concept canceled in 0.3.7)
    - an init function for plugins
 
-V.0.3.7
+V.0.3.7 (July 1998)
    - Thrown away the old style recording, and changed the concept
    - Gracefull shutdown with restoring original interface mode
 
