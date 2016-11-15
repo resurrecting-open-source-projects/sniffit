@@ -12,6 +12,9 @@
   Sent a patch to solve Debian bug #532581. It fixed crashes caused by missing
   #includes leads to wrong prototypes.
 
+- Joao Eriberto Mota Filho <eriberto@eriberto.pro.br>
+  See the CHANGELOG.
+
 - Joshua Kwan <joshk@triplehelix.org>
   Sent a patch to solve Debian bug #195548. It solved a fail with gcc-3.3.
 
