@@ -21,7 +21,7 @@ help a nice project, this is your opportunity.
 My name is Eriberto and **I am not a C developer**. I imported Sniffit from
 Internet to GitHub (the original homepage and developer are inactive).
 After this, I applied all patches found in Debian project and other
-places for this program. All my initial work was registered in ChangeLog
+places for this program. All my initial work was registered in CHANGELOG
 file (version 0.4.0 and later releases). I also maintain Sniffit packaged
 in Debian[1].
 
