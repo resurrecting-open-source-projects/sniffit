@@ -101,7 +101,7 @@ void close_pcapdev(void) {pcap_close(dev_desc);};
 void my_exit (void)
 {
   fflush(NULL);
-  printf("Gracefull shutdown...\n");
+  printf("Graceful shutdown...\n");
   exit (0);
 };
 
@@ -1366,7 +1366,7 @@ packethandler (unsigned char *ipaddrpoint,
 	case 128:
 	  break;		/* NO LOGGING MODE */
 	default:
-	  printf ("\nImpossible error! Sniffer Hartattack!\n");
+	  printf ("\nImpossible error! Sniffer Heartattack!\n");
 	  exit (0);
 	}
       return 1;
@@ -1519,7 +1519,7 @@ int main (int argc, char *argv[])
   int flag = 0, doboth = 0, FORCE_DEV = 0, SUPPORTED = 0;
   extern char *optarg;
 
-  signal (SIGINT,  my_exit);	/* gracefull termination in different ways */
+  signal (SIGINT,  my_exit);	/* graceful termination in different ways */
   signal (SIGHUP,  my_exit);
   signal (SIGTERM, my_exit);
 
@@ -1851,13 +1851,13 @@ if (Plugin_Active[9] == 1)
       memory_id = shmget (0, memsize, 0700);
       if (memory_id < 0)
 	{
-	  perror ("Interactive Sniffer Hartattack (No Shared mem avail!)");
+	  perror ("Interactive Sniffer Heartattack (No Shared mem avail!)");
 	  exit (0);
 	}
       exit_func (mem_exit);
       if ((SHARED = shmat (memory_id, 0, SHM_RND)) == NULL)
 	{
-	  perror ("Interactive Sniffer Hartattack (Wow something is wrong here)");
+	  perror ("Interactive Sniffer Heartattack (Wow something is wrong here)");
 	  exit (0);
 	};
       printf ("Entering Shared memory at %p\n", SHARED);
@@ -1884,7 +1884,7 @@ if (Plugin_Active[9] == 1)
 
       if ((Pid = fork ()) < 0)
 	{
-	  perror ("Interactive Sniffer Hartattack (Couldn't fork)");
+	  perror ("Interactive Sniffer Heartattack (Couldn't fork)");
 	  exit (0);
 	};
       if (Pid == 0)

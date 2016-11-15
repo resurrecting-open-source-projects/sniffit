@@ -91,7 +91,7 @@ void open_logfile (void)
 if(Logfile[0]==0)       strcpy(Logfile,"sniffit.log");
 LogFILE=fopen(Logfile,"a");
 if(LogFILE==NULL)
-  printf("Sniffit hardattack.. couldn't create/open logfile...\n"), exit(1);
+  printf("Sniffit heartattack.. couldn't create/open logfile...\n"), exit(1);
 exit_func(logfile_exit);
 fchmod(LogFILE,  S_IWUSR|S_IRUSR);
 print_logline("Sniffit session started.");

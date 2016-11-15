@@ -51,7 +51,7 @@ else {
 			select_from_length*sizeof(struct cfg_file_contense));
      }
 if(select_from_list==NULL)
-	{printf("Sniffit hartattack... out of memory!\n"); exit(1);}
+	{printf("Sniffit heartattack... out of memory!\n"); exit(1);}
 clear_list_buffer(&(select_from_list[select_from_length-1]));
 return &(select_from_list[select_from_length-1]);
 }
@@ -71,7 +71,7 @@ else
 			select_to_length*sizeof(struct cfg_file_contense));
      };
 if(select_to_list==NULL)
-	{printf("Sniffit hartattack... out of memory!\n"); exit(1);}
+	{printf("Sniffit heartattack... out of memory!\n"); exit(1);}
 clear_list_buffer(&(select_to_list[select_to_length-1]));
 return &(select_to_list[select_to_length-1]);
 }
@@ -90,7 +90,7 @@ else
 			deselect_from_length*sizeof(struct cfg_file_contense));
      }
 if(deselect_from_list==NULL)
-	{printf("Sniffit hartattack... out of memory!\n"); exit(1);}
+	{printf("Sniffit heartattack... out of memory!\n"); exit(1);}
 clear_list_buffer(&(deselect_from_list[deselect_from_length-1]));
 return (&(deselect_from_list[deselect_from_length-1]));
 }
@@ -110,7 +110,7 @@ else
 			deselect_to_length*sizeof(struct cfg_file_contense));
      }
 if(deselect_to_list==NULL)
-	{printf("Sniffit hartattack... out of memory!\n"); exit(1);}
+	{printf("Sniffit heartattack... out of memory!\n"); exit(1);}
 clear_list_buffer(&(deselect_to_list[deselect_to_length-1]));
 return &(deselect_to_list[deselect_to_length-1]);
 }
