@@ -1,16 +1,16 @@
-Version 0.4.0, 2016-11-14
+Version 0.4.0, 2016-11-15
 
   [ Joao Eriberto Mota Filho ]
 
-* Source code reorganized.
+* Added all patches from Debian.
 * Full conversion to autotools:
     - Previous configure.ac rewritten.
     - Created Makefile.am.
     - Created autogen.sh to use autoreconf (yes, it works fine now).
 * Removed embedded libpcap.
 * Removed the statement about libpcap from LICENSE file.
-* Added all patches from Debian.
-* Several adjustments.
+* Reorganized the source code.
+* Several adjustments and fixes (including CVE-2014-5439).
 * Long life to sniffit!
 
 
