@@ -7,24 +7,24 @@ SUBDIRS = src
 man_MANS = man/sniffit.5 man/sniffit.8
 
 clean:
-	rm -f config.cache
-	rm -f config.log
-	rm -f config.status
-	rm -f Makefile
 	rm -f src/*.o
-	rm -f src/Makefile
 	rm -f src/sniffit
 
-distclean: clean
+clean-local:
 	rm -f aclocal.m4
 	rm -f compile
 	rm -f configure
+	rm -f config.cache
+	rm -f config.log
+	rm -f config.status
 	rm -f depcomp
 	rm -f install-sh
+	rm -f Makefile
 	rm -f Makefile.in
 	rm -f missing
 	rm -f stamp-h1
 	rm -rf autom4te.cache
 	rm -rf config.h*
 	rm -rf src/.deps
+	rm -f src/Makefile
 	rm -f src/Makefile.in
