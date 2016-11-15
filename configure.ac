@@ -1,3 +1,8 @@
+# configure.ac for sniffit
+# Copyright 1997-1998 Brecht Claerhout
+# Copyright 2016      Joao Eriberto Mota Filho
+# Under BSD-3-CLause license.
+
 AC_PREREQ([2.69])
 AC_INIT([sniffit], [0.4.0], [https://github.com/eribertomota/sniffit/issues])
 AC_CONFIG_SRCDIR([src/sn_generation.h])
