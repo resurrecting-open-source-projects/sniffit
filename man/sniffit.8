@@ -1,4 +1,5 @@
 .\" Sniffit man page file - Brecht Claerhout
+.\" Some fixes by Joao Eriberto Mota Filho
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
@@ -259,7 +260,7 @@ receives the packets)
 Start a program 'sniffit_key5' with arguments
 .I "<from IP> <from port> <to IP> <to port>"
 If the program doesn't exist, nothing is done. Sniffit should be in the
-same path as sniffit was STARTED FROM (not necessarely the path sniffit is
+same path as sniffit was STARTED FROM (not necessarily the path sniffit is
 stored in) This function is useful for interactive connection killing or
 extra monitoring. A little shell script can always transform the arguments
 given and pass them on to other programs.
@@ -279,7 +280,7 @@ Toggle netstatistics. These are sampled at 3 secs, look in the sn_config.h
 file to change this.
 .IP "'g'"
 .B Sniffit
-is now able to generate some trafic load. Currently this is a 'underdevelloped'
+is now able to generate some traffic load. Currently this is a 'underdevelloped'
 feature with very few options, but it will be expanded a lot.
 Currently only UDP packets are generated. When pressing 'g' you will be
 asked the source/dest IP/port and how much packets are needed to be

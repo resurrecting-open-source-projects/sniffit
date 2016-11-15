@@ -1,8 +1,9 @@
 .\" sniffit config file man page - Brecht Claerhout
+.\" Some fixes by Joao Eriberto Mota Filho
 .\"
 .TH SNIFFIT 5
 .SH NAME
-sniffit \- configuration file for sniffit (name arbirtary)
+sniffit \- configuration file for sniffit (name arbitrary)
 
 .SH DESCRIPTION
 This page describes the format for the config file for
@@ -85,10 +86,10 @@ will ignore packets that match the description
 .IP
 .B mhosts
 - The (de)selection criteria involves multiple-hosts, like with the
-wildcars in 0.3.0, but without the 'x'
+wildcards in 0.3.0, but without the 'x'
 
 .IP "<field4>"
-Either a hostname, a portnumber, a service name or a numbet-dot partial
+Either a hostname, a portnumber, a service name or a number-dot partial
 notation indicating multiple hosts depending on <field3>
 (service names like 'ftp' are resolved as the services available present on
 the host that runs Sniffit, and translated into a port nr)
