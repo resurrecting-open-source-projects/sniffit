@@ -51,6 +51,9 @@ to give you a very detailed technical info on these packets, as SEQ, ACK, TTL,
 Window, etc. The packet contents also can be viewed, in different formats
 (hex or plain text, etc.).
 
+sniffit was originally developed by Brecht Claerhout. The initial homepage, now offline, was
+http://reptile.rug.ac.be/~coder/sniffit/sniffit.html.
+
 
 -----------------------
 4. BUILDING FROM SOURCE
