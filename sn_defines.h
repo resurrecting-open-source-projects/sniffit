@@ -12,31 +12,40 @@
 
 #include "pcap.h"
 
-/* Ethernet Device */
+/* Network Devices */
 
+#define PPP_DEV "ppp"
 #ifdef LINUX
-#define	ETH_DEV	"eth"
+	#define	ETH_DEV	"eth"
 #endif
 #ifdef SUNOS
-#define	ETH_DEV	"le"
+	#define	ETH_DEV	"le"
 #endif
 #ifdef IRIX
-#define	ETH_DEV	"et"
+	#define	ETH_DEV	"et"
+#endif
+#ifdef FREEBSD
+	#define	ETH_DEV	"ed"
+#endif
+
+/*** Extra system dependent stuff  ***/
+#ifdef SUNOS
+#define atexit(x) on_exit (x,0) 
 #endif
 
 #ifdef INCLUDE_INTERFACE
-#include <ncurses/ncurses.h>
+#include <ncurses.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #endif
 
 /*** Normal Sniffit operations */
 
-#define VERSION   "0.2.2"                 /* Program Version */
-#define SNAPLEN   1500                    /* Ethernet Packet Length */
-#define MSDELAY   0                       /* Delay between Packets */
-#define PACKETS   1                       /* Number of packets to dispatch */
-#define LENGTH_OF_INTERPROC_DATA	5*1500  /* buffer capacity */
+#define VERSION   "0.3.0"                          /* Program Version */
+#define SNAPLEN   MTU                              /* Ethernet Packet Length */
+#define MSDELAY   0                                /* Delay between Packets */
+#define PACKETS   1                                /* Number of packets to dispatch */
+#define LENGTH_OF_INTERPROC_DATA	5*SNAPLEN  /* buffer capacity */
 
 #define DEST        0
 #define SOURCE      1
@@ -70,7 +79,7 @@
 #define WIN_COLOR_MENU  	5
 #define WIN_COLOR_PACKET_INFO	6
 
-#define CONN_NAMELEN         55    /* length of string */
+#define CONN_NAMELEN         56    /* length of string */
 
 #define MENU " Masks: F1-Source IP  F2-Dest. IP  F3-Source Port  F4-Dest. Port"
 #endif

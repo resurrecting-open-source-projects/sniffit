@@ -5,7 +5,7 @@
 #include "config.h"
 #include "sn_defines.h"
 #include "sn_oldether.h"
-#include "packets.h"
+#include "sn_packets.h"
 #include "sn_data.h"
 #ifdef INCLUDE_INTERFACE
 #include "sn_interface.h"
@@ -17,12 +17,14 @@ static char Copyright[]=
 void quit (char *prog_name)                    /* Learn to use the program */
 {
 	printf(
-"usage: %s [-x] [-d] [-a] [-b] [-P proto] [-A char] [-p port] [-l sniflen]"
+"usage: %s [-x] [-d] [-a] [-b] [-P proto] [-A char] [-p port]\n"
+"       [-l sniflen] [-F snifdevice]"
 #ifdef INCLUDE_INTERFACE
 " [-D tty]" 
-"\n       -t<Target IP> | -s<Source IP> | -i\n",
+" (-t<Target IP> | -s<Source IP>)\n"
+"       | -i\n",
 #else
-"\n       -t<Target IP> | -s<Source IP>\n",
+" (-t<Target IP> | -s<Source IP>)\n",
 #endif
 		prog_name); 
 	exit(0); 
@@ -60,13 +62,28 @@ void reset_all (void)
 struct file_info *add_dynam (char *file, char ptype)
 {
 	FILE *f;
+	int last_time_out=0;
 	struct file_info *dummy_pointer; 
 	struct file_info *search_pointer; 
 
 	if(dynam_len>=MAXCOUNT)
 		{
-		printf("Too many connections, not logging some (MAXCOUNT compiled %d)\n", MAXCOUNT); 
-		return NULL;
+		                             /* remove less effective connection from list */
+		search_pointer=start_dynam; dummy_pointer=start_dynam;          
+		do
+			{
+			if(search_pointer->time_out > last_time_out)
+				{last_time_out=search_pointer->time_out;
+				dummy_pointer=search_pointer;}
+			search_pointer=search_pointer->next;
+			}
+		while(search_pointer != NULL);
+#ifdef DEBUG
+        	debug_msg("Auto timeout engaged (filename follows)");
+        	debug_msg(dummy_pointer->filename);
+#endif
+		delete_dynam(dummy_pointer->filename,dummy_pointer->proto);
+		printf("Too many connections... auto timeout\n"); 
 		}
 	if( (dummy_pointer=(struct file_info *)malloc(sizeof(struct file_info))) == NULL)
 		{printf("Couldn't allocate memory.\n"); exit(0);};
@@ -130,12 +147,22 @@ struct file_info *search_dynam(char *file, char ptype)
 	struct file_info *search_pointer;
 
 	if(start_dynam==NULL) return NULL;
- 	search_pointer=start_dynam;
+
+ 	search_pointer=start_dynam;               /* time_out add */
+	do
+		{
+		search_pointer->time_out += 1;
+		search_pointer=search_pointer->next;
+		}
+	while(search_pointer != NULL);
+
+ 	search_pointer=start_dynam;              /* actual search */
 	do
 		{
 		if( (strcmp(search_pointer->filename,file)==0) &&
 					(search_pointer->proto==ptype))
-			return search_pointer;
+			{search_pointer->time_out=0;   /* timeout reset */
+			return search_pointer;}
 		search_pointer=search_pointer->next;
 		}
 	while(search_pointer != NULL);
@@ -183,6 +210,7 @@ int check_packet(u_long ipaddr,
                                           /* MODE 2: -b              */ 
 {
         u_char *so,*dest;
+	char wc_so[20], wc_dest[20];
 	struct IP_header iphead;
 	struct TCP_header tcphead;
 	struct ICMP_header icmphead;
@@ -200,13 +228,28 @@ int check_packet(u_long ipaddr,
 						sizeof(struct TCP_header));
 		memcpy(detail,&tcphead,sizeof(struct TCP_header));
 
-		if (MODE == DEST && ipaddr != iphead.destination /* -t */
+		if(WILDCARD==0)
+		  {
+		  if (MODE == DEST && ipaddr != iphead.destination /* -t */
 			||
-		    MODE == SOURCE && ipaddr != iphead.source      /* -s */
+	   	      MODE == SOURCE && ipaddr != iphead.source      /* -s */
 			||
-		    MODE == BOTH && ipaddr != iphead.destination /* -b */
+		      MODE == BOTH && ipaddr != iphead.destination /* -b */
 			      && ipaddr != iphead.source
-	   	    )      return DONT_EXAMINE;	/* Check destination/source IP */
+	   	      )  return DONT_EXAMINE; /* Check destination/source IP */
+		  }
+		else
+		  {
+		  sprintf(wc_so,"%u.%u.%u.%u",so[0],so[1],so[2],so[3]);
+		  sprintf(wc_dest,"%u.%u.%u.%u",dest[0],dest[1],dest[2],dest[3]);
+		  if (MODE == DEST && (strstr(wc_dest,IP)==NULL) /* -t */
+			||
+	   	      MODE == SOURCE && (strstr(wc_so,IP)==NULL)      /* -s */
+			||
+		      MODE == BOTH && (strstr(wc_dest,IP)==NULL) /* -b */
+			      && (strstr(wc_so,IP)==NULL)
+	   	      )   return DONT_EXAMINE; /* Check destination/source IP */
+		  }
 
 		if( DEST_PORT && ntohs(tcphead.destination) != DEST_PORT) 
 			return DONT_EXAMINE; 	/* Check dest. PORT */
@@ -260,7 +303,7 @@ pcap_handler packethandler(	u_char *ipaddrpoint,
 			const struct packetheader *p_header, 
 			const u_char *sp) 
 { 
-	char filename[50],header[1500];
+	char filename[50],header[SNAPLEN];
 	FILE *f;
 	struct file_info *dummy_pointer;
 	u_char status=0;
@@ -295,6 +338,7 @@ pcap_handler packethandler(	u_char *ipaddrpoint,
 				(dummy&SYN)?'S':'-',(dummy&FIN)?'F':'-');
 		if(dummy&ACK) 
 			printf("   Window: %X\n",ntohs(tcphead.window));
+		else 	printf("\n");
 		};
 
 	if(finish<10)			/* TCP packet */
@@ -554,17 +598,16 @@ static u_long getaddrbyname(char *name)
 
 int main(int argc,char *argv[])
 {
-	char *dev, buffer[SNAPLEN];
+	char *dev, forced_dev[20], buffer[SNAPLEN];
 	int c;
-	char *IP;
 	u_long ipaddr, memsize;
-	int flag=0, doboth=0;
+	int flag=0, doboth=0, FORCE_DEV=0;
 	extern char *optarg;
 
 
 	SNIFLEN=300;                            /* Set defaults */
 	DEST_PORT=0;                            /* Dest Port */
-	SNIFMODE=DUMPMODE=PROTOCOLS=ASC=0;
+	SNIFMODE=DUMPMODE=PROTOCOLS=ASC=WILDCARD=0;
 	IP=logging_device=NULL;  
 
 	if (getuid()!=0)
@@ -581,9 +624,9 @@ int main(int argc,char *argv[])
 #endif
 
 #ifdef INCLUDE_INTERFACE        
-	while((c=getopt(argc,argv,"D:A:P:idp:l:xabt:s:"))!=-1) { 
+	while((c=getopt(argc,argv,"D:A:P:idp:l:xabt:s:F:"))!=-1) { 
 #else
-	while((c=getopt(argc,argv,"A:P:dp:l:xabt:s:"))!=-1) { 
+	while((c=getopt(argc,argv,"A:P:dp:l:xabt:s:F:"))!=-1) { 
 #endif
                                                     /* Argument treating */
   		switch(c) {
@@ -633,6 +676,10 @@ int main(int argc,char *argv[])
                                 flag++;
 				SNIFMODE=INTERACTIVE;
                                 break;
+			case 'F':
+				strcpy(forced_dev,optarg);
+                                FORCE_DEV=1;
+				break;
       			default : break;
 		}
 	}
@@ -642,30 +689,52 @@ int main(int argc,char *argv[])
 	if(doboth) SNIFMODE=BOTH;
         if(SNIFMODE!=INTERACTIVE)  
 		{
-		ipaddr = getaddrbyname(IP);
-		if(ipaddr==0) 
+		if(index(IP,'x'))
+		  {printf("Wildcard detected, IP nr. not checked...\n");
+		  WILDCARD=1;
+		  strcpy(index(IP,'x'),"\0");
+		  }
+		else
+		  {
+		  ipaddr = getaddrbyname(IP);
+		  if(ipaddr==0) 
 			printf("Non existing host!\n"), exit(1);
+		  }
 		}
 	reset_all();       /* just to be sure */
 
-	if((dev=pcap_lookupdev(NULL))==NULL) 
-		printf("No suitable device found.\n"),
-		exit(0);
+	if( (dev=pcap_lookupdev(NULL))==NULL )  
+		{
+		printf("No network devices found.... Sniffit giving up.\n");
+		exit(1);
+		}
+	
+	if(FORCE_DEV!=0)
+		{
+		strcpy(dev,forced_dev);
+		printf("Forcing device to %s (user requested)...\n",dev);
+		printf("Make sure you have read the docs carefully.\n");
+		PROTO_HEAD=FORCED_HEAD_LENGTH;
+	      	}
 
-	if(strstr(dev,ETH_DEV))             /* Checking supported devices */
-  		{printf("Using Ethernet device (%s)\n",dev);
-		PROTO_HEAD=ETHERHEAD;}
-        else 	{printf("Device %s not supported yet... sorry!\n",dev);		
-		exit(0);}
+	if(strstr(dev,ETH_DEV))                /* For expansion */
+		{PROTO_HEAD=ETHERHEAD;
+		printf("Supported ethernet device found. (%s)\n",dev); 
+		}
+
+	if(strstr(dev,PPP_DEV))               
+		{PROTO_HEAD=PPPHEAD;
+		printf("Supported PPP device found. (%s)\n",dev); 
+		}
 
 	if((dev_desc=pcap_open_live(dev,SNAPLEN,1,MSDELAY,NULL))==NULL)
-		printf("Couldn't open device.\n"),
-		exit(0);
+		{printf("Couldn't open device.\n");
+		exit(0);}
 
 #ifdef INCLUDE_INTERFACE
         if (SNIFMODE==INTERACTIVE)
  		{
-		memsize=sizeof(char)+sizeof(int)+LENGTH_OF_INTERPROC_DATA+
+		memsize=sizeof(int)+sizeof(int)+LENGTH_OF_INTERPROC_DATA+
 			sizeof(int)+sizeof(struct snif_mask)+CONN_NAMELEN+
 			(CONNECTION_CAPACITY*CONN_NAMELEN)+sizeof(int)+
 			sizeof(long)+sizeof(int)+sizeof(int)+sizeof(long)+
@@ -682,7 +751,7 @@ int main(int argc,char *argv[])
 
 
 		timing = SHARED;                    /* set all pointers */
-		DATAlength = timing + sizeof(char);
+		DATAlength = timing + sizeof(int);
 		connection_data = DATAlength + sizeof(int);
 		LISTlength = connection_data + LENGTH_OF_INTERPROC_DATA;
 		mask = LISTlength + sizeof(int);

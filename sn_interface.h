@@ -213,8 +213,10 @@ void point_item (struct box_window *Work_win, char *buffer,
 
 	if(*(buffer+(i*CONN_NAMELEN))!=0)	
 		{
-  		wattrset(Work_win->work_window,COLOR_PAIR(WIN_COLOR_POINT));
-  		wmove(Work_win->work_window,item-begin_item,0);
+		if(COLOR_AVAIL!=0)
+  		  wattrset(Work_win->work_window,COLOR_PAIR(WIN_COLOR_POINT));
+		else wattron(Work_win->work_window,A_REVERSE); 
+ 		wmove(Work_win->work_window,item-begin_item,0);
 		whline(Work_win->work_window,' ',rowlen);
 
 		if(strcmp(logged_connection,(buffer+(i*CONN_NAMELEN)))!=0)
@@ -227,7 +229,9 @@ void point_item (struct box_window *Work_win, char *buffer,
                                              	(buffer+(i*CONN_NAMELEN)) );
   
 		wnoutrefresh(Work_win->work_window);
-  		wattrset(Work_win->work_window,COLOR_PAIR(WIN_COLOR_NORMAL));
+		if(COLOR_AVAIL!=0)
+    		  wattrset(Work_win->work_window,COLOR_PAIR(WIN_COLOR_NORMAL));
+		else wattroff(Work_win->work_window,A_REVERSE); 
   		}
 }
 
@@ -521,6 +525,8 @@ void run_interface(void)
  		switch(key_hit)
     			{
     			case KEY_DOWN:
+			case 'J':
+			case 'j':
        				if(POINTpos>=*LISTlength) break;
        				if(POINTpos<(LISTpos+17))
          				POINTpos++;
@@ -530,6 +536,8 @@ void run_interface(void)
 				forced_refresh();
        				break;
     			case KEY_UP:
+			case 'K':
+			case 'k':
        				if(POINTpos==0) break;
        				if(POINTpos>LISTpos)
          				POINTpos--;

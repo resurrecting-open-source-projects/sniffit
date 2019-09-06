@@ -1,9 +1,9 @@
 /* Sniffit Packet Discription File -- Brecht Claerhout */
 
-int PROTO_HEAD;    /* Base Protocol head length (ethernet, token ,....) */
-#define ETHERHEAD 14   /* Length Ethernet Packet header */ 
-#define PPPHEAD 2      /* Length PPP Packet header */ 
-#define SLIPHEAD 0     /* Length SLIP Packet header */ 
+int PROTO_HEAD;    /* Base Protocol head length (ethernet, PPP ,....) */
+#define ETHERHEAD 14    /* Length Ethernet Packet header */ 
+#define PPPHEAD 4       /* Length PPP Packet header */ 
+#define SLIPHEAD 16     /* Length SLIP Packet header */ 
 
 #define URG 32       /*TCP-flags */ 
 #define ACK 16 

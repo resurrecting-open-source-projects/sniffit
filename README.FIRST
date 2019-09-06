@@ -1,5 +1,5 @@
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
-*                            Sniffit V.0.2.2                                  *
+*                            Sniffit V.0.3.0                                  *
 *                          By Brecht Claerhout                                *
 #  This program is intended to demonstrate the unsafeness of TCP (currently)  #
 *                No illegal activities are encouraged!                        *
@@ -19,8 +19,9 @@
 	excuses for my incompetence
 2. Use of the program
 	flags and examples
-3. When running interactive mode
-	this is something on the test side of sniffit
+3. Extra info on use 
+        3.1 Running interactive mode
+	3.2 Forcing network devices   (*READ*)
 4. The output
 	read this! you could be supprised otherwise.
 5. IMPORTANT NOTES, READ!
@@ -34,16 +35,34 @@
 0. Introduction, and some stuff you should know.
 ------------------------------------------------
 
-This release has nothing new for non-LINUX users, because it covers 
-updates (bugfixes, netload) on the interface (yeah finally)! 
-(Feedback p-p-please....)
-The interactive part is not available with Sun/SGI (yet?!). (check the 
-config.h file for options).
+Why Jump to 0.3.0? Because I think it's time to start with patches and not
+with complete releases for every minor detail that changes. I believe Sniffit
+is now in a stage where it will benefit of a lot of minor changes instead of 
+some huge modifications.
+The last number in the version will be the patch-level from now on. 
+BTW: you should read IMPORTANT!
 
-The sniffer is still under development, so you'll find some parts that 
-should be extended some more (like the interactive part)!
-I now use the libpcap library developped at Berkeley Laboratory, for easy 
-porting.
+What did I add? Well, support for people with more then one network interface,
+because I got a lot of mails lately of people complaining that sniffit didn't
+want to use their second ethernetcard and thus gave up.
+PPP support was added... no big deal...
+Also I added the use of wildcards in IP numbers....(READ ON HOW TO USE 
+THEM, it's not with *'s) 
+Sniffit should also work on FreeBSD now..
+When in logging mode (you know, all the small files) there is a TIMEOUT 
+mechanism, so you won't miss a byte!
+You can now define another MTU than 1500 bytes in the 'config.h' file. 
+The ncurses interface should work on FreeBSD and SunOS/Solaris too know, 
+a big thanks to Woju (woju@freebsd.ee.ntu.edu.tw) for doing the work I 
+resented (I wasn't able to test this, but I trust'em ;).
+He also added 'k'/'j' as UP/DOWN in interactive mode.
+
+The sniffer is still under development (it always will be, I don't get payed
+for this ;), so you'll find some parts that should be extended some more (like
+the interactive part)!
+
+I use the libpcap library developped at Berkeley Laboratory, for easy 
+porting (Read the licence).
 
 Credits go to: 
     Wim Vandeputte, for testing and providing me with a WWW and FTP site.
@@ -54,12 +73,15 @@ Credits go to:
                    don't need no credits").
                    Without him, there would have been no ports at all.
     Brooke Paul, for providing me with an SGI account.
+    Qing Long, for the bash/zsh libpcap/configure script
+    Guy Gustavson, For giving me a FreeBSD account. 
+    Woju, for the ncurses SunOS/FreeBSD fixing, and for his other effords.
     everybody, who ever mailed me with sugestions help, etc...
 
 This is free software, spread it if you want, but keep the package 
 complete and unmodified. Do not use any code from this package without 
 mentioning the source in your docs and advertisement. Do not use any of 
-this code in Commercial Software.
+this code in Commercial Software/Commercial Packages.
 
 Sugestions and comments can be sent to:
   coder@reptile.rug.ac.be
@@ -71,11 +93,11 @@ Compiling:
 Look at the "config.h" file for options. PLEASE CHECK THAT CONFIG FILE! 
 First, try "make all", if that doesn't work, you should look into the 
 process of compilation more carefull.
-(You real guru's can do a 'strip sniffit' afterwards ;)
 
 make clean  : cleans all directories for a compiling from scratch
 make config : needed for the compilation of libpcap
 make sniffit: compile the sniffer program
+make freebsd: compile sniffit on FreeBSD
 make sniffit_manual: look at the end of the makefile, this part is easily 
                      modified manually. If the program doesn't compile and 
                      you want to add some comliling options
@@ -84,34 +106,37 @@ make sniffit_manual: look at the end of the makefile, this part is easily
 1. Programmers notes
 --------------------
 
-The interface is stangely designed, I admit, that's because my first idea 
-was to work with pipes for interprocess communication. I had build a 
-complete interface with dynamic memory allocation.
-It worked, but I was looking for something easier (timing was a pain in 
-the ass, and when looking upon further development, I didn't really like 
-those pipes), so I jumped into shared memory, and didn't feel like rewriting 
-the whole thing, so I adjusted the old funcions.
-I'm not going to get dynamic on shared memory, so I jumped back to static 
-memory (it's a bit of turning back, but I don't like the idea of 
-dynamicaly allocating shared memory, you probably don't like it either). 
-Shared memory means: 'System V IPC (CONFIG_SYSVIPC) [y]'
-You will have this enabled I suppose (otherwise you couldn't play DOOM 
-;-)), but I mention it anyway in case you get weird errors on functions 
-not implemented and stuff.
+No more excuses ..... I think I used the easiest solution, probably 
+somewhere some guru is now laughing with my lack of programming skill, 
+but the hell with it, it works (most of the time ;)
 
+Still I note the use of shared memory, with Linux you should take extra 
+care when recompiling your kernel! Answer YES to 'System V IPC 
+(CONFIG_SYSVIPC) [y]'.
 
 2. Use of the program
 ---------------------
+
+(* in front of the line that describes something new)
 
 Options:
 ONE of these three is required!
   -t <IP nr/name>   tells the sniffer to check out packets GOING TO <IP>
   -s <IP nr/name>   tells the sniffer to check out packets COMMING FROM <IP>
+*                   You can now use the 'x' wildcard (only IP NUMBERS of 
+*                   course).
+*                   e.g. -t 199.145.x
+*                        -t 199.14x
+*                   mind you -t x is not a valid option.
   -i                Interactive mode, overrides all other options
 
 NOTE: -t or -s only apply to TCP packages, ICMP, IP, UDP packages are ALL 
       interpreted.
-      Also, any selection on ports, -p only applies to TCP packages.\
+      Also, any selection on ports, -p only applies to TCP packages.
+
+Parameters both modes (non-interactive and interactive):
+* -F <device>  force sniffit to use a network device (READ 3.2 ON THIS 
+*                                                         SUBJECT, IMPORTANT)
 
 Parameters for not running in -i:
   -b           does both -t and -s, doesn't mather what function you used 
@@ -176,35 +201,55 @@ Some examples:
     9. This could go on for ever..............
 
 
-3. When running interactive mode (LINUX)
---------------------------------
+3. Extra info on use 
+-------------------- 
+
+3.1 Running interactive mode
+----------------------------
 
 Remember: This part is in full development, so if anything goes wrong, 
           MAIL ME !
 
-The interactive part is a little less beta now. There were a lot of 
-lock-ups, due to a number of bugs. I removed most of them now (there are 
-probably still a lot of bugs left in there). Hope you will enjoy it a 
-little more.
+There are still some small problems with timing that could cause lock-ups in 
+some cases.. it doesn't happen often, I'll look at it later.
 
 When running in interactive mode:
 
-F1 or '1': Enter a host (enter 'all' for no mask) for packet filtering 
-           (host that sends the packets)
-F2 or '2': Enter a host (enter 'all' for no mask) for packet filtering.
-           (host that receives the packets)
-F3 or '3': Enter a port (enter '0' for no mask) for packet filtering.
-           (host that sends the packets)
-F4 or '4': Enter a port (enter '0' for no mask) for packet filtering.
-           (host that receives the packets)
-ENTER    : a window will pop up and log the connection, or the connection 
-           output will be send at a chosen device if you used the '-D' 
-           option.
-'q'      : When in logging mode, stop logging. Otherwise, quit.
-'n'      : Toggle netstatistics. These are sampled at 3 secs, look in 
-           the config.h file to change this (could be needed if y'r 
-           computer is slow).
-	   
+UP or 'k' : self explanatory
+DOWN or j': self explanatory
+F1 or '1' : Enter a host (enter 'all' for no mask) for packet filtering 
+            (host that sends the packets)
+F2 or '2' : Enter a host (enter 'all' for no mask) for packet filtering.
+            (host that receives the packets)
+F3 or '3' : Enter a port (enter '0' for no mask) for packet filtering.
+            (host that sends the packets)
+F4 or '4' : Enter a port (enter '0' for no mask) for packet filtering.
+            (host that receives the packets)
+ENTER     : a window will pop up and log the connection, or the connection 
+            output will be send at a chosen device if you used the '-D' 
+            option.
+'q'       : When in logging mode, stop logging. Otherwise, quit.
+'n'       : Toggle netstatistics. These are sampled at 3 secs, look in 
+            the config.h file to change this (could be needed if y'r 
+            computer is slow).
+
+3.2 Forcing network devices   (*READ*)
+--------------------------------------
+
+NOTE: the correct name (for sniffit) of a device can be found by running 
+      'ifconfig'
+
+When forcing network devices, sniffit tries to find out what device it is. 
+If sniffit recognises the name, everything is okay. 
+If it does not recognise the name it will set the variable 
+FORCED_HEAD_LENGHTH to the ethernet headlength. The ethernet headlength 
+is the length in bytes of an ethernet packet hearder. 
+So if you have to force a non-ethernet device, that is not recognised by 
+sniffit, make sure you change that headlength correctly in the 'config.h' file.
+
+The -F option was added, because I noticed devicenames can differ from 
+system to system, and because some ppl have multiple devices present.
+When having problems with this option, please think twice before you mail me.
 
 4. The output
 -------------
@@ -323,8 +368,6 @@ Some other notes:
         Also harddisks can make a lot of noice, but these sympthomes are 
         only payed attention to in hostile environments.
    - (LINUX) Your KERNEL should support System V IPC. If you will use '-i'
-   - You're MTU should be 1500 bytes, that is the ethernet standard (I 
-     have never seen a system that had this changed).
 
 
 6. BUGFIXES
@@ -341,6 +384,7 @@ Some other notes:
 (SINCE 0.2.0)
    - MAXCOUNT bug 
    - interactive part lock-up bugs
+   - output format 
 
 7. NEW STUFF
 ------------
@@ -371,14 +415,21 @@ V.0.2.2
    - Netload statistics (interactive part)
    - Massive debugging of interactive part 
 
+V.0.3.0
+   - Wildcards in non-interactive mode
+   - time-out in non interactive mode, so you won't stuff memory by 
+     connections that weren't closed like they're supposed to be. 
+   - Forcing the use of a snif device
+   - MTU changeble in config.h
+   - ppp use 
+
 I'm working on (if you still believe me):
-   - A fully working ncurses interface ;)
+   - An expanded ncurses interface 
         - two way connection logging
         - ....
      (for further ncurses development, I need y'r reports, thx!)  
    - including all ICMP info (like timestamp, etc.)
    - debugging and optimizing (sigh...)
-   - MTU adjustment
    - Further Porting (shouldn't give much problems anymore)
 
 ------------------------ Thx for using Sniffit(tm) ---------------------------

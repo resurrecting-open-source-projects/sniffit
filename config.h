@@ -9,11 +9,11 @@
 /* If you 'define' INCLUDE_INTERFACE, your kernel should support          */
 /* System V IPC (it probably does)                                        */
 
-#ifdef LINUX
-  /* #undef INCLUDE_INTERFACE  */  
-  #define INCLUDE_INTERFACE 
+#ifdef IRIX
+  #undef INCLUDE_INTERFACE   /* interactive support not tested yet for IRIX */
 #else
-  #undef INCLUDE_INTERFACE       /* No interactive support yet for non linux*/
+/*  #undef INCLUDE_INTERFACE */  
+   #define INCLUDE_INTERFACE  
 #endif     
 
 /* Following parameters describe the connections that can be handled at */ 
@@ -25,14 +25,24 @@
 /* more dangerous to change, if you machine goes to slow (when sniffing */
 /* in interactive mode), lower this number.                             */
 
-	#define MAXCOUNT  		30                    
+	#define MAXCOUNT  		50
 #ifdef INCLUDE_INTERFACE
-	#define CONNECTION_CAPACITY  	30
+	#define CONNECTION_CAPACITY  	50
 #endif
 
 /* This is the interval time for the netstatistics */
 
 #define INFO_TIMER	3       /* In seconds */
+
+/* Read about forcing the sniff device in the README.FIRST file */
+
+#define FORCED_HEAD_LENGTH	ETHERHEAD
+
+/* MTU: this could need a change on interfaces different from ethernet or on non-standard */
+/*      configured systems. Get the info out of 'ifconfig'.                               */
+/*      But 1500 is a standard.                                                           */
+
+#define MTU	1500
 
 /*************** Don't change anything below this line *********************/
 

@@ -12,14 +12,16 @@ struct file_info
         char proto, filename[50];
         FILE *f;
         unsigned long bytes;
+	int time_out;
 	struct file_info *next;
 };
 void *start_dynam;
 int dynam_len;
 
+char *IP;
 unsigned long SNIFLEN;                            /* bytes we need to snif */
 short DEST_PORT;                           /* destination port */
-char SNIFMODE, DUMPMODE, PROTOCOLS, ASC;
+char SNIFMODE, DUMPMODE, PROTOCOLS, ASC, WILDCARD;
 char non_printable, *logging_device;
 
 #ifdef INCLUDE_INTERFACE
@@ -42,7 +44,8 @@ struct snif_mask
 struct snif_mask *mask;
 
 /* menu data */
-volatile sig_atomic_t LOGGING=0, screen_busy=0;
+/* volatile sig_atomic_t LOGGING=0, screen_busy=0; */
+volatile int LOGGING=0, screen_busy=0;
 char PACKET_INFO;
 int POINTpos=0,LISTpos=0;
 u_char COLOR_AVAIL=0;
