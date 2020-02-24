@@ -1,6 +1,6 @@
 ## HOW TO CONTRIBUTE TO SNIFFIT DEVELOPMENT
 
-Sniffit is available at https://github.com/eribertomota/sniffit
+Sniffit is available at https://github.com/resurrecting-open-source-projects/sniffit
 
 If you are interested in contribute to sniffit development, please, follow
 these steps:
