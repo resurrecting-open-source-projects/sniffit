@@ -1,3 +1,12 @@
+Version 0.5, 2020-04-19
+
+  [ Joao Eriberto Mota Filho ]
+
+* Created full-check.yml file to provide CI tests in GitHub.
+* Fixed a FTBFS with GCC-10. Thanks to Jaime Peñalba from netdiscover project.
+* Reorganized Makefile.am.
+* Updated URL of the projext in docs.
+
 Version 0.4.0, 2016-11-15
 
   [ Joao Eriberto Mota Filho ]
