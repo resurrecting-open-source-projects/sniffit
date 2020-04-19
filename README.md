@@ -5,7 +5,7 @@
 <br><br>
 **1. HELP THIS PROJECT**<br>
 **2. I AND SNIFFIT**<br>
-**2. WHAT IS AXEL?**<br>
+**2. WHAT IS SNIFFIT?**<br>
 **3. BUILDING FROM SOURCE**<br>
 **4. LICENSE**<br>
 
@@ -25,7 +25,7 @@ places for this program. All my initial work was registered in CHANGELOG
 file (version 0.4.0 and later releases). I also maintain Sniffit packaged
 in Debian[1].
 
-If you are interested to help Axel, read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+If you are interested to help Sniffit, read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 [1] https://packages.qa.debian.org/s/sniffit.html<br>
 
