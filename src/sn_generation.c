@@ -50,7 +50,7 @@ while(count<count_ptr)
 #endif
 	if(count==count_ptr-1)
 		{
-		sprintf(msg,"DISPATCH COMPLETE-Press ENTER");
+		sprintf(msg,"DISPATCH COMPLETE - Press ENTER");
 		}
 	else {
 		sprintf(msg,"Packet No: %d dispatched.",count+1);
