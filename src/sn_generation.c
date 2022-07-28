@@ -13,7 +13,9 @@
 #include "sn_curses.h"
 #include "sn_defines.h"
 #include "sn_structs.h"
+#include "sn_packets.h"
 #include "sn_generation.h"
+#include "sn_interface.h"
 
 extern volatile int screen_busy;
 

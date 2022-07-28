@@ -3,6 +3,7 @@
 
 #include "sn_config.h"		/* Config header file */
 
+#include <ctype.h>
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
