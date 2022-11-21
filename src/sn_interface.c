@@ -4,6 +4,7 @@
 #include "sn_config.h"
 
 #ifdef INCLUDE_INTERFACE
+#include <ctype.h>
 #include <signal.h>
 #include <termios.h>
 #include <stdlib.h>
