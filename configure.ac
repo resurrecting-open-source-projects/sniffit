@@ -4,7 +4,7 @@
 # Under BSD-3-CLause license.
 
 AC_PREREQ([2.69])
-AC_INIT([sniffit], [0.5], [https://github.com/resurrecting-open-source-projects/sniffit/issues])
+AC_INIT([sniffit], [0.6], [https://github.com/resurrecting-open-source-projects/sniffit/issues])
 AC_CONFIG_SRCDIR([src/sn_generation.h])
 AC_CONFIG_HEADERS([config.h])
 

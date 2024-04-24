@@ -14,7 +14,7 @@ typedef unsigned short _16_bit;
 
 /*** Normal Sniffit operations */
 
-#define VERSION   "0.5"                          /* Program Version */
+#define VERSION   "0.6"                          /* Program Version */
 #define SNAPLEN   MTU                            /* Ethernet Packet Length */
 #define MSDELAY   1000                                     /* pcap timeout */
 #define PACKETS   1					  /* pcap dispatch */
