@@ -1,3 +1,8 @@
+0.6 version:
+
+- Sam James <sam@gentoo.org> fixed a fail to build from source around
+  -Wimplicit-function-declaration.
+
 0.5 version:
 
 - Jaime Peñalba helped to solve a FTBFS with GCC 10.
