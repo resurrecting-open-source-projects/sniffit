@@ -1,3 +1,9 @@
+Version 0.6, 2024-04-23
+
+  [ Sam James, from Gentoo.org ]
+
+* Fix -Wimplicit-function-declaration.
+
 Version 0.5, 2020-04-19
 
   [ Joao Eriberto Mota Filho ]
