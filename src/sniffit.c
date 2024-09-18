@@ -479,7 +479,7 @@ print_iphead (struct IP_header *iphead, char icmp_or_plain)
 
 static int
 check_packet (_32_bit ipaddr,
-	      const struct packetheader *p_header,
+	      const struct pcap_pkthdr *p_header,
 	      const unsigned char *sp,
 	      char *file,
 	      char *file2,
@@ -1073,7 +1073,7 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 /* Default Processing of packets */
 static pcap_handler
 packethandler (unsigned char *ipaddrpoint,
-	       const struct packetheader * p_header,
+	       const struct pcap_pkthdr * p_header,
 	       const unsigned char *sp)
 {
   char filename[50], filename2[50], header[SNAPLEN];
@@ -1380,7 +1380,7 @@ packethandler (unsigned char *ipaddrpoint,
 
 #ifdef INCLUDE_INTERFACE	/* Interactive packethandling */
 static int
-check_mask (const struct packetheader *p_header,
+check_mask (const struct pcap_pkthdr *p_header,
 	    const unsigned char *sp,
 	    char *conn_name, char *conn_name2, char *desc_string,
 	    struct unwrap *info)
@@ -1473,7 +1473,7 @@ if(INTERACTIVE_EXTEND==1)
 
 static pcap_handler
 interactive_packethandler (char *dummy,
-			   const struct packetheader * p_header,
+			   const struct pcap_pkthdr * p_header,
 			   const unsigned char *sp)
 {
   char conn_name[CONN_NAMELEN], conn_name2[CONN_NAMELEN];
