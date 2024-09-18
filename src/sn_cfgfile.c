@@ -30,7 +30,7 @@ extern int Priority;        /* The higher the priority, the more important */
 extern char dot_notation[20];                       /* for easy working, Q&D */
 extern char Logfile[250];
 
-void clear_list_buffer (struct cfg_file_contense *help)
+static void clear_list_buffer (struct cfg_file_contense *help)
 {
 help->host[0]=0;
 help->priority=0;
@@ -38,7 +38,7 @@ help->port=0;
 help->wildcard=0;
 }
 
-struct cfg_file_contense *adjust_select_from_list (void)
+static struct cfg_file_contense *adjust_select_from_list (void)
 {
 Priority++;
 select_from_length++;
@@ -57,7 +57,7 @@ clear_list_buffer(&(select_from_list[select_from_length-1]));
 return &(select_from_list[select_from_length-1]);
 }
 
-struct cfg_file_contense *adjust_select_to_list (void)
+static struct cfg_file_contense *adjust_select_to_list (void)
 {
 Priority++;
 select_to_length++;
@@ -77,7 +77,7 @@ clear_list_buffer(&(select_to_list[select_to_length-1]));
 return &(select_to_list[select_to_length-1]);
 }
 
-struct cfg_file_contense *adjust_deselect_from_list (void)
+static struct cfg_file_contense *adjust_deselect_from_list (void)
 {
 Priority++;
 deselect_from_length++;
@@ -96,7 +96,7 @@ clear_list_buffer(&(deselect_from_list[deselect_from_length-1]));
 return (&(deselect_from_list[deselect_from_length-1]));
 }
 
-struct cfg_file_contense *adjust_deselect_to_list (void)
+static struct cfg_file_contense *adjust_deselect_to_list (void)
 {
 Priority++;
 deselect_to_length++;
@@ -116,7 +116,7 @@ clear_list_buffer(&(deselect_to_list[deselect_to_length-1]));
 return &(deselect_to_list[deselect_to_length-1]);
 }
 
-char *clean_string (char *string)
+static char *clean_string (char *string)
 {
 char help[20];
 int i, j;
@@ -140,7 +140,7 @@ strcpy(string, help);
 return string;
 }
 
-char *clean_filename (char *string)
+static char *clean_filename (char *string)
 {
 char help[20];
 int i, j;
@@ -164,7 +164,7 @@ strcpy(string, help);
 return string;
 }
 
-void make_nr_dot (char *host)
+static void make_nr_dot (char *host)
 {
 _32_bit hostnr;
 unsigned char *digit;
@@ -208,7 +208,7 @@ if (ret <= 0)
 return ret;
 }
 
-void interprete_line (char *line)
+static void interprete_line (char *line)
 {
 struct cfg_file_contense *help, *helpp;
 char *field;

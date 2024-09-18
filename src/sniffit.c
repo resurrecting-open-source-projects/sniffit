@@ -44,10 +44,13 @@
 
 #include "sniffit.h"		/* definition of functions  */
 
+/*** forward declarations ***/
+static void delete_dynam (char *, char, char);
+
 static char Copyright[] =
 "Sniffit - Brecht Claerhout - Copyright 1996-98";
 
-void quit (char *prog_name)		/* Learn to use the program */
+static void quit (char *prog_name)		/* Learn to use the program */
 {
   printf (
 	   "usage: %s [-xdabvnN] [-P proto] [-A char] [-p port] [(-r|-R) recordfile]\n"
@@ -129,7 +132,7 @@ char *strlower (char *string)
   return string;
 }
 
-void start_plugin (int PL_nr, struct Plugin_data *PL_d)
+static void start_plugin (int PL_nr, struct Plugin_data *PL_d)
 {
   switch (PL_nr)
     {
@@ -195,7 +198,7 @@ void start_plugin (int PL_nr, struct Plugin_data *PL_d)
     }
 }
 
-void
+static void
 reset_all (void)
 {
   start_dynam = NULL;
@@ -204,7 +207,7 @@ reset_all (void)
 
 /* if do_file == 0, then don't handle the files */
 /* this is for the global logfile option        */
-struct file_info *
+static struct file_info *
 add_dynam (char *file, char ptype, char do_file,
 	   _32_bit cur_seq, int len)
 {
@@ -281,7 +284,7 @@ add_dynam (char *file, char ptype, char do_file,
   return dummy_pointer;
 }
 
-void
+static void
 delete_dynam (char *file, char ptype, char do_file)
 {
   struct file_info *search_pointer;
@@ -322,7 +325,7 @@ delete_dynam (char *file, char ptype, char do_file)
 }
 
 /* returns NULL on failure */
-struct file_info *
+static struct file_info *
 search_dynam (char *file, char ptype)
 {
   struct file_info *search_pointer;
@@ -354,7 +357,7 @@ search_dynam (char *file, char ptype)
 }
 
 /* Type 0: TELNET  */
-void
+static void
 record_buf (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
 	    char *data, int len, int type)
 {
@@ -400,7 +403,7 @@ record_buf (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
 #endif
 }
 
-void
+static void
 sb_shift (struct file_info *dummy_pointer)
 {
   int i, j;
@@ -409,7 +412,7 @@ sb_shift (struct file_info *dummy_pointer)
     dummy_pointer->scroll_buf[i - 1] = dummy_pointer->scroll_buf[i];
 }
 
-void
+static void
 sbuf_update (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
 	     char *data, int len)
 {
@@ -439,7 +442,7 @@ sbuf_update (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
 #endif
 }
 
-void
+static void
 print_iphead (struct IP_header *iphead, char icmp_or_plain)
 {
   int dummy;
@@ -474,7 +477,7 @@ print_iphead (struct IP_header *iphead, char icmp_or_plain)
   printf ("\n");
 }
 
-int
+static int
 check_packet (_32_bit ipaddr,
 	      const struct packetheader *p_header,
 	      const unsigned char *sp,
@@ -1068,7 +1071,7 @@ if((info->FRAG_nf!=0)||(proto==TCP_FRAG_HEAD))
 }
 
 /* Default Processing of packets */
-pcap_handler
+static pcap_handler
 packethandler (unsigned char *ipaddrpoint,
 	       const struct packetheader * p_header,
 	       const unsigned char *sp)
@@ -1376,7 +1379,7 @@ packethandler (unsigned char *ipaddrpoint,
 
 
 #ifdef INCLUDE_INTERFACE	/* Interactive packethandling */
-int
+static int
 check_mask (const struct packetheader *p_header,
 	    const unsigned char *sp,
 	    char *conn_name, char *conn_name2, char *desc_string,
@@ -1468,7 +1471,7 @@ if(INTERACTIVE_EXTEND==1)
   return TCP_EXAMINE;		/* interprete packet */
 }
 
-pcap_handler
+static pcap_handler
 interactive_packethandler (char *dummy,
 			   const struct packetheader * p_header,
 			   const unsigned char *sp)

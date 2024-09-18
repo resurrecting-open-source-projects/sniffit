@@ -18,7 +18,10 @@ extern FILE *LogFILE;                                     /* logfile stream */
 extern char LOGPARAM;
 extern char DUMPMODE;				   	 /* recorded or not */
 
-void logfile_exit (void)         /* at/on_exit closing of logfile */
+/*** forward declarations ***/
+static void print_logline (char *);
+
+static void logfile_exit (void)         /* at/on_exit closing of logfile */
 {
 printf("Sniffit Logging session ended.\n");
 print_logline("Sniffit session ended.");
@@ -26,7 +29,7 @@ fflush(LogFILE);
 fclose(LogFILE);
 }
 
-char *gettime (void)
+static char *gettime (void)
 {
 time_t t;
 char *tm;
@@ -38,7 +41,7 @@ tm[24]=0;
 return (DUMPMODE&16)?recorded:tm;
 }
 
-void print_logline (char *logline)
+static void print_logline (char *logline)
 {
 fprintf(LogFILE,"[%s] - %s\n",gettime(),logline);
 fflush(LogFILE);

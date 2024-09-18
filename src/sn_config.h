@@ -85,7 +85,7 @@
 /* #define	DEBUG_ONSCREEN */
 
 #ifdef DEBUG
-void close_debug_device (void);
-void debug_msg(char *);
+extern void close_debug_device (void);
+extern void debug_msg(char *);
 #endif
 
