@@ -26,7 +26,6 @@ void record_buf(struct file_info *, _32_bit, char *, int, int);
 void sb_shift(struct file_info *);
 void sbuf_update(struct file_info *, _32_bit, char *, int);
 struct file_info *search_dynam(char *, char);
-void my_exit (void);
 
 /**** Sniffit functions (plugins) *******************************************/
 void start_plugin (int, struct Plugin_data *);

@@ -99,7 +99,7 @@ void quit (char *prog_name)		/* Learn to use the program */
 void close_dumpfile(void) {pcap_dump_close(dev_dump);};
 void close_pcapdev(void) {pcap_close(dev_desc);};
 
-void my_exit (void)
+static void my_exit (int signo)
 {
   fflush(NULL);
   printf("Graceful shutdown...\n");
@@ -1798,43 +1798,43 @@ int main (int argc, char *argv[])
       exit_func(close_pcapdev);
   if(FORCE_DEV!=0) {free(dev);}  /* no longer needed  */
 
-#ifdef PLUGIN0_INIT()
+#ifdef PLUGIN0_INIT
 if (Plugin_Active[0] == 1)
   PLUGIN0_INIT ();
 #endif
-#ifdef PLUGIN1_INIT()
+#ifdef PLUGIN1_INIT
 if (Plugin_Active[1] == 1)
   PLUGIN1_INIT ();
 #endif
-#ifdef PLUGIN2_INIT()
+#ifdef PLUGIN2_INIT
 if (Plugin_Active[2] == 1)
   PLUGIN2_INIT ();
 #endif
-#ifdef PLUGIN3_INIT()
+#ifdef PLUGIN3_INIT
 if (Plugin_Active[3] == 1)
   PLUGIN3_INIT ();
 #endif
-#ifdef PLUGIN4_INIT()
+#ifdef PLUGIN4_INIT
 if (Plugin_Active[4] == 1)
   PLUGIN4_INIT ();
 #endif
-#ifdef PLUGIN5_INIT()
+#ifdef PLUGIN5_INIT
 if (Plugin_Active[5] == 1)
   PLUGIN5_INIT ();
 #endif
-#ifdef PLUGIN6_INIT()
+#ifdef PLUGIN6_INIT
 if (Plugin_Active[6] == 1)
   PLUGIN6_INIT ();
 #endif
-#ifdef PLUGIN7_INIT()
+#ifdef PLUGIN7_INIT
 if (Plugin_Active[7] == 1)
   PLUGIN7_INIT ();
 #endif
-#ifdef PLUGIN8_INIT()
+#ifdef PLUGIN8_INIT
 if (Plugin_Active[8] == 1)
   PLUGIN8_INIT ();
 #endif
-#ifdef PLUGIN9_INIT()
+#ifdef PLUGIN9_INIT
 if (Plugin_Active[9] == 1)
   PLUGIN9_INIT ();
 #endif

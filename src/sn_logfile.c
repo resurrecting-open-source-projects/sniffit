@@ -93,7 +93,7 @@ LogFILE=fopen(Logfile,"a");
 if(LogFILE==NULL)
   printf("Sniffit heartattack.. couldn't create/open logfile...\n"), exit(1);
 exit_func(logfile_exit);
-fchmod(LogFILE,  S_IWUSR|S_IRUSR);
+chmod(Logfile, S_IWUSR|S_IRUSR);
 print_logline("Sniffit session started.");
 printf("Sniffit Logging started.\n");
 }
