@@ -99,7 +99,7 @@ void quit (char *prog_name)		/* Learn to use the program */
 void close_dumpfile(void) {pcap_dump_close(dev_dump);};
 void close_pcapdev(void) {pcap_close(dev_desc);};
 
-void my_exit (void)
+static void my_exit (int signo)
 {
   fflush(NULL);
   printf("Graceful shutdown...\n");
