@@ -90,6 +90,12 @@ char *NETDEV[]={"le","sam"};
 int HEADSIZE[]={14  ,14   };
 #endif
 
+#ifdef __HAIKU__
+#define NETDEV_NR 4
+char *NETDEV[]={"loop","tun","tap","/dev/net/"};
+int HEADSIZE[]={0,     0,    14,   14};
+#endif
+
 #ifndef NETDEV_NR
 #error "Missing network device data for the current OS, please fix!"
 #endif

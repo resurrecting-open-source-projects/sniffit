@@ -30,6 +30,16 @@ dnl exit function check
 AC_CHECK_FUNCS(atexit)
 
 # Other checks
+# On Haiku sendto(), socket(), setservent() and inet_addr() are in libnetwork.
+AC_CHECK_FUNC(setservent, ,
+	[
+		AC_CHECK_LIB(network,
+			setservent,
+			[LIBS="-lnetwork $LIBS"],
+			[AC_MSG_ERROR([setservent() is required, but wasn't found])]
+		)
+	]
+)
 
 dnl Check the datalength
 AC_CHECK_SIZEOF(unsigned short int)
