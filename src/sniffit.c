@@ -1774,8 +1774,14 @@ int main (int argc, char *argv[])
     }
   else
     {
-    if((dev = pcap_lookupdev (ebuf)) == NULL)
+    pcap_if_t *alldevsp;
+    if (pcap_findalldevs (&alldevsp, ebuf) == PCAP_ERROR)
        fprintf (stderr,"%s\n",ebuf), exit (1);
+    if (alldevsp == NULL)
+       fprintf (stderr, "No network devices available.\n"), exit (1);
+    if ((dev = strdup (alldevsp[0].name)) == NULL)
+       perror ("strdup"), exit (1);
+    pcap_freealldevs (alldevsp);
     }
 
   for (i = 0; i < NETDEV_NR; i++)
