@@ -19,6 +19,13 @@
 
 extern volatile int screen_busy;
 
+/*** forward declarations ***/
+static void transmit_UDP (int, char *,
+			   int, int,
+		           _32_bit, unsigned short,
+			   _32_bit, unsigned short);
+static int open_sending (void);
+
 void exec_generate(struct generate_mask *generate)
 {
 WINDOW *Msg_dsp;
@@ -126,7 +133,7 @@ forced_refresh();
 #define SP_UDP_HEAD_BASE 	8              /* Always fixed */
 
 
-int open_sending (void)
+static int open_sending (void)
 {
 struct protoent *sp_proto;
 int sp_fd;
@@ -142,7 +149,7 @@ if ((sp_fd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW))==-1)
 return sp_fd;
 }
 
-void sp_send_packet (struct sp_data_exchange *sp, unsigned char proto)
+static void sp_send_packet (struct sp_data_exchange *sp, unsigned char proto)
 {
 int sp_status;
 struct sockaddr_in sp_server;
@@ -182,7 +189,7 @@ if (sp_status < 0 || sp_status != sp->datalen+HEAD_BASE+SP_IP_HEAD_BASE+sp->IP_o
 #endif
 }
 
-void sp_fix_IP_packet (struct sp_data_exchange *sp, unsigned char proto)
+static void sp_fix_IP_packet (struct sp_data_exchange *sp, unsigned char proto)
 {
 struct IP_header *sp_help_ip;
 int HEAD_BASE;
@@ -211,7 +218,7 @@ sp_help_ip->checksum=in_cksum((unsigned short *) (sp->buffer),
 #endif
 }
 
-void sp_fix_TCP_packet (struct sp_data_exchange *sp)
+static void sp_fix_TCP_packet (struct sp_data_exchange *sp)
 {
 char sp_pseudo_ip_construct[MTU];
 struct TCP_header *sp_help_tcp;
@@ -245,7 +252,8 @@ sp_help_tcp->checksum=in_cksum((unsigned short *) sp_pseudo_ip_construct,
 #endif
 }
 
-void transmit_TCP (int sp_fd, char *sp_data,
+/* FIXME: dead code */
+static void transmit_TCP (int sp_fd, char *sp_data,
 			   int sp_ipoptlen, int sp_tcpoptlen, int sp_datalen,
 		           _32_bit sp_source, unsigned short sp_source_port,
 			   _32_bit sp_dest, unsigned short sp_dest_port,
@@ -285,7 +293,7 @@ sp_fix_IP_packet(&sp_struct, 6);
 sp_send_packet(&sp_struct, 6);
 }
 
-void sp_fix_UDP_packet (struct sp_data_exchange *sp)
+static void sp_fix_UDP_packet (struct sp_data_exchange *sp)
 {
 char sp_pseudo_ip_construct[MTU];
 struct UDP_header *sp_help_udp;
@@ -316,7 +324,7 @@ sp_help_udp->checksum=in_cksum((unsigned short *) sp_pseudo_ip_construct,
 #endif
 }
 
-void transmit_UDP (int sp_fd, char *sp_data,
+static void transmit_UDP (int sp_fd, char *sp_data,
 			   int sp_ipoptlen, int sp_datalen,
 		           _32_bit sp_source, unsigned short sp_source_port,
 			   _32_bit sp_dest, unsigned short sp_dest_port)

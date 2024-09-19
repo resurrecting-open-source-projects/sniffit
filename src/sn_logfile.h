@@ -7,13 +7,10 @@
 #define	LOG_PWD			3
 #define	LOG_PWD_RECORDED	4
 
-void logfile_exit (void);
-char *gettime (void);
-void print_logline (char *);
-void print_ftp_user (char *, char *);
-void print_ftp_pass(char *, char *);
-void print_login (char *, char *);
-void print_pwd (char *, char *);
-void print_conn (char *, char *);
-void print_mail (char *, char *);
-void open_logfile (void);
+extern void print_ftp_user (char *, char *);
+extern void print_ftp_pass(char *, char *);
+extern void print_login (char *, char *);
+extern void print_pwd (char *, char *);
+extern void print_conn (char *, char *);
+extern void print_mail (char *, char *);
+extern void open_logfile (void);

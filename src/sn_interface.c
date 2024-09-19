@@ -52,8 +52,13 @@ extern int INFO_WINDOW_X, INFO_WINDOW_Y, MASK_WINDOW_X, MASK_WINDOW_Y;
 extern int DATA_WINDOW_X, DATA_WINDOW_Y;
 
 
+/*** forward declarations ***/
+static void stop_logging (void);
+static void screen_exit (void);
+
+
 /*** Sreen operations ***/
-void init_screen (void)
+static void init_screen (void)
 {
 initscr();
 cbreak();
@@ -90,7 +95,7 @@ if( (COLS<80)||(LINES<18) )
 	exit(0);
 };
 
-void f_box_window (struct box_window *Win,
+static void f_box_window (struct box_window *Win,
                  int num_lines, int num_cols, int begy,int begx, int col_mode)
 /*  col_mode : color selection   */
 {
@@ -126,7 +131,7 @@ wnoutrefresh(Win->main_window);wnoutrefresh(Win->work_window);
 doupdate();
 }
 
-void data_window (struct box_window *Win, struct box_window *P_Win,
+static void data_window (struct box_window *Win, struct box_window *P_Win,
                  int num_lines, int num_cols, int begy,int begx,
                  char *buffer, int listitem)
 {
@@ -164,7 +169,7 @@ wnoutrefresh(Win->main_window);wnoutrefresh(Win->work_window);
 doupdate();
 }
 
-void data_device (char *buffer, int listitem)
+static void data_device (char *buffer, int listitem)
 {
 int i=0, j=0;
 struct shared_conn_data *conn;
@@ -182,7 +187,7 @@ if(i>=CONNECTION_CAPACITY+1) return;
 strcpy(log_conn->log_enter, conn[i].connection);
 }
 
-void mask_status (struct box_window *Work_win)
+static void mask_status (struct box_window *Work_win)
 {
 unsigned char *ad;
 int i;
@@ -218,7 +223,7 @@ wnoutrefresh(Work_win->work_window);
 doupdate();
 }
 
-void fill_box_window (struct box_window *Work_win, char *buffer,
+static void fill_box_window (struct box_window *Work_win, char *buffer,
                       int begin_item, int boxlen, int rowlen)
                                                  /* 0 is the first item  */
 {
@@ -269,7 +274,7 @@ for(i=line;i<boxlen;i++)
 wnoutrefresh(Work_win->work_window);
 }
 
-void point_item (struct box_window *Work_win, char *buffer,
+static void point_item (struct box_window *Work_win, char *buffer,
                  int item, int begin_item, int boxlen, int rowlen)
 {
 int i=0, j=0;
@@ -361,7 +366,7 @@ if(PACKET_INFO==1)
 doupdate();
 }
 
-void menu_line (void)
+static void menu_line (void)
 {
 int i;
 
@@ -412,7 +417,7 @@ char *input_field(char *string, char *input, int flag)
 	return input;
 }
 
-void exec_mask (void)
+static void exec_mask (void)
 {
 LISTpos=0;
 POINTpos=-1;             /* otherwise we get never ending loop */
@@ -424,7 +429,7 @@ forced_refresh();
 
 /* signaling */
 
-void sig_blocking(char on_off, int sig)
+static void sig_blocking(char on_off, int sig)
 {
 sigset_t set;
 
@@ -434,7 +439,7 @@ if(on_off==1)
 else	{sigprocmask(SIG_UNBLOCK,&set,NULL);}
 }
 
-void set_signal (int signum, sig_hand new_action)
+static void set_signal (int signum, sig_hand new_action)
 {
 struct sigaction new_sigusr;
 sigset_t sig_mask;
@@ -448,7 +453,7 @@ new_sigusr.sa_flags=0;
 sigaction(signum,&new_sigusr,NULL);
 }
 
-void interaction (int sig)              /* invoked when data arrives */
+static void interaction (int sig)              /* invoked when data arrives */
 {
 int i;
 struct shared_conn_data *conn;
@@ -483,7 +488,7 @@ forced_refresh();
 set_signal(SIGUSR1,interaction);
 }
 
-void packet_info_handler (int signum)
+static void packet_info_handler (int signum)
 {
 #ifdef DEBUG
 		debug_msg("ALARM RANG");
@@ -515,7 +520,7 @@ void child_exit (void)
 kill(Pid,SIGKILL);
 };
 
-void screen_exit (void)
+static void screen_exit (void)
 {
 endwin();
 /* next line added by Edward Betts <edward@debian.org>, should not be needed
@@ -532,7 +537,7 @@ if(shmctl(memory_id,IPC_RMID,0)<0)
 
 /* Some other stuff */
 
-void stop_logging (void)
+static void stop_logging (void)
 {
 LOGGING=0;
 log_conn->log_enter[0]=0;
@@ -541,7 +546,7 @@ if(logging_device==NULL)
 forced_refresh();
 }
 
-void stop_packet_info (void)
+static void stop_packet_info (void)
 {
 PACKET_INFO=0;
 alarm(0);
@@ -640,7 +645,7 @@ for(i=0;i<CONNECTION_CAPACITY;i++)
 *timing=0;
 };
 
-void create_arguments(char *esource, char *es_port, char *edest,
+static void create_arguments(char *esource, char *es_port, char *edest,
 				        char *ed_port, char *buffer, int item)
 {
 char e_dummy[CONN_NAMELEN];

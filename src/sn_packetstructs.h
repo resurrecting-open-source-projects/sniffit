@@ -5,13 +5,6 @@
 
 #include <sys/time.h>
 
-struct packetheader
-{
-        struct timeval ts;      /* time stamp */
-        unsigned long caplen;          /* length of portion present */
-        unsigned long len;             /* length this packet (off wire) */
-};
-
 struct IP_header                        /* The IPheader (without options) */
 {
 	unsigned char verlen, type;

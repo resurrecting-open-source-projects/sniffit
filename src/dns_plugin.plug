@@ -84,7 +84,7 @@ udp_start = PLD->PL_info.IP_len;
 len=PLD->PL_info.IP_len + PLD->PL_info.UDP_len + PLD->PL_info.DATA_len;
 dns_iphead= (struct IP_header *) dns_buffer;
 dns_udphead= (struct UDP_header *) (dns_buffer+udp_start);
-dns_dnshead= (struct DNS_header *) (dns_buffer+udp_start+sizeof(struct UDP_header));
+dns_dnshead= (struct PL_DNS_header *) (dns_buffer+udp_start+sizeof(struct UDP_header));
 
 PL_pos_max = PLD->PL_info.DATA_len - 12;
 
