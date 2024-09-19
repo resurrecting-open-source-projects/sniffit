@@ -12,22 +12,16 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 
 # Checks for libraries.
-AC_CHECK_LIB(ncurses, main, , [AC_MSG_ERROR([Couldn't find libncurses])])
+# FIXME: sniffit links with libncurses when it is available, even if it does
+# not use it because src/sn_config.h does not define INCLUDE_INTERFACE because
+# other conditions are not met.  It would be better to move that logic entirely
+# to Autoconf and to define (or not) INCLUDE_INTERFACE only here.
+AC_CHECK_LIB(ncurses, initscr)
 AC_CHECK_LIB(pcap, pcap_open_live, , [AC_MSG_ERROR([Couldn't find libpcap])])
 
 # Checks for header files.
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stdlib.h string.h sys/socket.h sys/time.h termios.h unistd.h])
-AC_CHECK_HEADERS([ncurses.h], AC_DEFINE([HAVE_NCURSES_H], 1, [none]), AC_MSG_ERROR([ncurses.h not found]))
+AC_CHECK_HEADERS([ncurses.h])
 AC_CHECK_HEADERS([pcap.h], , AC_MSG_ERROR([pcap.h not found]))
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_TYPE_SIZE_T
-
-# Checks for library functions.
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_CHECK_FUNCS([alarm bzero gethostbyname socket strchr strdup strstr])
 
 dnl Check Shared Memory support
 AC_CHECK_FUNCS(shmget)
@@ -40,8 +34,7 @@ AC_CHECK_FUNCS(atexit)
 dnl Check the datalength
 AC_CHECK_SIZEOF(unsigned short int)
 if test $ac_cv_sizeof_unsigned_short_int -ne 2; then
-    echo "unsigned short is NOT 2 bytes... quiting"
-    exit
+    AC_MSG_ERROR([unsigned short is NOT 2 bytes... quiting])
 fi
 
 AC_CHECK_SIZEOF(unsigned long int)
@@ -51,8 +44,7 @@ else
     echo "unsigned long is NOT 4 bytes... hmmm..."
     AC_CHECK_SIZEOF(unsigned int)
     if test $ac_cv_sizeof_unsigned_int -ne 4; then
-        echo "unsigned int is NOT 4 bytes either... quiting"
-        exit
+        AC_MSG_ERROR([unsigned int is NOT 4 bytes either... quiting])
     else
         AC_DEFINE(USE_32_INT, 1, [none])
     fi

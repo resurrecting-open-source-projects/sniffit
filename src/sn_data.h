@@ -9,7 +9,7 @@
 /* slip : 16                             */
 /* lo   : 4                              */
 
-#ifdef LINUX
+#ifdef __linux__
 /*
 #define NETDEV_NR      3
 char *NETDEV[]={"lo","ppp","eth"};
@@ -90,6 +90,9 @@ char *NETDEV[]={"le","sam"};
 int HEADSIZE[]={14  ,14   };
 #endif
 
+#ifndef NETDEV_NR
+#error "Missing network device data for the current OS, please fix!"
+#endif
 /**** Global data **********************************************************/
 pcap_t *dev_desc;
 pcap_dumper_t *dev_dump;

@@ -4,6 +4,8 @@
 /* Because of the use of GNU autoconfig, this file manages pretty much   */
 /* itself, you could however still add your personal touch in some parts */
 
+#include <config.h>
+
 #define INCLUDE_INTERFACE            /* By default */
 
 #ifndef HAVE_SHMGET                                 /* No Shared memory  */
@@ -12,9 +14,9 @@
 #ifndef HAVE_LIBNCURSES                             /* ncurses not found */
 #undef INCLUDE_INTERFACE
 #endif
-//#ifndef HAVE_NCURSES_H                              /* ncurses not found */
-//#undef INCLUDE_INTERFACE
-//#endif
+#ifndef HAVE_NCURSES_H                              /* ncurses not found */
+#undef INCLUDE_INTERFACE
+#endif
 #ifdef IRIX                                      /* No interface on IRIX */
 #undef INCLUDE_INTERFACE
 #endif
