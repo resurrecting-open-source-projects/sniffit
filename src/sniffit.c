@@ -499,7 +499,7 @@ check_packet (_32_bit ipaddr,
   unsigned int prior;
   char selected;
   int i;			/* Wildcard stuff */
-  unsigned char *str_IP;
+  char *str_IP;
   unsigned int n_s;		/* strlen short notation for wc bugfix */
 
   proto = unwrap_packet (sp, info);
@@ -1155,9 +1155,9 @@ packethandler (unsigned char *ipaddrpoint,
       dummy = ntohs (tcphead.offset_flag);
       printf ("\n");
       printf ("TCP Packet ID (from_IP.port-to_IP.port): %s\n", filename);
-      printf ("   SEQ (hex): %lX   ", ntohl (tcphead.seq_nr));
+      printf ("   SEQ (hex): %X   ", ntohl (tcphead.seq_nr));
       if (dummy & ACK)
-	printf ("ACK (hex): %lX\n", ntohl (tcphead.ACK_nr));
+	printf ("ACK (hex): %X\n", ntohl (tcphead.ACK_nr));
       printf ("   FLAGS: %c%c%c%c%c%c",
 	      (dummy & URG) ? 'U' : '-', (dummy & ACK) ? 'A' : '-',
 	      (dummy & PSH) ? 'P' : '-', (dummy & RST) ? 'R' : '-',
@@ -1516,9 +1516,9 @@ int main (int argc, char *argv[])
 {
   char *dev, forced_dev[20], buffer[SNAPLEN];
   char ebuf[PCAP_ERRBUF_SIZE];
-  unsigned char *DUMPfile;           /* file used for packed logging */
+  char *DUMPfile;           /* file used for packed logging */
   int c, i;
-  unsigned long memsize;
+  size_t memsize;
   _32_bit ipaddr;
   int flag = 0, doboth = 0, FORCE_DEV = 0, SUPPORTED = 0;
   extern char *optarg;
@@ -1579,12 +1579,12 @@ int main (int argc, char *argv[])
         case 'R':                    /* recording (not mixable) */
           if(DUMPMODE) quit(argv[0]);
           DUMPMODE=8;
-          DUMPfile=(unsigned char *)optarg;
+          DUMPfile=optarg;
           break;
         case 'r':
           if(DUMPMODE&8) quit(argv[0]);
           DUMPMODE|=16;              /* reading (mixable) */
-          DUMPfile=(unsigned char *)optarg;
+          DUMPfile=optarg;
           break;
         case 'x':
 	  if(DUMPMODE&8) quit(argv[0]);
@@ -1801,10 +1801,12 @@ int main (int argc, char *argv[])
     }
 
   if(!(DUMPMODE&16))
+    {
     if ((dev_desc = pcap_open_live (dev, SNAPLEN, 1, MSDELAY, ebuf)) == NULL)
       fprintf (stderr,"%s\n",ebuf), exit (0);
     else
       exit_func(close_pcapdev);
+    }
   if(FORCE_DEV!=0) {free(dev);}  /* no longer needed  */
 
 #ifdef PLUGIN0_INIT
@@ -1871,7 +1873,7 @@ if (Plugin_Active[9] == 1)
 	  exit (0);
 	};
       printf ("Entering Shared memory at %p\n", SHARED);
-      printf ("Shared %d\n", memsize);
+      printf ("Shared %zu\n", memsize);
 
       timing = SHARED;		/* set all pointers */
       DATAlength = timing + sizeof (int);

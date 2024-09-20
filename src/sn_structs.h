@@ -28,7 +28,7 @@ struct file_info
 /**** Global data (config) **************************************************/
 struct cfg_file_contense
 {
-unsigned char host[16];
+char host[16];
 unsigned int priority;
 unsigned char wildcard;
 unsigned short port;

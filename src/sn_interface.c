@@ -494,10 +494,10 @@ static void packet_info_handler (int signum)
 		debug_msg("ALARM RANG");
 #endif
 screen_busy=1;
-mvwprintw(packets_box.work_window,0,1,"IP packets/sec.  : % 12u",(*IP_nr_of_packets)/INFO_TIMER);
-mvwprintw(packets_box.work_window,1,1,"TCP packets/sec. : % 12u",(*TCP_nr_of_packets)/INFO_TIMER);
-mvwprintw(packets_box.work_window,2,1,"ICMP packets/sec.: % 12u",(*ICMP_nr_of_packets)/INFO_TIMER);
-mvwprintw(packets_box.work_window,3,1,"UDP packets/sec. : % 12u",(*UDP_nr_of_packets)/INFO_TIMER);
+mvwprintw(packets_box.work_window,0,1,"IP packets/sec.  : %12u",(*IP_nr_of_packets)/INFO_TIMER);
+mvwprintw(packets_box.work_window,1,1,"TCP packets/sec. : %12u",(*TCP_nr_of_packets)/INFO_TIMER);
+mvwprintw(packets_box.work_window,2,1,"ICMP packets/sec.: %12u",(*ICMP_nr_of_packets)/INFO_TIMER);
+mvwprintw(packets_box.work_window,3,1,"UDP packets/sec. : %12u",(*UDP_nr_of_packets)/INFO_TIMER);
 mvwprintw(packets_box.work_window,4,1,"bytes/sec. (TCP) : % 12ld",(*TCP_bytes_in_packets)/INFO_TIMER);
 mvwprintw(packets_box.work_window,5,1,"bytes/sec. (UDP) : % 12ld",(*UDP_bytes_in_packets)/INFO_TIMER);
 screen_busy=0;
