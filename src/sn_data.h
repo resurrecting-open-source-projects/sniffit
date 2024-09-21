@@ -21,7 +21,7 @@ int HEADSIZE []={0   ,0     ,14};		/* slip needs testing */
 #endif
 
 #ifdef SUNOS
-#define NETDEV_NR      3
+#define NETDEV_NR      2
 char *NETDEV[]={"le","hme"};
 int HEADSIZE[]={14  ,14};		/* ppp: 4 or 0 or nothing? */
 #endif
