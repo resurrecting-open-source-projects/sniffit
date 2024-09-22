@@ -359,7 +359,7 @@ search_dynam (char *file, char ptype)
 /* Type 0: TELNET  */
 static void
 record_buf (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
-	    char *data, int len, int type)
+	    const char *data, int len, int type)
 {
   int i, j, noloop = 0;
 
@@ -414,7 +414,7 @@ sb_shift (struct file_info *dummy_pointer)
 
 static void
 sbuf_update (struct file_info *dummy_pointer, _32_bit cur_seq_nr,
-	     char *data, int len)
+	     const char *data, int len)
 {
   int i;
 
