@@ -60,19 +60,24 @@ char *NETDEV[]={"ln"};
 int HEADSIZE[]={14};
 #endif
 
-#ifdef NETBSD
-#ifdef i386
+#ifdef __NetBSD__
+#if defined(i386) || defined(__amd64__)
 #define NETDEV_NR      21
 char *NETDEV[]={"ppp","ai","de","ec","ef","eg","el","en","ep","fe","fea","fpa","fxp","ix","iy","lc","le","ne","sm","tl","we"};
 int HEADSIZE[]={4    ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14   ,14   ,14   ,14  ,14  ,14  ,14  ,14  ,14  ,14  ,14  };
-#elif defined(sparc)
+#elif defined(__sparc__)
 #define NETDEV_NR      3
 char *NETDEV[]={"ppp","le","ie"};
 int HEADSIZE[]={4    ,14  ,14};
-#elif defined(amiga)
-#define ETH_DEV_NR      6
+#elif defined(__m68k__)
+#define NETDEV_NR      6
 char *NETDEV[]={"ppp","bah","ed","es","le","qn"};
 int HEADSIZE[]={4    ,14  ,14   ,14  ,14  ,14};
+#elif defined(__mips64) && defined(__MIPSEB__)
+/* Assume Octeon. */
+#define NETDEV_NR      1
+char *NETDEV[]={"cnmac"};
+int HEADSIZE[]={14};
 #else
 #error Unknown network devices for this NetBSD architecture.
 #endif
