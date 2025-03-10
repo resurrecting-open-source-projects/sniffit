@@ -15,7 +15,7 @@
 1. HELP THIS PROJECT
 --------------------
 
-Sniffit needs your help. **If you are a programmer** and if you wants to
+Sniffit needs your help. **If you are a programmer** and if you want to
 help a nice project, this is your opportunity.
 
 My name is Eriberto and **I am not a C developer**. I imported Sniffit from
@@ -52,7 +52,7 @@ Window, etc. The packet contents also can be viewed, in different formats
 (hex or plain text, etc.).
 
 sniffit was originally developed by Brecht Claerhout. The initial homepage, now offline, was
-http://reptile.rug.ac.be/~coder/sniffit/sniffit.html.
+[here](http://reptile.rug.ac.be/~coder/sniffit/sniffit.html).
 
 
 -----------------------
@@ -60,9 +60,13 @@ http://reptile.rug.ac.be/~coder/sniffit/sniffit.html.
 -----------------------
 
 Run `./autogen.sh` to create the configure script, then run
-./configure, make and make install.
+```
+./configure
+make
+make install
+```
 
-This program depends of the libpcap and libncurses.
+This program requires libpcap, it also uses libncurses if available.
 
 
 ----------
