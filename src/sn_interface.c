@@ -189,8 +189,9 @@ strcpy(log_conn->log_enter, conn[i].connection);
 
 static void mask_status (struct box_window *Work_win)
 {
-unsigned char *ad;
+const char *ad;
 int i;
+char ipv4_buf[sizeof("000.000.000.000")];
 
 wmove(Work_win->work_window,0,1);
 for(i=0;i<2;i++)
@@ -198,16 +199,27 @@ for(i=0;i<2;i++)
 	whline(Work_win->work_window,' ',COLS-2);}
 wmove(Work_win->work_window,0,1);
 wprintw(Work_win->work_window,"Source IP     : ");
-ad=&(mask->source_ip);
-if(mask->source_ip==0)
- 	wprintw(Work_win->work_window,"All");
-else wprintw(Work_win->work_window,"%u.%u.%u.%u",ad[0],ad[1],ad[2],ad[3]);
+/* Both source_ip and destination_ip are in network byte order. */
+ad = mask->source_ip ?
+	inet_ntop(AF_INET,&mask->source_ip,ipv4_buf,sizeof(ipv4_buf)) :
+	"All";
+if(!ad)
+{
+	perror("inet_ntop");
+	exit(1);
+}
+wprintw(Work_win->work_window,"%s",ad);
 wmove(Work_win->work_window,1,1);
 wprintw(Work_win->work_window,"Destination IP: ");
-ad=&(mask->destination_ip);
-if(mask->destination_ip==0)
- 	wprintw(Work_win->work_window,"All");
-else wprintw(Work_win->work_window,"%u.%u.%u.%u",ad[0],ad[1],ad[2],ad[3]);
+ad = mask->source_ip ?
+	inet_ntop(AF_INET,&mask->destination_ip,ipv4_buf,sizeof(ipv4_buf)) :
+	"All";
+if(!ad)
+{
+	perror("inet_ntop");
+	exit(1);
+}
+wprintw(Work_win->work_window,"%s",ad);
 wmove(Work_win->work_window,0,35);
 wprintw(Work_win->work_window,"Source PORT     : ");
 if(mask->source_port==0)
