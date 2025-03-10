@@ -11,29 +11,23 @@ extern int PROTO_HEAD;
 extern char NO_CHKSUM;
 
 /* This routine stolen from ping.c */
-unsigned short in_cksum(unsigned short *addr,int len)
+unsigned short in_cksum(const unsigned char *addr,int nleft)
 {
-register int nleft = len;   /* leave this alone.. my opinion is that the   */
-register unsigned short *w = addr;
-                            /* register is needed to make it work for both */
-register int sum = 0;       /* BIG and LITTLE endian machines              */
-unsigned short answer = 0;
-                        /* but then again, who am I to make such statement */
+int sum = 0;
 
 while (nleft > 1)
         {
-        sum += *w++;
+        sum += *addr++ << 8;
+        sum += *addr++;
         nleft -= 2;
         }
 if (nleft == 1)
         {
-        *(unsigned char *)(&answer) = *(unsigned char *)w ;
-        sum += answer;
+        sum += *addr++;
         }
 sum = (sum >> 16) + (sum & 0xffff);
 sum += (sum >> 16);
-answer = ~sum;
-return(answer);
+return(~sum);
 }
 
 int unwrap_packet (unsigned char *sp, struct unwrap *unwrapped)

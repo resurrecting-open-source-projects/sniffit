@@ -211,7 +211,7 @@ sp_help_ip->TTL = 69;
 sp_help_ip->protocol = proto;
 sp_help_ip->source = sp->source;
 sp_help_ip->destination =  sp->dest;
-sp_help_ip->checksum=in_cksum((unsigned short *) (sp->buffer),
+sp_help_ip->checksum=in_cksum(sp->buffer,
 						SP_IP_HEAD_BASE+sp->IP_optlen);
 #ifdef DEBUG
 	printf("IP header fixed...\n");
@@ -220,7 +220,7 @@ sp_help_ip->checksum=in_cksum((unsigned short *) (sp->buffer),
 
 static void sp_fix_TCP_packet (struct sp_data_exchange *sp)
 {
-char sp_pseudo_ip_construct[MTU];
+unsigned char sp_pseudo_ip_construct[MTU];
 struct TCP_header *sp_help_tcp;
 struct pseudo_IP_header *sp_help_pseudo;
 int i;
@@ -245,7 +245,7 @@ sp_help_pseudo->protocol = 6;
 sp_help_pseudo->TCP_UDP_len = htons(sp->datalen+SP_TCP_HEAD_BASE+sp->TCP_optlen);
 
 memcpy(sp_pseudo_ip_construct+12, sp_help_tcp, sp->TCP_optlen+sp->datalen+SP_TCP_HEAD_BASE);
-sp_help_tcp->checksum=in_cksum((unsigned short *) sp_pseudo_ip_construct,
+sp_help_tcp->checksum=in_cksum(sp_pseudo_ip_construct,
 				  sp->datalen+12+SP_TCP_HEAD_BASE+sp->TCP_optlen);
 #ifdef DEBUG
 	printf("TCP header fixed...\n");
@@ -260,7 +260,7 @@ static void transmit_TCP (int sp_fd, char *sp_data,
                            _32_bit sp_seq, _32_bit sp_ack,
                            unsigned short sp_flags)
 {
-char sp_buffer[1500];
+unsigned char sp_buffer[1500];
 struct sp_data_exchange sp_struct;
 
 bzero(sp_buffer,1500);
@@ -295,7 +295,7 @@ sp_send_packet(&sp_struct, 6);
 
 static void sp_fix_UDP_packet (struct sp_data_exchange *sp)
 {
-char sp_pseudo_ip_construct[MTU];
+unsigned char sp_pseudo_ip_construct[MTU];
 struct UDP_header *sp_help_udp;
 struct pseudo_IP_header *sp_help_pseudo;
 int i;
@@ -317,7 +317,7 @@ sp_help_pseudo->protocol = 17;
 sp_help_pseudo->TCP_UDP_len = htons(sp->datalen+SP_UDP_HEAD_BASE);
 
 memcpy(sp_pseudo_ip_construct+12, sp_help_udp, sp->datalen+SP_UDP_HEAD_BASE);
-sp_help_udp->checksum=in_cksum((unsigned short *) sp_pseudo_ip_construct,
+sp_help_udp->checksum=in_cksum(sp_pseudo_ip_construct,
 						     sp->datalen+12+SP_UDP_HEAD_BASE);
 #ifdef DEBUG
 	printf("UDP header fixed...\n");
@@ -329,7 +329,7 @@ static void transmit_UDP (int sp_fd, char *sp_data,
 		           _32_bit sp_source, unsigned short sp_source_port,
 			   _32_bit sp_dest, unsigned short sp_dest_port)
 {
-char sp_buffer[1500];
+unsigned char sp_buffer[1500];
 struct sp_data_exchange sp_struct;
 bzero(sp_buffer,1500);
 

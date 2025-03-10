@@ -86,7 +86,7 @@ struct sp_data_exchange {
         _32_bit dest;   unsigned short dest_port;
         _32_bit seq, ack;
         unsigned short flags;
-        char *buffer;               /* work buffer */
+        unsigned char *buffer;     /* work buffer */
         int IP_optlen;             /* IP options length in bytes  */
         int TCP_optlen;            /* TCP options length in bytes */
         };
