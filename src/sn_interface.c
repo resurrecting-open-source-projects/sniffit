@@ -20,8 +20,8 @@
 #include "sn_resolv.h"
 
 /*** extern stuff ********/
-extern char *SHARED, *connection_data, *running_connections,
-                                                  *logged_connections;
+extern char *SHARED, *connection_data, *logged_connections;
+extern struct shared_conn_data *running_connections;
 extern int *LISTlength, *DATAlength, memory_id;
 extern unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets; unsigned int  *IP_nr_of_packets;
 extern unsigned long *TCP_bytes_in_packets, *UDP_bytes_in_packets;
@@ -133,12 +133,10 @@ doupdate();
 
 static void data_window (struct box_window *Win, struct box_window *P_Win,
                  int num_lines, int num_cols, int begy,int begx,
-                 char *buffer, int listitem)
+                 struct shared_conn_data *conn, int listitem)
 {
 int i=0, j=0;
-struct shared_conn_data *conn;
 
-conn = (struct shared_conn_data *) buffer;
 while((j<listitem)&&(i<(CONNECTION_CAPACITY+1)))
 	{
   	if(conn[i].connection[0]!=0)
@@ -169,12 +167,10 @@ wnoutrefresh(Win->main_window);wnoutrefresh(Win->work_window);
 doupdate();
 }
 
-static void data_device (char *buffer, int listitem)
+static void data_device (struct shared_conn_data *conn, int listitem)
 {
 int i=0, j=0;
-struct shared_conn_data *conn;
 
-conn = (struct shared_conn_data *) buffer;
 while((j<listitem)&&(i<(CONNECTION_CAPACITY+1)))
 	{
   	if(conn[i].connection[0]!=0)
@@ -235,14 +231,12 @@ wnoutrefresh(Work_win->work_window);
 doupdate();
 }
 
-static void fill_box_window (struct box_window *Work_win, char *buffer,
+static void fill_box_window (struct box_window *Work_win, struct shared_conn_data *conn,
                       int begin_item, int boxlen, int rowlen)
                                                  /* 0 is the first item  */
 {
 int i=0, j=0, line=0;
-struct shared_conn_data *conn;
 
-conn = (struct shared_conn_data *) buffer;
 while((j<begin_item)&&(i<(CONNECTION_CAPACITY+1)))
 	{
   	if(conn[i].connection[0]!=0)
@@ -286,18 +280,15 @@ for(i=line;i<boxlen;i++)
 wnoutrefresh(Work_win->work_window);
 }
 
-static void point_item (struct box_window *Work_win, char *buffer,
+static void point_item (struct box_window *Work_win, struct shared_conn_data *conn,
                  int item, int begin_item, int boxlen, int rowlen)
 {
 int i=0, j=0;
-struct shared_conn_data *conn;
-
 
 if(item<0) return;      /* POINTpos   0 = first item   -1 = no items */
                         /* LISTlength 0 = 1            -1 = no items */
                         /* DANGER - there should always be >=        */
                         /*          connections than 'item'          */
-conn = (struct shared_conn_data *) buffer;
 while((j<item)&&(i<(CONNECTION_CAPACITY+1)))
 	{
 	if(conn[i].connection[0] !=0)
@@ -468,11 +459,10 @@ sigaction(signum,&new_sigusr,NULL);
 static void interaction (int sig)              /* invoked when data arrives */
 {
 int i;
-struct shared_conn_data *conn;
+struct shared_conn_data *conn = running_connections;
 
 
 /* timeout increase */
-conn = (struct shared_conn_data *) running_connections;
 for(i=0;i<CONNECTION_CAPACITY;i++)
   	if(conn[i].connection[0]!=0)
 		conn[i].timeout+=1;
@@ -566,14 +556,12 @@ delwin(packets_box.work_window), delwin(packets_box.main_window);
 forced_refresh();
 }
 
-int add_itemlist(char *buffer, char *string, char *desc)
+int add_itemlist(struct shared_conn_data *conn, char *string, char *desc)
 {
 int i, to_help, to_item;
-struct shared_conn_data *conn;
 
 /*invoked every time a packet comes in */
 
-conn = (struct shared_conn_data *) buffer;
 for(i=0;i<CONNECTION_CAPACITY;i++)
 	if(strcmp( conn[i].connection, string)==0)
 		{
@@ -606,12 +594,10 @@ conn[to_item].timeout=0;
 return to_item;
 }
 
-int del_itemlist(char *buffer, char *string)
+int del_itemlist(struct shared_conn_data *conn, char *string)
 {
 int i;
-struct shared_conn_data *conn;
 
-conn = (struct shared_conn_data *) buffer;
 for(i=0;i<CONNECTION_CAPACITY;i++)
 	if(strcmp( conn[i].connection, string)==0)
     		{
@@ -632,7 +618,7 @@ void clear_shared_mem(char mode)
 			/*             keep packet count */
 {
 int i;
-struct shared_conn_data *conn;
+struct shared_conn_data *conn = running_connections;
 
 *DATAlength=0;
 *LISTlength=-1;
@@ -646,7 +632,6 @@ if(mode==0)
   }
 
 log_conn->log_enter[0]=0;
-conn = (struct shared_conn_data *) running_connections;
 for(i=0;i<CONNECTION_CAPACITY;i++)
 	{
 	conn[i].connection[0]=0;
@@ -656,14 +641,12 @@ for(i=0;i<CONNECTION_CAPACITY;i++)
 };
 
 static void create_arguments(char *esource, char *es_port, char *edest,
-				        char *ed_port, char *buffer, int item)
+				        char *ed_port, struct shared_conn_data *conn, int item)
 {
 char e_dummy[CONN_NAMELEN];
 int i=0, j=0;
-struct shared_conn_data *conn;
 
 if(item<0) return;
-conn = (struct shared_conn_data *) buffer;
 while((j<item)&&(i<(CONNECTION_CAPACITY+1)))
 	{
   	if(conn[i].connection[0] !=0)

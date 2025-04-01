@@ -1883,7 +1883,7 @@ if (Plugin_Active[9] == 1)
       logged_connections = mask + sizeof (struct snif_mask);
       log_conn = (struct shared_logged_conn *) logged_connections;
       running_connections = logged_connections + sizeof (struct shared_logged_conn);
-      TCP_nr_of_packets = running_connections + (sizeof (struct shared_conn_data) * CONNECTION_CAPACITY);
+      TCP_nr_of_packets = (void *)running_connections + (sizeof (struct shared_conn_data) * CONNECTION_CAPACITY);
       TCP_bytes_in_packets = TCP_nr_of_packets + sizeof (int);
       ICMP_nr_of_packets = TCP_bytes_in_packets + sizeof (unsigned long);
       UDP_nr_of_packets = ICMP_nr_of_packets + sizeof (int);
