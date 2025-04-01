@@ -23,7 +23,8 @@
 extern char *SHARED, *connection_data, *logged_connections;
 extern struct shared_conn_data *running_connections;
 extern int *LISTlength, *DATAlength, memory_id;
-extern unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets; unsigned int  *IP_nr_of_packets;
+extern unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets;
+extern unsigned int  *IP_nr_of_packets;
 extern unsigned long *TCP_bytes_in_packets, *UDP_bytes_in_packets;
 extern int *DESC_LEN;   /* For the connection desciption */
 
