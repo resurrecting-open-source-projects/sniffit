@@ -185,7 +185,7 @@ ONE of these is required!
                     mind you -t @ is also a valid option.
   -i                Interactive mode, overrides all other options
 * -I                Extended Interactive mode, overrides all other options
-*                   Much more fun then -i, watch and enjoy...
+*                   Much more fun than -i, watch and enjoy...
 *                   (best viewed in a xterm that is stretched wide...)
   -c <file>         Use <file> as a config file for Sniffit
                     See 3.3 for format of the config file.

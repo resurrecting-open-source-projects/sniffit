@@ -12,7 +12,7 @@ Sniffit-FAQ.
 2. I can only see packets to/from my own computer, what is wrong? (BTW:
    I'm on PPP).
 
-3. I have e.g. to ethernetcards, but 'sniffit -F /dev/eth1' doesn't work,
+3. I have e.g. two ethernetcards, but 'sniffit -F /dev/eth1' doesn't work,
    why?
 
 4. How can I find the device names?
@@ -25,7 +25,7 @@ Sniffit-FAQ.
 
 1. 'sniffit -i' doesn't work. It says unknown option.
 
-   Prior to 0.3.5 you had to configure Sniffit manual, that was a drag,
+   Prior to 0.3.5 you had to configure Sniffit manually, that was a drag,
    so I made it configure itself. Problem now is that it is too automatic.
    When running the 'configure' script, it looks for 'ncurses' (which is
    needed for the interactive mode), when it does not find 'ncurses', it
@@ -50,14 +50,14 @@ Sniffit-FAQ.
    I'm on PPP)
 
    PPP: Point to Point connection.
-   Per defenition, this protocol will only carry packets that contain
+   Per definition, this protocol will only carry packets that contain
    information for the connected computer.
    As a consequence on your side, you see only things that got to/come
    from your computer, so Sniffit works fine.
    To see traffic of whole subnets, you need protocols like ethernet (the
    coax cable).
 
-3. I have e.g. to ethernetcards, but 'sniffit -F /dev/eth1' doesn't work,
+3. I have e.g. two ethernetcards, but 'sniffit -F /dev/eth1' doesn't work,
    why?
 
    Don't put any path in front of the devices. These names aren't even
@@ -73,10 +73,10 @@ Sniffit-FAQ.
 5. Why can't my LINUX capture packets?
 
    You should upgrade the kernel.
-   Normally Sniffit should work on all kernels older then 2.0.0.
-   But I advise using a kernel older then 2.0.25.
-   (You could also downgrade the libpcap version to that used wityh
-    Sniffit 0.3.3 if all else fails)
+   Normally Sniffit should work on all kernel versions >= 2.0.0.
+   But I advise using a kernel version >= 2.0.25.
+   (You could also downgrade the libpcap version to that used with
+    Sniffit 0.3.3 if all else fails.)
 
 6. Why can't my BSD style system capture packets?
 
