@@ -165,7 +165,7 @@ char Plugin_Active[10];
 #ifdef INCLUDE_INTERFACE
 
 /**** shared memory pointers ************************************************/
-char *SHARED, *connection_data, *timing, *running_connections,
+char *SHARED, *connection_data, *running_connections,
 						  *logged_connections;
 int *LISTlength, *DATAlength, memory_id;
 unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets;

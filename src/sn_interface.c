@@ -20,7 +20,7 @@
 #include "sn_resolv.h"
 
 /*** extern stuff ********/
-extern char *SHARED, *connection_data, *timing, *running_connections,
+extern char *SHARED, *connection_data, *running_connections,
                                                   *logged_connections;
 extern int *LISTlength, *DATAlength, memory_id;
 extern unsigned int  *TCP_nr_of_packets, *ICMP_nr_of_packets, *UDP_nr_of_packets; unsigned int  *IP_nr_of_packets;
@@ -634,7 +634,6 @@ void clear_shared_mem(char mode)
 int i;
 struct shared_conn_data *conn;
 
-*timing=1;
 *DATAlength=0;
 *LISTlength=-1;
 if(mode==0)
@@ -654,7 +653,6 @@ for(i=0;i<CONNECTION_CAPACITY;i++)
 	conn[i].desc[0]=0;
 	conn[i].timeout=0;
 	}
-*timing=0;
 };
 
 static void create_arguments(char *esource, char *es_port, char *edest,

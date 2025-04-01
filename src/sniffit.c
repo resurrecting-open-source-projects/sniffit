@@ -1853,7 +1853,7 @@ if (Plugin_Active[9] == 1)
 #ifdef INCLUDE_INTERFACE
   if (SNIFMODE == INTERACTIVE)
     {
-      memsize = sizeof (int) + sizeof (int) + LENGTH_OF_INTERPROC_DATA +
+      memsize = sizeof (int) + LENGTH_OF_INTERPROC_DATA +
         sizeof (int) + sizeof (struct snif_mask) +
         sizeof (struct shared_logged_conn) +
         (CONNECTION_CAPACITY * sizeof (struct shared_conn_data)) +
@@ -1875,8 +1875,8 @@ if (Plugin_Active[9] == 1)
       printf ("Entering Shared memory at %p\n", SHARED);
       printf ("Shared %zu\n", memsize);
 
-      timing = SHARED;		/* set all pointers */
-      DATAlength = timing + sizeof (int);
+      /* set all pointers */
+      DATAlength = SHARED;
       connection_data = DATAlength + sizeof (int);
       LISTlength = connection_data + LENGTH_OF_INTERPROC_DATA;
       mask = LISTlength + sizeof (int);
