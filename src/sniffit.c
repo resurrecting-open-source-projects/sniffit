@@ -1629,13 +1629,13 @@ int main (int argc, char *argv[])
 	  break;
 	case 'P':
 	  strlower (optarg);
-	  if (strstr (optarg, "tcp"))
+	  if (strstr (optarg, "tcp") || strstr (optarg, "TCP"))
 	    PROTOCOLS |= F_TCP;
-	  if (strstr (optarg, "icmp"))
+	  if (strstr (optarg, "icmp") || strstr (optarg, "ICMP"))
 	    PROTOCOLS |= F_ICMP;
-	  if (strstr (optarg, "udp"))
+	  if (strstr (optarg, "udp") || strstr (optarg, "UDP"))
 	    PROTOCOLS |= F_UDP;
-	  if (strstr (optarg, "ip"))
+	  if (strstr (optarg, "ip") || strstr (optarg, "IP"))
 	    PROTOCOLS |= F_IP;
 	  break;
 	case 's':
