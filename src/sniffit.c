@@ -1876,20 +1876,20 @@ if (Plugin_Active[9] == 1)
       printf ("Shared %zu\n", memsize);
 
       /* set all pointers */
-      DATAlength = SHARED;
-      connection_data = DATAlength + sizeof (int);
-      LISTlength = connection_data + LENGTH_OF_INTERPROC_DATA;
-      mask = LISTlength + sizeof (int);
-      logged_connections = mask + sizeof (struct snif_mask);
+      DATAlength = (int *) SHARED;
+      connection_data = (char *) (DATAlength + 1);
+      LISTlength = (int *) (connection_data + LENGTH_OF_INTERPROC_DATA);
+      mask = (struct snif_mask *)((char *)LISTlength + sizeof(int));
+      logged_connections = (char *)mask + sizeof(struct snif_mask);
       log_conn = (struct shared_logged_conn *) logged_connections;
-      running_connections = logged_connections + sizeof (struct shared_logged_conn);
-      TCP_nr_of_packets = (void *)running_connections + (sizeof (struct shared_conn_data) * CONNECTION_CAPACITY);
-      TCP_bytes_in_packets = TCP_nr_of_packets + sizeof (int);
-      ICMP_nr_of_packets = TCP_bytes_in_packets + sizeof (unsigned long);
-      UDP_nr_of_packets = ICMP_nr_of_packets + sizeof (int);
-      UDP_bytes_in_packets = UDP_nr_of_packets + sizeof (int);
-      IP_nr_of_packets = UDP_bytes_in_packets + sizeof (unsigned long);
-      DESC_LEN = IP_nr_of_packets + sizeof (int);
+      running_connections = (struct shared_conn_data *)((char *)logged_connections + sizeof(struct shared_logged_conn));
+      TCP_nr_of_packets = (int *)((char *)running_connections + sizeof(struct shared_conn_data) * CONNECTION_CAPACITY);
+      TCP_bytes_in_packets = (unsigned long *)((char *)TCP_nr_of_packets + sizeof(int));
+      ICMP_nr_of_packets = (unsigned int *)((char *)TCP_bytes_in_packets + sizeof(unsigned long));
+      UDP_nr_of_packets = (unsigned int *)(ICMP_nr_of_packets + 1);
+      UDP_bytes_in_packets = (unsigned long *)((char *)UDP_nr_of_packets + sizeof(unsigned int));
+      IP_nr_of_packets = (unsigned int *)((char *)UDP_bytes_in_packets + sizeof(unsigned long));
+      DESC_LEN = (int *)(IP_nr_of_packets + 1);
       clear_shared_mem (0);
 
       *DESC_LEN = 10;             /* not necessary, but for security (eliminate very unlikely races) */
