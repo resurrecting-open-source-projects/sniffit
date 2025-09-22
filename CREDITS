@@ -1,3 +1,11 @@
+0.7 version:
+
+- Denis Ovsienko, @infrastation, <denis@ovsienko.info> fixed several build
+  warnings and improved the source code and some documentation.
+
+- Joao Eriberto Mota Filho <eriberto@eriberto.pro.br> fixed the build with
+  GCC 14 and 15.
+
 0.6 version:
 
 - Sam James <sam@gentoo.org> fixed a fail to build from source around
