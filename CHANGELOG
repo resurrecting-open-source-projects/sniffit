@@ -1,3 +1,18 @@
+Version 0.7, 2025-09-22
+
+  [ Denis Ovsienko, @infrastation ]
+
+* Fixed several build warnings.
+* Fix NETDEV_NR for SunOS.
+* Improved the build system.
+* Improved the source code.
+* Improved the README.FIRST and FAQ.
+* Removed "timing" because it is write-only.
+
+  [ Joao Eriberto Mota Filho ]
+
+* Fixed the build with GCC 14 and 15.
+
 Version 0.6, 2024-04-23
 
   [ Sam James, from Gentoo.org ]
