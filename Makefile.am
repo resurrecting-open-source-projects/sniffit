@@ -1,5 +1,6 @@
 # Makefile.am for sniffit
-# Copyright 2016 Joao Eriberto Mota Filho
+# Copyright 2016 Joao Eriberto Mota Filho <eriberto@eriberto.pro.br>
+# Copyright 2024 Denis Ovsienko <denis@ovsienko.info>
 # Under BSD-3-CLause license.
 
 SUBDIRS = src
